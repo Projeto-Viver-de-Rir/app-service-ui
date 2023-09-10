@@ -1,0 +1,5 @@
+
+//abstract
+export interface authRepositoryInterface {
+
+}
