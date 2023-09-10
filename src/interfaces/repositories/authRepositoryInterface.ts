@@ -1,5 +1,0 @@
-
-//abstract
-export interface authRepositoryInterface {
-
-}
