@@ -12,7 +12,7 @@ import { useVolunteers } from '../../stores/volunteerStore'
 
 
 interface SetupData {
-    filter: ComputedRef;
+    filters: ComputedRef;
     getUsers: () => void;
 }
 
@@ -40,13 +40,13 @@ export default defineComponent({
         const route = useRoute()
         const router = useRouter()
         const store = useVolunteers()
-        const filter = computed(() => store.filter);
+        const filters = computed(() => store.filters);
         const getUsers = (): void => {
             store.filter()
         }
 
         return {
-            filter,
+            filters,
             getUsers,
             page,
             breadcrumbs
@@ -63,12 +63,12 @@ export default defineComponent({
             <UiParentCard title="Filtros">  
                 <v-row>
                     <v-col cols="5" md="5">
-                            <v-text-field label="Nome" v-model="filter.name">
+                            <v-text-field label="Nome" v-model="filters.name">
                                 
                             </v-text-field>
                     </v-col>
                     <v-col cols="5" md="5">
-                            <v-text-field label="Email" v-model="filter.email">
+                            <v-text-field label="Email" v-model="filters.email">
                                 
                             </v-text-field>
                     </v-col>

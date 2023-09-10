@@ -38,7 +38,7 @@ export default defineComponent({
         const route = useRoute()
         const router = useRouter()
         const store = useVolunteers()        
-        const filter = computed(() => store.filter);
+        const filter = computed(() => store.filters);
 
         const getUsers = (): void => {
             store.filter()

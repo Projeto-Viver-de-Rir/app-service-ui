@@ -28,6 +28,7 @@ export const useVolunteers = defineStore('volunteer', () => {
   const getList = computed(() => state.users)
   const getUser = computed(() => state.user)
   const isLoading = computed(() => state.isLoading)
+  const filters = computed(() => state.filters)
   const availability = computed(() => "0")
   
   const getData = async () => {
@@ -49,12 +50,13 @@ export const useVolunteers = defineStore('volunteer', () => {
   }
 
   return {
+    filter,
     getData,
     getById,
     getUser,
     getList,
     isLoading,
-    filter,
+    filters,
     availability
   }
 })

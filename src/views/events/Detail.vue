@@ -209,7 +209,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;">
 <h1 style="margin-bottom:15px" >Confirmados ({{numberConfirmed}}/ {{event.occupancy}})</h1>
-<v-btn size="large" color="success" @click="confirmModal()"  style="margin-bottom: 5px; margin-left:15px" type="submit">Participar</v-btn>
+<v-btn size="large" color="success" v-if="numberConfirmed < event.occupancy" @click="confirmModal()"  style="margin-bottom: 5px; margin-left:15px" type="submit">Participar</v-btn>
 </v-row>
 <hr class="rounded">
 <v-row >
