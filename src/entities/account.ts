@@ -1,6 +1,7 @@
 export interface account {
     id: number
     name: string
+    nickname: string
     email: string
     photo: string
     access_failed_count: number
