@@ -11,7 +11,7 @@ interface volunteerState {
   users: volunteer[],
   filters: volunteerFilter,
   isLoading: boolean,
-
+  isEditing: boolean,
   filterName: string,
   filterEmail: string
 }
@@ -21,7 +21,8 @@ export const useVolunteers = defineStore('volunteer', () => {
     isLoading: true,
     filters: new volunteerFilter("",""),
     users: [],
-    user: null
+    user: null,
+    isEditing : false
   })
   
   const userRepository = container.resolve(volunteerRepository)
@@ -30,7 +31,7 @@ export const useVolunteers = defineStore('volunteer', () => {
   const isLoading = computed(() => state.isLoading)
   const filters = computed(() => state.filters)
   const availability = computed(() => "0")
-  
+  const isEditing = computed(() => state.isEditing)
   const getData = async () => {
     state.isLoading = true
     const data = await userRepository.get()
@@ -56,6 +57,7 @@ export const useVolunteers = defineStore('volunteer', () => {
     getUser,
     getList,
     isLoading,
+    isEditing,
     filters,
     availability
   }
