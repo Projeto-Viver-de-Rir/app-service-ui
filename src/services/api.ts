@@ -5,14 +5,13 @@ import { useAuthStore } from '@/stores/auth';
 
 export class Api implements ApiInterface {
   client = axios.create({
-    baseURL: 'http://localhost:8000/api/v1/',
+    baseURL: 'https://localhost:7123/api/',
     timeout: 9000
   })
   
   async invoke<T = any>(url: string): Promise<AxiosResponse<T>> {
     
     const auth: any = useAuthStore();
-
     const config = {
       headers: {
          Authorization: "Bearer " + auth.token

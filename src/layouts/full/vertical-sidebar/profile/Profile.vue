@@ -2,15 +2,16 @@
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
+console.log(authStore.user);
 </script>
 
 <template>
     <v-sheet rounded="md" color="lightsecondary" class="px-4 py-3 ExtraBox">
         <div class="d-flex align-center hide-menu">
-            <v-avatar size="40" v-if="(!authStore.user.photo.includes('jpg') || !authStore.user.photo.includes('png'))">
+            <v-avatar size="40" v-if="(!authStore.user.photo || !authStore.user.photo.includes('jpg') || !authStore.user.photo.includes('png'))">
                 <img  src="@/assets/images/palhaco.png" alt="user" height="40" />
             </v-avatar>
-           <v-avatar size="40" v-if="(authStore.user.photo.includes('.jpg') || authStore.user.photo.includes('.png'))">
+           <v-avatar size="40" v-if="(authStore.user.photo !== undefined && (authStore.user.photo.includes('.jpg') || authStore.user.photo.includes('.png')))">
                 <img :src="authStore.user.photo"  height="40" />
             </v-avatar>
             <div class="ml-4">

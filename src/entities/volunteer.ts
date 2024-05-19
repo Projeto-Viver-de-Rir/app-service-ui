@@ -1,5 +1,5 @@
 export interface volunteer {
-    id: number
+    id: string
     name: string
     nickname: string
     email: string
@@ -16,7 +16,7 @@ export interface volunteer {
   }
 
   export interface volunteersResponse {
-    volunteers: Array<volunteer>
+    result: Array<volunteer>
     skip: number
     total: number
     limit: number

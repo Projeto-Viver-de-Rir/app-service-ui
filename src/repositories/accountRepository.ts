@@ -9,7 +9,7 @@ export class accountRepository implements accountRepositoryInterface {
   constructor(@inject('ApiService') private apiService: Api) {}
 
   public async getCurrentUser(): Promise<accountResponse> {
-    const response = await this.apiService.invoke('accounts')
+    const response = await this.apiService.invoke('account/myself')
     return response.data
   }
 

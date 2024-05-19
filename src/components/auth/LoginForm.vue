@@ -6,8 +6,8 @@ import { Form } from 'vee-validate';
 const checkbox = ref(false);
 const valid = ref(false);
 const show1 = ref(false);
-const password = ref('1234');
-const email = ref('test@hotmail.com');
+const password = ref('Oi@123456');
+const email = ref('dev-vinicicius.machado@gmail.com');
 const passwordRules = ref([
     (v: string) => !!v || 'Senha é obrigatória'
 ]);
@@ -15,6 +15,7 @@ const emailRules = ref([(v: string) => !!v || 'Email é obrigatório', (v: strin
 
 function validate(values: any, { setErrors }: any) {
     const authStore = useAuthStore();
+    console.log("aqui");
     return authStore.login(email.value, password.value).catch((error) => setErrors({ apiError: error }));
 }
 </script>
@@ -41,7 +42,7 @@ function validate(values: any, { setErrors }: any) {
         <div class="d-flex flex-wrap align-center my-3 ml-n2">
 
         </div>
-        <v-btn size="large" :loading="isSubmitting" color="primary" :disabled="valid" block type="submit" flat>Sign In</v-btn>
+        <v-btn size="large" :loading="isSubmitting" color="primary" block type="submit" flat>Sign In</v-btn>
         <div v-if="errors.apiError" class="mt-2">
             <v-alert color="error">{{ errors.apiError }}</v-alert>
         </div>

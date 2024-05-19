@@ -13,7 +13,7 @@ const volunteersRoutes = {
         },
         {
             name: 'DetailtUser',
-            path: '/Voluntarios/Detalhes/:id(\\d+)',
+            path: '/Voluntarios/Detalhes/:id',
             component: () => import('@/views/volunteers/detail.vue')
         },
     ]

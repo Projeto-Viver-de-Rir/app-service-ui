@@ -4,8 +4,8 @@ export interface event {
     description: string
     address: string
     city: string
-    meeting_point: string
-    date: string
+    meetingPoint: string
+    happenAt: string
     time: string
     occupancy: number
     organizer: number
@@ -34,5 +34,5 @@ export interface eventVolunteers{
   }
 
   export interface finishEventRequest {
-    volunteersPresent: number[]
+    presences: number[]
   }

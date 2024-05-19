@@ -49,7 +49,7 @@ export default defineComponent({
         const store = useVolunteers()    
         
         onMounted(async () => {
-            await store.getById(Number(route.params['id']));
+            await store.getById(route.params['id']);
         });
         const user = computed(() => store.getUser);
         const isLoading = computed(() => store.isLoading);

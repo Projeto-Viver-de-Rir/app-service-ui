@@ -7,7 +7,7 @@ import { volunteerFilter } from '../entities/volunteerFilter'
 import { volunteerRepository } from '../repositories/volunteerRepository'
 
 interface volunteerState {
-  useer: volunteer | null,
+  user: volunteer | null,
   users: volunteer[],
   filters: volunteerFilter,
   isLoading: boolean,
@@ -19,10 +19,12 @@ interface volunteerState {
 export const useVolunteers = defineStore('volunteer', () => {
   const state = reactive<volunteerState>({
     isLoading: true,
-    filters: new volunteerFilter("",""),
+    filters: new volunteerFilter("", ""),
     users: [],
     user: null,
-    isEditing : false
+    isEditing: false,
+    filterName: '',
+    filterEmail: ''
   })
   
   const userRepository = container.resolve(volunteerRepository)
@@ -35,14 +37,14 @@ export const useVolunteers = defineStore('volunteer', () => {
   const getData = async () => {
     state.isLoading = true
     const data = await userRepository.get()
-    state.users = data.volunteers
+    state.users = data.result
     state.isLoading = false
   }
 
-  const getById = async (id: number): Promise<void> => {
+  const getById = async (id: string): Promise<void> => {
     state.isLoading = true
     const data = await userRepository.getById(id);
-    state.user = data.volunteer;  
+    state.user = data;  
     state.isLoading = false
 }
 

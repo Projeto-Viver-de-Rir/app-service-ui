@@ -9,25 +9,25 @@ export class eventRepository implements eventRepositoryInterface {
   constructor(@inject('ApiService') private apiService: Api) {}
 
   public async getEvents(): Promise<eventsResponse> {
-    const response = await this.apiService.invoke('events')
+    const response = await this.apiService.invoke('event')
     return response.data
   }
 
   public async getById(id:number): Promise<eventResponse> {
-    const response = await this.apiService.invoke('events/'+id)
+    const response = await this.apiService.invoke('event/'+id)
     return response.data
   }
 
   public async create(event: event) : Promise<void> {
-    await this.apiService.post('events/', event)
+    await this.apiService.post('event/', event)
   }
 
   public async update(event: event) : Promise<void> {
-    await this.apiService.put('events/'+ event.id, event)
+    await this.apiService.put('event/'+ event.id, event)
   }
 
   public async finish(eventId : number,request: finishEventRequest) : Promise<void> {
-    await this.apiService.put('events/'+ eventId+"/confirm", request)
+    await this.apiService.put('event/'+ eventId+"/confirm", request)
   }
 
   public async confirm(eventId : number) : Promise<void> {

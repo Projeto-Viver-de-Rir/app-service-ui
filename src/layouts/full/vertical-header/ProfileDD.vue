@@ -5,6 +5,7 @@ import { profileDD } from '@/_mockApis/headerData';
 import { useAuthStore } from '@/stores/auth';
 
 const authStore = useAuthStore();
+console.log(authStore.user);
 </script>
 
 <template>
@@ -14,10 +15,10 @@ const authStore = useAuthStore();
     <v-menu :close-on-content-click="false">
         <template v-slot:activator="{ props }">
             <v-btn class="custom-hover-primary" variant="text" v-bind="props" icon>
-                 <v-avatar size="40" v-if="(!authStore.user.photo.includes('jpg') || !authStore.user.photo.includes('png'))">
+                 <v-avatar size="40" v-if="(!authStore.user.photo || !authStore.user.photo.includes('jpg') || !authStore.user.photo.includes('png'))">
                     <img  src="@/assets/images/palhaco.png" alt="user" height="40" />
                 </v-avatar>
-                <v-avatar size="40" v-if="(authStore.user.photo.includes('.jpg') || authStore.user.photo.includes('.png'))">
+                <v-avatar size="40" v-if="(authStore.user.photo !== undefined && (authStore.user.photo.includes('.jpg') || authStore.user.photo.includes('.png')))">
                     <img :src="authStore.user.photo"  height="40" />
                 </v-avatar>
             </v-btn>
@@ -26,7 +27,7 @@ const authStore = useAuthStore();
             <div class="px-8 pt-6">
                 <h6 class="text-h5 font-weight-medium">Voluntário</h6>
                 <div class="d-flex align-center mt-4 pb-6">
-                 <v-avatar size="80" v-if="(!authStore.user.photo.includes('jpg') || !authStore.user.photo.includes('png'))">
+                 <v-avatar size="80" v-if="(!authStore.user.photo ||  !authStore.user.photo.includes('jpg') || !authStore.user.photo.includes('png'))">
                     <img  src="@/assets/images/palhaco.png" alt="user" height="80" />
                 </v-avatar>
                 <v-avatar size="80" v-if="(authStore.user.photo.includes('.jpg') || authStore.user.photo.includes('.png'))">
