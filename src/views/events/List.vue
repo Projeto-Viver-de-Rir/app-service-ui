@@ -9,6 +9,8 @@ import { useEvents } from '../../stores/eventStore'
 import { eventFilter } from '../../entities/eventFilter'
 import {useRoute, useRouter} from 'vue-router'
 
+
+
 const page = ref({ title: 'Eventos' });
 const breadcrumbs = ref([
     {

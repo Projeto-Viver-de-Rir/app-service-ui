@@ -32,12 +32,13 @@ export const useVolunteers = defineStore('volunteer', () => {
   const getUser = computed(() => state.user)
   const isLoading = computed(() => state.isLoading)
   const filters = computed(() => state.filters)
-  const availability = computed(() => "0")
+  const availability = computed(() => state.user?.availability)
   const isEditing = computed(() => state.isEditing)
   const getData = async () => {
     state.isLoading = true
     const data = await userRepository.get()
     state.users = data.result
+
     state.isLoading = false
   }
 
@@ -45,6 +46,11 @@ export const useVolunteers = defineStore('volunteer', () => {
     state.isLoading = true
     const data = await userRepository.getById(id);
     state.user = data;  
+    state.users.lastMonthAttendances = "0";
+    state.users.actualMonthAttendances  = "0";
+    state.users.lastMonthAbsences  = "0";
+    state.users.actualMonthAbsences  = "0";
+    console.log(state.users);
     state.isLoading = false
 }
 

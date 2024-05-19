@@ -5,6 +5,8 @@ import {defineComponent, computed, onMounted} from 'vue'
 import { useEvents } from '../../stores/eventStore'
 import type { event } from '../../entities/event'
 
+
+
 interface SetupData {
     events: ComputedRef
 }
@@ -48,7 +50,7 @@ export default defineComponent({
                     <td>
                         <div class="d-left">
                               <div>
-                                <h6 class="text-h6">{{ item.date }}</h6>
+                                <h6 class="text-h6">{{ new Date(item.happenAt).toLocaleDateString() + " " + new Date(item.happenAt).getHours() + ":"+ new Date(item.happenAt).getMinutes() }}</h6>
                             </div>
                         </div>
                     </td>

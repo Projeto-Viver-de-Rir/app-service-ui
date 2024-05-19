@@ -10,6 +10,7 @@ import { useEvents } from '../../stores/eventStore'
 
 interface SetupData {
     event: ComputedRef
+    volunteersPresent: ComputedRef,
     places: ComputedRef
     isLoading: ComputedRef<boolean>
     isEditing: ComputedRef<boolean>
@@ -46,8 +47,7 @@ export default defineComponent({
         const store = useEvents()    
         
         onMounted(async () => {
-            await store.getById(Number(route.params['id']));
-            console.log(store.getEvent)
+            await store.getById(route.params['id']);
         });
 
         const edit = (): void => {
@@ -66,8 +66,8 @@ export default defineComponent({
             store.save();
             router.push({ path: '/Eventos', replace: true });
         }
-
         const event = computed(() => store.getEvent);
+        const volunteersPresent= computed(() => store.volunteersPresent);
         const isLoading = computed(() => store.isLoading);
         const isEditing = computed(() => store.isEditing);
         const places = computed(() => store.getPlaces);
@@ -83,6 +83,7 @@ export default defineComponent({
             edit,
             back,
             removeVolunteer,
+            volunteersPresent,
             save
         }
     }
@@ -121,7 +122,7 @@ Remova os candidatos que desmarcaram ({{numberConfirmed}}/ {{event.occupancy}})<
 
 </v-row>
 <hr class="rounded">
-<v-row  v-for="item in event.volunteers" :key="item.id">
+<v-row  v-for="item in volunteersPresent" :key="item.id">
       <v-col cols="12" md="1">
            <v-avatar size="50" v-if="(!item.photo.includes('jpg') || !item.photo.includes('png'))">
                 <img  src="@/assets/images/palhaco.png" alt="user" height="50" />

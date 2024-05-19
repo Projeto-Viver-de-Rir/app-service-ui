@@ -42,7 +42,22 @@ export class Api implements ApiInterface {
       console.log(error);
     });
   }
+  async delete<T = any>(url : string) : Promise<void> {   
+    
+    const auth: any = useAuthStore();
 
+    const config = {
+      headers: {
+         Authorization: "Bearer " + auth.token
+      }
+    }
+    return await this.client.delete(url, config).then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
   async put<T = any>(url : string, request: T) : Promise<void> {    
     const auth: any = useAuthStore();
 

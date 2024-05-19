@@ -86,10 +86,10 @@ export default defineComponent({
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <v-row>
         <v-col cols="6" md="4" >
-            <presenceCards :current="7" :history="10"></presenceCards>
+            <presenceCards :current="user.actualMonthAttendances || 0" :history="user.lastMonthAttendances || 0"></presenceCards>
         </v-col>
         <v-col cols="6" md="4" style="padding-left: 5px">
-            <absencesCards :current="2" :history="1"></absencesCards>
+            <absencesCards :current="user.actualMonthAbsences || 0" :history="user.lastMonthAbsences || 0"></absencesCards>
         </v-col>
     </v-row>
     <v-row>

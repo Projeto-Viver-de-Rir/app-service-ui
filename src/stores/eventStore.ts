@@ -4,6 +4,7 @@ import { computed, reactive } from 'vue'
 import type { event, eventVolunteers} from '../entities/event'
 import { eventFilter } from '../entities/eventFilter'
 import { eventRepository } from '../repositories/eventRepository'
+import { eventPresenceRepository } from '../repositories/eventPresenceRepository'
 
 interface eventState {
   event: event | null,
@@ -15,7 +16,8 @@ interface eventState {
   isLoading: boolean,
   numberConfirmed : number,
   isOtherSelecteced: boolean,
-  volunteersPresent: number[],
+  volunteersPresent: [],
+  volunteersDeleted: [],
   action: string
   showModel : boolean
   isTimeEnded: boolean,
@@ -39,17 +41,22 @@ export const useEvents = defineStore('events', () => {
       "FASE Padre Cacique",
       "FASE Cruzeiro",
       "Vila Safira",
-      "Outros"],
+      "Outros"
+    ],
     event: null,
-    initialEvent : null,
+    initialEvent: null,
     isEditing: false,
     numberConfirmed: 0,
-    isOtherSelecteced : false,
-    volunteersPresent : [],
+    isOtherSelecteced: false,
+    volunteersPresent: [],
+    volunteersDeleted: [],
     action: "D",
-    
+    isTimeEnded: false,
+    confirmLabel: '',
+    nextMonth: ''
   })
   const repository = container.resolve(eventRepository)
+  const presenceRepository = container.resolve(eventPresenceRepository)
   const eventLength = computed(() => state.events.length)
   const getList = computed(() => state.events)
   const getEvent = computed(() => state.event)
@@ -63,27 +70,36 @@ export const useEvents = defineStore('events', () => {
   const confirmLabel = computed(() => state.confirmLabel)  
   const nextMonth = computed(() => state.nextMonth)  
   const filters = computed(() => state.filters) 
+  const volunteersPresent = computed(()=> state.volunteersPresent);
   const getData = async () => {
     state.isLoading = true
     const data = await repository.getEvents()
-    state.events = data.events
+    state.events = data.result
+    console.log(data.result);
     state.isLoading = false;
 
   }
 
-  const getById = async (id: number): Promise<void> => {
+  const getById = async (id: string): Promise<void> => {
     state.isLoading = true
     state.isEditing = false
     state.showModel = false
     const data = await repository.getById(id);
-    state.event = data.event;  
-    state.initialEvent = data.event;
-    state.numberConfirmed = data.event.volunteers.length
+    const dataVolunteers = await presenceRepository.getById(id);
+    state.volunteersPresent = [];
+    dataVolunteers.result.forEach(f => state.volunteersPresent.push({
+      presenceId: f.id,
+      id: f.volunteer.id, 
+      name : f.volunteer.name,
+      photo: f.volunteer.photo != null ? f.eventPresenceVolunteer.photo : ""
+    }))
 
-    data.event.volunteers.forEach(populateVolunteersPresent)
+    state.event = data;
+    state.initialEvent = data;
+    state.numberConfirmed = state.volunteersPresent.length
 
     const events = await repository.getEvents();
-    events.events.forEach(addIfNotExists);
+    events.result.forEach(addIfNotExists);
     state.isLoading = false
 
 }
@@ -97,11 +113,6 @@ export const useEvents = defineStore('events', () => {
       state.places.push("Outros");
     }
   }
-
-  function populateVolunteersPresent(item: eventVolunteers) {
-    state.volunteersPresent.push(item.id);
-  }
-  
 
   const filter = async () => {
 
@@ -124,11 +135,31 @@ export const useEvents = defineStore('events', () => {
 
   const save = async ()  => {
     state.isLoading = true
+    var eventToSent = state.event;
 
     if(state.action === "D")
-      await repository.update(state.event);
+      await repository.update({
+        id: eventToSent?.id,
+        name: eventToSent?.name,
+        description: eventToSent?.description,
+        address: eventToSent?.address,
+        city: eventToSent?.city,
+        meetingPoint: eventToSent?.meetingPoint,
+        occupancy : eventToSent?.occupancy,
+        happenAt: "2024-05-25T10:00:00Z",
+        status: 1
+      });
     else
-      await repository.create(state.event);
+      await repository.create({
+        name: eventToSent?.name,
+        description: eventToSent?.description,
+        address: eventToSent?.address,
+        city: eventToSent?.city,
+        meetingPoint: eventToSent?.meetingPoint,
+        occupancy : eventToSent?.occupancy,
+        happenAt: "2024-05-25T10:00:00Z",
+        status: 1
+      });
     state.isLoading = false
   }
 
@@ -154,19 +185,20 @@ export const useEvents = defineStore('events', () => {
   }
 
   const CreateNewEvent = () => {
-    state.event = {id:0} as event;
-    console.log(state.event);
+    state.event = {id:""} as event;
     state.isLoading = false;
     state.isEditing = true;
     state.action = "C";
   }
 
   const removeVolunteer = (volunteer: any): void => {
-    const index = state.event.volunteers.indexOf(volunteer);
-    state.event.volunteers.splice(index, 1)   
+    const index = state.volunteersPresent.indexOf(volunteer);
+    state.volunteersDeleted.push(state.volunteersPresent[index]);
+    state.volunteersPresent.splice(index, 1);
+    console.log(state.volunteersDeleted);
     state.numberConfirmed = state.numberConfirmed -1;     
   }
-  const changeVonlunteer = (id: number): void => {
+  const changeVolunteer = (id: string): void => {
 
     const index = state.volunteersPresent.indexOf(id);
 
@@ -220,7 +252,7 @@ export const useEvents = defineStore('events', () => {
     isOtherSelecteced,
     selectOther,
     save,
-    changeVonlunteer,
+    changeVolunteer,
     finish,
     CreateNewEvent,
     showModel,
@@ -228,6 +260,7 @@ export const useEvents = defineStore('events', () => {
     isTimeEnded,
     confirmLabel,
     confirmVacancy,
-    nextMonth
+    nextMonth,
+    volunteersPresent
   }
 })

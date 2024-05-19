@@ -1,16 +1,14 @@
 export interface event {
-    id: number
+    id: string
     name: string
     description: string
     address: string
     city: string
     meetingPoint: string
-    happenAt: string
-    time: string
+    happenAt: Date
+    date: string,
+    time: string,
     occupancy: number
-    organizer: number
-    finalized: boolean
-    volunteers: eventVolunteers[]
   }
 
 export interface eventVolunteers{
@@ -20,14 +18,14 @@ export interface eventVolunteers{
 }
 
   export interface eventsResponse {
-    events: Array<event>
+    result: Array<event>
     skip: number
     total: number
     limit: number
   }
   
   export interface eventResponse {
-    event: event
+    result: event
     skip: number
     total: number
     limit: number

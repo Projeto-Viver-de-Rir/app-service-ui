@@ -13,7 +13,7 @@ const eventsRoutes = {
         },
         {
             name: 'DetailtEvent',
-            path: '/Eventos/Detalhes/:id(\\d+)',
+            path: '/Eventos/Detalhes/:id',
             component: () => import('@/views/events/detail.vue')
         },
         {
@@ -23,12 +23,12 @@ const eventsRoutes = {
         },
         {
             name: 'ManageVolunteers',
-            path: '/Eventos/Detalhes/:id(\\d+)/Volundarios',
+            path: '/Eventos/Detalhes/:id/Voluntarios',
             component: () => import('@/views/events/manageVolunteers.vue')
         },
         {
             name: 'FinishVisit',
-            path: '/Eventos/Detalhes/:id(\\d+)/Concluir',
+            path: '/Eventos/Detalhes/:id/Concluir',
             component: () => import('@/views/events/finishVisit.vue')
         },
     ]

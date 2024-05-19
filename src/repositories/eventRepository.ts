@@ -13,7 +13,7 @@ export class eventRepository implements eventRepositoryInterface {
     return response.data
   }
 
-  public async getById(id:number): Promise<eventResponse> {
+  public async getById(id:string): Promise<eventResponse> {
     const response = await this.apiService.invoke('event/'+id)
     return response.data
   }
@@ -26,11 +26,11 @@ export class eventRepository implements eventRepositoryInterface {
     await this.apiService.put('event/'+ event.id, event)
   }
 
-  public async finish(eventId : number,request: finishEventRequest) : Promise<void> {
+  public async finish(eventId : string,request: finishEventRequest) : Promise<void> {
     await this.apiService.put('event/'+ eventId+"/confirm", request)
   }
 
-  public async confirm(eventId : number) : Promise<void> {
+  public async confirm(eventId : string) : Promise<void> {
     await this.apiService.patch('events/'+ eventId+"/vacancy", null)
   }
 }

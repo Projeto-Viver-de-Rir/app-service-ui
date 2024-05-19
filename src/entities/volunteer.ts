@@ -12,7 +12,11 @@ export interface volunteer {
     identifier: string,
     availability: string,
     comments: string,
-    status: string
+    status: string,
+    lastMonthAttendances : string,
+    actualMonthAttendances : string,
+    lastMonthAbsences : string,
+    actualMonthAbsences : string,
   }
 
   export interface volunteersResponse {

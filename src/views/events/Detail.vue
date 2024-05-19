@@ -8,10 +8,11 @@ import {useRoute, useRouter} from 'vue-router'
 import { useEvents } from '../../stores/eventStore'
 
 interface SetupData {
-    event: ComputedRef
-    places: ComputedRef
-    isLoading: ComputedRef<boolean>
-    isEditing: ComputedRef<boolean>
+    event: ComputedRef,
+    volunteersPresent: ComputedRef,
+    places: ComputedRef,
+    isLoading: ComputedRef<boolean>,
+    isEditing: ComputedRef<boolean>,
     numberConfirmed : ComputedRef,
     isOtherSelecteced: ComputedRef,
     showModel: ComputedRef<boolean>,
@@ -51,7 +52,7 @@ export default defineComponent({
 
         if(route.fullPath.includes("Detalhes"))
         onMounted(async () => {      
-            await store.getById(Number(route.params['id']));
+            await store.getById(route.params['id']);
         });
         else store.CreateNewEvent();
         
@@ -87,6 +88,7 @@ export default defineComponent({
         }
 
         const event = computed(() => store.getEvent);
+        const volunteersPresent= computed(() => store.volunteersPresent);
         const isLoading = computed(() => store.isLoading);
         const isEditing = computed(() => store.isEditing);
         const places = computed(() => store.getPlaces);
@@ -115,7 +117,8 @@ export default defineComponent({
             isTimeEnded,
             confirmLabel,
             closeModal,
-            confirmVacancy
+            confirmVacancy,
+            volunteersPresent
         }
     }
 })
@@ -131,7 +134,7 @@ export default defineComponent({
                                 <router-link tag="v-btn" v-if="event !== null"
                                     class="btn btn-secondary mr-2"
                                     
-                                    :to="{name: 'ManageVolunteers', params: { id: event.id || 0 }}"
+                                    :to="{name: 'ManageVolunteers', params: { id: event.id }}"
                                 >
                                     <v-btn size="large" color="warning" type="submit">Gerenciar voluntários</v-btn>
                                 </router-link>
@@ -139,7 +142,7 @@ export default defineComponent({
                                                                 <router-link tag="v-btn" v-if="event !== null"
                                     class="btn btn-success mr-2"
                                     
-                                    :to="{name: 'FinishVisit', params: { id: event.id || 0 }}"
+                                    :to="{name: 'FinishVisit', params: { id: event.id }}"
                                 >
                                     <v-btn size="large" color="success" type="submit">Realizado</v-btn>
                                 </router-link>
@@ -172,17 +175,13 @@ export default defineComponent({
             </v-col>
             <v-col cols="12" md="6">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Ponto de Encontro:</v-label>
-                <v-text-field v-model="event.meeting_point" :disabled="!isEditing"></v-text-field>
+                <v-text-field v-model="event.meetingPoint" :disabled="!isEditing"></v-text-field>
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="12" md="4">
+            <v-col cols="12" md="8">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Data:</v-label>
-                <v-text-field v-model="event.date" v-maska="'##/##/####'" return-masked-value :disabled="!isEditing"></v-text-field>
-            </v-col>
-            <v-col cols="12" md="4">
-                <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Horário de Início:</v-label>
-                <v-text-field v-model="event.time" v-maska="'##:##'" return-masked-value :disabled="!isEditing"></v-text-field>
+                <v-text-field v-model="event.happenAt" v-maska="'##/##/#### ##:##'" return-masked-value :disabled="!isEditing"></v-text-field>
             </v-col>
             <v-col cols="12" md="4">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Vagas:</v-label>
@@ -213,7 +212,7 @@ export default defineComponent({
 </v-row>
 <hr class="rounded">
 <v-row >
-      <v-col cols="12" md="4" v-for="item in event.volunteers" :key="item.id">
+      <v-col cols="12" md="4" v-for="item in volunteersPresent" :key="item.id">
            <v-avatar size="50" v-if="(!item.photo.includes('jpg') || !item.photo.includes('png'))">
                 <img  src="@/assets/images/palhaco.png" alt="user" height="50" />
             </v-avatar>
