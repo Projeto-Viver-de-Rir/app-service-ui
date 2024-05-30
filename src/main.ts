@@ -26,6 +26,9 @@ import { createI18n } from 'vue-i18n';
 import messages from '@/utils/locales/messages';
 import regisContainer from './di/registration'
 
+import VueDatePicker from '@vuepic/vue-datepicker';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 const i18n = createI18n({
     locale: 'en',
     messages: messages,
@@ -41,6 +44,7 @@ app.use(PerfectScrollbar);
 app.use(createPinia());
 app.use(VCalendar, {});
 app.use(VueTablerIcons);
+app.component('VueDatePicker', VueDatePicker);
 // app.use(print);
 app.use(VueRecaptcha, {
     siteKey: '6LdzqbcaAAAAALrGEZWQHIHUhzJZc8O-KSTdTTh_',

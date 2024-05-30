@@ -15,7 +15,6 @@ const emailRules = ref([(v: string) => !!v || 'Email é obrigatório', (v: strin
 
 function validate(values: any, { setErrors }: any) {
     const authStore = useAuthStore();
-    console.log("aqui");
     return authStore.login(email.value, password.value).catch((error) => setErrors({ apiError: error }));
 }
 </script>

@@ -5,6 +5,7 @@ import type { event, eventVolunteers} from '../entities/event'
 import { eventFilter } from '../entities/eventFilter'
 import { eventRepository } from '../repositories/eventRepository'
 import { eventPresenceRepository } from '../repositories/eventPresenceRepository'
+import { useAuthStore } from '@/stores/auth';
 
 interface eventState {
   event: event | null,
@@ -21,6 +22,7 @@ interface eventState {
   action: string
   showModel : boolean
   isTimeEnded: boolean,
+  shouldShowButton: boolean,
   confirmLabel : string,
   nextMonth : string
 }
@@ -53,7 +55,8 @@ export const useEvents = defineStore('events', () => {
     action: "D",
     isTimeEnded: false,
     confirmLabel: '',
-    nextMonth: ''
+    nextMonth: '',
+    shouldShowButton: true
   })
   const repository = container.resolve(eventRepository)
   const presenceRepository = container.resolve(eventPresenceRepository)
@@ -71,6 +74,7 @@ export const useEvents = defineStore('events', () => {
   const nextMonth = computed(() => state.nextMonth)  
   const filters = computed(() => state.filters) 
   const volunteersPresent = computed(()=> state.volunteersPresent);
+  const shouldShowButton = computed(()=> state.shouldShowButton);
   const getData = async () => {
     state.isLoading = true
     const data = await repository.getEvents()
@@ -81,6 +85,7 @@ export const useEvents = defineStore('events', () => {
   }
 
   const getById = async (id: string): Promise<void> => {
+    const authStore = useAuthStore();
     state.isLoading = true
     state.isEditing = false
     state.showModel = false
@@ -89,6 +94,7 @@ export const useEvents = defineStore('events', () => {
     state.volunteersPresent = [];
     dataVolunteers.result.forEach(f => state.volunteersPresent.push({
       presenceId: f.id,
+      attented: true,
       id: f.volunteer.id, 
       name : f.volunteer.name,
       photo: f.volunteer.photo != null ? f.eventPresenceVolunteer.photo : ""
@@ -97,7 +103,8 @@ export const useEvents = defineStore('events', () => {
     state.event = data;
     state.initialEvent = data;
     state.numberConfirmed = state.volunteersPresent.length
-
+    console.log(state.volunteersPresent.find((element) => element.id == authStore.user.id));
+    state.shouldShowButton = state.volunteersPresent.find((element) => element.id == authStore.user.id) == null;
     const events = await repository.getEvents();
     events.result.forEach(addIfNotExists);
     state.isLoading = false
@@ -146,7 +153,7 @@ export const useEvents = defineStore('events', () => {
         city: eventToSent?.city,
         meetingPoint: eventToSent?.meetingPoint,
         occupancy : eventToSent?.occupancy,
-        happenAt: "2024-05-25T10:00:00Z",
+        happenAt: eventToSent?.happenAt,
         status: 1
       });
     else
@@ -165,16 +172,17 @@ export const useEvents = defineStore('events', () => {
 
   const confirmVacancy = async ()  => {
     state.isLoading = true
-    await repository.confirm(state.event.id);
+    state.showModel = false;
+    const authStore = useAuthStore();
+    await presenceRepository.create(state.event.id, authStore.user.id);
     state.isLoading = false
   }
-
 
   const finish = async ()  => {
     state.isLoading = true
     await repository.finish(state.event.id, state.volunteersPresent);
     state.showModel = false;
-    state.isLoading = false
+    state.isLoading = false;
   }
 
   const selectOther = (selected : boolean)=> {
@@ -198,14 +206,22 @@ export const useEvents = defineStore('events', () => {
     console.log(state.volunteersDeleted);
     state.numberConfirmed = state.numberConfirmed -1;     
   }
-  const changeVolunteer = (id: string): void => {
 
-    const index = state.volunteersPresent.indexOf(id);
+  const saveVonlunteers = async ()  => {
+    state.isLoading = true
+    state.volunteersDeleted.forEach(element => {
+      presenceRepository.delete(element.presenceId);
+    });
+    state.isLoading = false
+  }
 
-    if(index == -1)
-      state.volunteersPresent.push(id);
-    else
-      state.volunteersPresent.splice(index, 1);    
+  const changeVolunteer = (volunteer): void => {
+
+    const index = state.volunteersPresent.indexOf(volunteer);
+
+    state.volunteersPresent[index].attented = !state.volunteersPresent[index].attented; 
+
+      console.log(state.volunteersPresent);
   }
 
   let countDown = 5;
@@ -260,6 +276,8 @@ export const useEvents = defineStore('events', () => {
     isTimeEnded,
     confirmLabel,
     confirmVacancy,
+    saveVonlunteers,
+    shouldShowButton,
     nextMonth,
     volunteersPresent
   }

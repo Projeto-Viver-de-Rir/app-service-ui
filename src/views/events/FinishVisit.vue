@@ -11,6 +11,7 @@ import { useEvents } from '../../stores/eventStore'
 interface SetupData {
     event: ComputedRef
     places: ComputedRef
+    volunteersPresent: ComputedRef,
     isLoading: ComputedRef<boolean>
     isEditing: ComputedRef<boolean>
     numberConfirmed : ComputedRef
@@ -36,7 +37,7 @@ export default defineComponent({
                 href: '/Eventos'
             },
             {
-                text: 'Gerenciar voluntários',
+                text: 'Finalizar Evento',
                 disabled: true,
                 href: '#'
             }
@@ -46,7 +47,7 @@ export default defineComponent({
         const store = useEvents()    
         
         onMounted(async () => {
-            await store.getById(Number(route.params['id']));
+            await store.getById(route.params['id']);
         });
 
         const edit = (): void => {
@@ -66,13 +67,14 @@ export default defineComponent({
             router.push({ path: '/Eventos', replace: true });
         }
 
-        const changeVonlunteer = (id: number): void => {
-             store.changeVonlunteer(id);           
+        const changeVolunteer = (id: number): void => {
+             store.changeVolunteer(id);           
         }
         const event = computed(() => store.getEvent);
         const isLoading = computed(() => store.isLoading);
         const isEditing = computed(() => store.isEditing);
         const places = computed(() => store.getPlaces);
+        const volunteersPresent =  computed(() => store.volunteersPresent);
         const numberConfirmed = computed(() => store.getNumberConfirmed);
         return {
             event,
@@ -85,8 +87,9 @@ export default defineComponent({
             edit,
             back,
             removeVolunteer,
+            volunteersPresent,
             finish,
-            changeVonlunteer
+            changeVolunteer
         }
     }
 })
@@ -109,22 +112,22 @@ export default defineComponent({
             </v-col>
             <v-col cols="12" md="4">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Data:</v-label>
-                <v-text-field v-model="event.date" :disabled="!isEditing"></v-text-field>
+                <v-text-field :disabled="!isEditing">{{ new Date(event.happenAt).toLocaleDateString()  }}</v-text-field>
             </v-col>
             <v-col cols="12" md="4">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Horário de Início:</v-label>
-                <v-text-field v-model="event.time" :disabled="!isEditing"></v-text-field>
+                <v-text-field disabled="!isEditing">{{ new Date(event.happenAt).getHours() + ":"+ new Date(event.happenAt).getMinutes() }}</v-text-field>
             </v-col>
         </v-row>       
         <v-row style="display: flex;
   align-items: center;
   justify-content: center;">
 <h1 style="margin-bottom:15px" >
-Remova os candidatos que desmarcaram</h1>
+Indique a presença dos voluntarios </h1>
 
 </v-row>
 <hr class="rounded">
-<v-row  v-for="item in event.volunteers" :key="item.id">
+<v-row  v-for="item in volunteersPresent" :key="item.id">
       <v-col cols="12" md="1">
            <v-avatar size="50" v-if="(!item.photo.includes('jpg') || !item.photo.includes('png'))">
                 <img  src="@/assets/images/palhaco.png" alt="user" height="50" />
@@ -137,7 +140,7 @@ Remova os candidatos que desmarcaram</h1>
           <v-label class="text-subtitle-1 font-weight-semibold text-lightText" style="margin-top:15px">{{item.name}}</v-label>
       </v-col>
       <v-col cols="12" md="2">
-          <v-switch color="primary" :model-value="true" @change="changeVonlunteer(item.id)" hide-details></v-switch>
+          <v-switch color="primary" :model-value="true" @change="changeVolunteer(item)" hide-details></v-switch>
       </v-col>
 </v-row>
     </UiParentCard>

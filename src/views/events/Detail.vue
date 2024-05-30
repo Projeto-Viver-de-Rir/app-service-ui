@@ -18,6 +18,7 @@ interface SetupData {
     showModel: ComputedRef<boolean>,
     confirmLabel: ComputedRef<string>,
     isTimeEnded : ComputedRef<boolean>,
+    shouldShowButton: ComputedRef<boolean>,  
 }
 
 export default defineComponent({
@@ -53,6 +54,7 @@ export default defineComponent({
         if(route.fullPath.includes("Detalhes"))
         onMounted(async () => {      
             await store.getById(route.params['id']);
+            console.log(store.shouldShowButton);
         });
         else store.CreateNewEvent();
         
@@ -65,8 +67,8 @@ export default defineComponent({
             store.cancel()
         }
 
-        const save = (): void => {
-            store.save()
+        const save = async ()  => {
+            await store.save()
             router.push({ path: '/Eventos', replace: true });
         }
 
@@ -82,9 +84,20 @@ export default defineComponent({
             store.openModal(false);
         }
 
-        const confirmVacancy = (): void => {
-            store.confirmVacancy();
+        const confirmVacancy = async ()  => {
+            await store.confirmVacancy();
             router.push({ path: '/Eventos', replace: true });
+            
+        }
+
+        const format = (date) => {
+            const day = date.getDate();
+            const month = (date.getMonth() + 1).toString().padStart(2, "0")
+            const year = date.getFullYear();
+            const hours = date.getHours();
+            const minutes = (date.getMinutes() < 10 ? '0' : '') + date.getMinutes();
+
+            return day+'/'+month+'/'+year +' ' + hours+':'+minutes;
         }
 
         const event = computed(() => store.getEvent);
@@ -97,7 +110,7 @@ export default defineComponent({
         const showModel = computed(() => store.showModel)
         const confirmLabel = computed(() => store.confirmLabel)
         const isTimeEnded = computed(() => store.isTimeEnded)
-        
+        const shouldShowButton = computed(() => store.shouldShowButton);
 
         return {
             event,
@@ -118,7 +131,9 @@ export default defineComponent({
             confirmLabel,
             closeModal,
             confirmVacancy,
-            volunteersPresent
+            volunteersPresent,
+            shouldShowButton,
+            format
         }
     }
 })
@@ -181,7 +196,7 @@ export default defineComponent({
         <v-row>
             <v-col cols="12" md="8">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Data:</v-label>
-                <v-text-field v-model="event.happenAt" v-maska="'##/##/#### ##:##'" return-masked-value :disabled="!isEditing"></v-text-field>
+                <VueDatePicker v-model="event.happenAt" :format="format" locale="pt-BR" :disabled="!isEditing" />
             </v-col>
             <v-col cols="12" md="4">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Vagas:</v-label>
@@ -208,7 +223,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;">
 <h1 style="margin-bottom:15px" >Confirmados ({{numberConfirmed}}/ {{event.occupancy}})</h1>
-<v-btn size="large" color="success" v-if="numberConfirmed < event.occupancy" @click="confirmModal()"  style="margin-bottom: 5px; margin-left:15px" type="submit">Participar</v-btn>
+<v-btn size="large" color="success" v-if="numberConfirmed < event.occupancy && shouldShowButton" @click="confirmModal()"  style="margin-bottom: 5px; margin-left:15px" type="submit">Participar</v-btn>
 </v-row>
 <hr class="rounded">
 <v-row >
@@ -240,13 +255,13 @@ export default defineComponent({
     <v-row>
         <v-col cols="12" md="12">
             <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Data:</v-label>
-            <h1>{{event.date}}</h1>
+            <h1>{{ new Date(event.happenAt).toLocaleDateString()  }}</h1>
         </v-col>
     </v-row>
         <v-row>
         <v-col cols="12" md="12">
             <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Hora:</v-label>
-            <h1>{{event.time}}</h1>
+            <h1>{{ new Date(event.happenAt).getHours() + ":"+ new Date(event.happenAt).getMinutes() }}</h1>
         </v-col>
     </v-row>
     <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Você tem certeza que irá comparecer?</v-label>

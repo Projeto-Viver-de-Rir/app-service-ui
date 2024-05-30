@@ -14,10 +14,10 @@ export class eventPresenceRepository implements eventPresenceRepositoryInterface
         return response.data
     }
     public async create(eventId: string, volunteerId: string): Promise<void> {
-        await this.apiService.post('event/', {eventId, volunteerId})
+        await this.apiService.post('event-presence/', {eventId, volunteerId})
     }
 
     public async delete(presenceId: string): Promise<void> {
-        await this.apiService.delete('event/'+presenceId);
+        await this.apiService.delete('event-presence/'+presenceId);
     }
 }

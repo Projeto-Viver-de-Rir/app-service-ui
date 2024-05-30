@@ -63,7 +63,7 @@ export default defineComponent({
         }
 
         const save = (): void => {
-            store.save();
+            store.saveVonlunteers();
             router.push({ path: '/Eventos', replace: true });
         }
         const event = computed(() => store.getEvent);
@@ -107,11 +107,11 @@ export default defineComponent({
             </v-col>
             <v-col cols="12" md="4">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Data:</v-label>
-                <v-text-field v-model="event.date" :disabled="!isEditing"></v-text-field>
+                <v-text-field :disabled="!isEditing">{{ new Date(event.happenAt).toLocaleDateString()  }}</v-text-field>
             </v-col>
             <v-col cols="12" md="4">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Horário de Início:</v-label>
-                <v-text-field v-model="event.time" :disabled="!isEditing"></v-text-field>
+                <v-text-field disabled="!isEditing">{{ new Date(event.happenAt).getHours() + ":"+ new Date(event.happenAt).getMinutes() }}</v-text-field>
             </v-col>
         </v-row>       
         <v-row style="display: flex;
