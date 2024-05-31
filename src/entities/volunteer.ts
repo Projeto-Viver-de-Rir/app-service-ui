@@ -8,7 +8,7 @@ export interface volunteer {
     city: string
     state : string,
     zip : string,
-    birth_date: string,
+    birthDate: string,
     identifier: string,
     availability: string,
     comments: string,

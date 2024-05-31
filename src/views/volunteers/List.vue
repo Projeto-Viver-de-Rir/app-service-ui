@@ -68,7 +68,7 @@ export default defineComponent({
                             </v-text-field>
                     </v-col>
                     <v-col cols="5" md="5">
-                            <v-text-field label="Email" v-model="filters.email">
+                            <v-text-field label="Nickname" v-model="filters.nickname">
                                 
                             </v-text-field>
                     </v-col>

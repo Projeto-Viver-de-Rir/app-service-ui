@@ -6,7 +6,7 @@ import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 import {useRoute, useRouter} from 'vue-router'
 
-import { useVolunteers } from '../../stores/volunteerStore'
+import { use } from '../../stores/debtStore'
 
 
 

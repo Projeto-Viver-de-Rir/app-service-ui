@@ -8,6 +8,7 @@ import presenceCards from '@/components/widgets/cards/presenceCards.vue'
 import {useRoute, useRouter} from 'vue-router'
 
 import { useVolunteers } from '../../stores/volunteerStore'
+import type { storeToRefs } from 'pinia';
 
 
 
@@ -53,7 +54,7 @@ export default defineComponent({
         });
         const user = computed(() => store.getUser);
         const isLoading = computed(() => store.isLoading);
-        const isEditing = computed(() => store.isLoading); 
+        const isEditing = computed(() => store.isEditing); 
         const segundaChecked = computed(() => store.availability.includes("1"));
         const tercaChecked = computed(() => store.availability.includes("2"));
         const quartaChecked = computed(() => store.availability.includes("3"));
@@ -62,6 +63,37 @@ export default defineComponent({
         const sabadoChecked = computed(() => store.availability.includes("6"));
         const domingoChecked = computed(() => store.availability.includes("0"));
         const indefinidoChecked = computed(() => store.availability === "");
+
+        const edit = (): void => {
+            store.edit();
+        }
+
+        const cancel = (): void => {
+            store.cancel();
+        }
+        const save = async ()  => {
+            await store.save()
+            router.push({ path: '/Voluntarios', replace: true });
+        }
+
+        const changeAvailability = (checkDay: number) : void => {
+            let days = store.availability;
+            if(days.includes(checkDay))
+                days = days.replace(checkDay, '');
+            else
+                days = days + ','+checkDay;
+
+            store.changeAvailability(days);
+        }
+
+        const format = (date) => {
+            const day = date.getDate();
+            const month = (date.getMonth() + 1).toString().padStart(2, "0")
+            const year = date.getFullYear();
+
+            return day+'/'+month+'/'+year;
+        }
+
         return {
             user,
             isLoading,
@@ -75,7 +107,12 @@ export default defineComponent({
             sextaChecked,
             sabadoChecked,
             domingoChecked,
-            indefinidoChecked
+            indefinidoChecked,
+            edit,
+            cancel,
+            save,
+            changeAvailability,
+            format
         }
     }
 })
@@ -84,17 +121,24 @@ export default defineComponent({
 
 <template>
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
+
     <v-row>
-        <v-col cols="6" md="4" >
-            <presenceCards :current="user.actualMonthAttendances || 0" :history="user.lastMonthAttendances || 0"></presenceCards>
-        </v-col>
-        <v-col cols="6" md="4" style="padding-left: 5px">
-            <absencesCards :current="user.actualMonthAbsences || 0" :history="user.lastMonthAbsences || 0"></absencesCards>
-        </v-col>
-    </v-row>
-    <v-row>
-    <UiParentCard v-if="!isLoading && user !== null"> 
-    <v-row>
+        <UiParentCard v-if="!isLoading && user !== null"> 
+            <v-row  v-if="!isEditing">
+            <v-col cols="12" md="12" style="text-align: right;">
+                                <v-btn style="margin-right:10px" size="large" @click="edit()" color="primary" type="submit">Editar</v-btn>
+            </v-col>
+
+        </v-row> 
+        <v-row  v-if="isEditing">
+            <v-col cols="12" md="12" style="text-align: right;">
+                <v-btn style="margin-right:5px" size="large" @click="cancel()" color="light" type="submit">Cancelar</v-btn>
+                <v-btn style="margin-right:5px" size="large" @click="save()" color="success" type="submit">Salvar</v-btn>
+
+            </v-col>
+
+        </v-row> 
+        <v-row>
     <v-col cols="0" md="2">
             <v-avatar size="150">
                 <img src="@/assets/images/profile/user-1.jpg" alt="user" height="150" />
@@ -146,7 +190,7 @@ export default defineComponent({
         </v-col>
         <v-col cols="12" md="4">
             <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Data de Nascimento:</v-label>
-            <v-text-field v-model="user.birth_date" :disabled="!isEditing"></v-text-field>
+            <VueDatePicker v-model="user.birthDate" :format="format" :enableTimePicker="false" :disabled="!isEditing" />
         </v-col>
     </v-row>
     <v-row>
@@ -198,28 +242,28 @@ export default defineComponent({
 
     </v-col>
     <v-col cols="1" md="1">
-        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" :disabled="true" v-model="segundaChecked" />   
+        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" @click="changeAvailability(1)" :disabled="!isEditing" v-model="segundaChecked" />   
     </v-col>
         <v-col cols="1" md="1">
-        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" :disabled="true" v-model="tercaChecked" /> 
+        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" @click="changeAvailability(2)"  :disabled="!isEditing" v-model="tercaChecked" /> 
     </v-col>
         <v-col cols="1" md="1">
-        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" :disabled="true" v-model="quartaChecked" /> 
+        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" @click="changeAvailability(3)" :disabled="!isEditing" v-model="quartaChecked" /> 
     </v-col>
         <v-col cols="1" md="1">
-        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" :disabled="true" v-model="quintaChecked" /> 
+        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" @click="changeAvailability(4)" :disabled="!isEditing" v-model="quintaChecked" /> 
     </v-col>
         <v-col cols="1" md="1">
-        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" :disabled="true" v-model="sextaChecked" /> 
+        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" @click="changeAvailability(5)" :disabled="!isEditing" v-model="sextaChecked" /> 
     </v-col>
         <v-col cols="1" md="1">
-        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" :disabled="true" v-model="sabadoChecked" /> 
+        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" @click="changeAvailability(6)" :disabled="!isEditing" v-model="sabadoChecked" /> 
     </v-col>
         <v-col cols="1" md="1">
-        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" :disabled="true" v-model="domingoChecked" /> 
+        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" @click="changeAvailability(0)" :disabled="!isEditing" v-model="domingoChecked" /> 
     </v-col>
     <v-col cols="2" md="2">
-        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" :disabled="true" v-model="indefinidoChecked" /> 
+        <input type="checkbox" id="checkbox" style="transform:scale(1.8, 1.8); margin-left:10px" @click="changeAvailability(9)"  :disabled="true" v-model="indefinidoChecked" /> 
     </v-col>
 </v-row>
     </UiParentCard>
