@@ -1,11 +1,14 @@
 import { defineStore } from 'pinia'
 import { container } from 'tsyringe'
 import { computed, reactive } from 'vue'
-import type { event, eventVolunteers} from '../entities/event'
+import { finishEventRequest, type event, type eventVolunteers} from '../entities/event'
+import { createEventRequest} from '../entities/operation'
 import { eventFilter } from '../entities/eventFilter'
 import { eventRepository } from '../repositories/eventRepository'
 import { eventPresenceRepository } from '../repositories/eventPresenceRepository'
+import { operationRepository } from '../repositories/operationRepository'
 import { useAuthStore } from '@/stores/auth';
+import { fa } from 'vuetify/lib/locale/index.mjs'
 
 interface eventState {
   event: event | null,
@@ -19,8 +22,10 @@ interface eventState {
   isOtherSelecteced: boolean,
   volunteersPresent: [],
   volunteersDeleted: [],
-  action: string
-  showModel : boolean
+  volunteersConfirmed: finishEventRequest,
+  action: string,
+  showModel : boolean,
+  showModelRemove: boolean,
   isTimeEnded: boolean,
   shouldShowButton: boolean,
   confirmLabel : string,
@@ -31,6 +36,7 @@ export const useEvents = defineStore('events', () => {
   const state = reactive<eventState>({
     isLoading: true,
     showModel: false,
+    showModelRemove: false,
     filters: new eventFilter(""),
     events: [],
     places: [
@@ -56,10 +62,12 @@ export const useEvents = defineStore('events', () => {
     isTimeEnded: false,
     confirmLabel: '',
     nextMonth: '',
-    shouldShowButton: true
+    shouldShowButton: true,
+    volunteersConfirmed: new finishEventRequest([])
   })
   const repository = container.resolve(eventRepository)
   const presenceRepository = container.resolve(eventPresenceRepository)
+  const opRepository = container.resolve(operationRepository)
   const eventLength = computed(() => state.events.length)
   const getList = computed(() => state.events)
   const getEvent = computed(() => state.event)
@@ -69,6 +77,7 @@ export const useEvents = defineStore('events', () => {
   const getNumberConfirmed  = computed(() => state.numberConfirmed)
   const isOtherSelecteced  = computed(() => state.isOtherSelecteced)
   const showModel = computed(() => state.showModel)  
+  const showModelRemove = computed(() => state.showModelRemove)  
   const isTimeEnded = computed(() => state.isTimeEnded)  
   const confirmLabel = computed(() => state.confirmLabel)  
   const nextMonth = computed(() => state.nextMonth)  
@@ -77,9 +86,8 @@ export const useEvents = defineStore('events', () => {
   const shouldShowButton = computed(()=> state.shouldShowButton);
   const getData = async () => {
     state.isLoading = true
-    const data = await repository.getEvents()
+    const data = await repository.getEvents("")
     state.events = data.result
-    console.log(data.result);
     state.isLoading = false;
 
   }
@@ -92,6 +100,7 @@ export const useEvents = defineStore('events', () => {
     const data = await repository.getById(id);
     const dataVolunteers = await presenceRepository.getById(id);
     state.volunteersPresent = [];
+    state.action = "D";
     dataVolunteers.result.forEach(f => state.volunteersPresent.push({
       presenceId: f.id,
       attented: true,
@@ -105,7 +114,7 @@ export const useEvents = defineStore('events', () => {
     state.numberConfirmed = state.volunteersPresent.length
     console.log(state.volunteersPresent.find((element) => element.id == authStore.user.id));
     state.shouldShowButton = state.volunteersPresent.find((element) => element.id == authStore.user.id) == null;
-    const events = await repository.getEvents();
+    const events = await repository.getEvents("");
     events.result.forEach(addIfNotExists);
     state.isLoading = false
 
@@ -122,7 +131,10 @@ export const useEvents = defineStore('events', () => {
   }
 
   const filter = async () => {
-
+    state.isLoading = true
+    const data = await repository.getEvents(state.filters.name)
+    state.events = data.result
+    state.isLoading = false;
   }
 
   const edit = async ()  => {
@@ -180,7 +192,13 @@ export const useEvents = defineStore('events', () => {
 
   const finish = async ()  => {
     state.isLoading = true
-    await repository.finish(state.event.id, state.volunteersPresent);
+    state.volunteersPresent.forEach(element => {
+      if(element.attented)
+        state.volunteersConfirmed.presences.push(element.id);
+    });
+    if(state.volunteersConfirmed.presences.length > 0)
+      await repository.finish(state.event.id, state.volunteersConfirmed);
+    
     state.showModel = false;
     state.isLoading = false;
   }
@@ -228,6 +246,7 @@ export const useEvents = defineStore('events', () => {
 
   const openModal = (open: boolean): void => {
     state.showModel = open;
+    state.showModelRemove = open;
     state.isTimeEnded = !open;
     state.confirmLabel = "Confirmar (5)";
     countDown = 5;
@@ -248,6 +267,36 @@ export const useEvents = defineStore('events', () => {
       state.isTimeEnded = true;
       state.confirmLabel = "Confirmar";
     }
+  }
+
+  const runProcess = async ()  => {
+    state.showModel = true;
+    state.isLoading = true;
+
+    let date = new Date();
+    var newDate = new Date(date.setMonth(date.getMonth()+2));
+    var request = new createEventRequest(newDate);
+    await opRepository.createEvents(request);
+
+    const data = await repository.getEvents("")
+    state.events = data.result
+
+    state.showModel = false;
+    state.isLoading = false;
+  }
+
+  const remove = async (event: event)  => {  
+    state.isLoading = true;
+    await repository.delete(event.id);
+
+    const data = await repository.getEvents(state.filters.name)
+    state.events = data.result
+
+    state.showModelRemove = false;
+  }
+  const openModalRemove = async(event: event) => {  
+    state.event = event;
+    state.showModelRemove = true;
   }
 
   return {
@@ -272,6 +321,8 @@ export const useEvents = defineStore('events', () => {
     finish,
     CreateNewEvent,
     showModel,
+    showModelRemove,
+    openModalRemove,
     openModal, 
     isTimeEnded,
     confirmLabel,
@@ -279,6 +330,8 @@ export const useEvents = defineStore('events', () => {
     saveVonlunteers,
     shouldShowButton,
     nextMonth,
-    volunteersPresent
+    volunteersPresent,
+    runProcess,
+    remove
   }
 })

@@ -7,10 +7,21 @@ import type { Api } from '../services/api'
 @injectable()
 export class eventRepository implements eventRepositoryInterface {
   constructor(@inject('ApiService') private apiService: Api) {}
+  public async delete(eventId: string): Promise<void> {
+    await this.apiService.delete('event/'+ eventId);
+  }
 
-  public async getEvents(): Promise<eventsResponse> {
+  public async getEvents(name : string): Promise<eventsResponse> {
+    console.log(name);
+    if(name !== "")
+    {
+      const response = await this.apiService.invoke('event?name='+name)
+      return response.data
+    }
+
     const response = await this.apiService.invoke('event')
     return response.data
+
   }
 
   public async getById(id:string): Promise<eventResponse> {
@@ -26,11 +37,7 @@ export class eventRepository implements eventRepositoryInterface {
     await this.apiService.put('event/'+ event.id, event)
   }
 
-  public async finish(eventId : string,request: finishEventRequest) : Promise<void> {
-    await this.apiService.put('event/'+ eventId+"/confirm", request)
-  }
-
-  public async confirm(eventId : string) : Promise<void> {
-    await this.apiService.patch('events/'+ eventId+"/vacancy", null)
+  public async finish(eventId : string, request: finishEventRequest) : Promise<void> {
+    await this.apiService.put('event/'+ eventId+"/conclusion", request)
   }
 }

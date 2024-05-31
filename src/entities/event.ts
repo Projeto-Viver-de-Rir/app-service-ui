@@ -31,6 +31,9 @@ export interface eventVolunteers{
     limit: number
   }
 
-  export interface finishEventRequest {
-    presences: number[]
+  export class finishEventRequest {    
+    constructor(
+      public presences: string[]
+    ) {}
   }
+

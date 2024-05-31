@@ -54,7 +54,6 @@ export default defineComponent({
         if(route.fullPath.includes("Detalhes"))
         onMounted(async () => {      
             await store.getById(route.params['id']);
-            console.log(store.shouldShowButton);
         });
         else store.CreateNewEvent();
         
@@ -142,7 +141,7 @@ export default defineComponent({
 <template>
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <UiParentCard v-if="!isLoading && event !== null">
-        <v-row  v-if="!isEditing">
+        <v-row  v-if="!isEditing && event.status == 1">
             <v-col cols="12" md="12" style="text-align: right;">
                                 <v-btn style="margin-right:10px" size="large" @click="edit()" color="primary" type="submit">Editar</v-btn>
 
@@ -223,7 +222,7 @@ export default defineComponent({
   align-items: center;
   justify-content: center;">
 <h1 style="margin-bottom:15px" >Confirmados ({{numberConfirmed}}/ {{event.occupancy}})</h1>
-<v-btn size="large" color="success" v-if="numberConfirmed < event.occupancy && shouldShowButton" @click="confirmModal()"  style="margin-bottom: 5px; margin-left:15px" type="submit">Participar</v-btn>
+<v-btn size="large" color="success" v-if="numberConfirmed < event.occupancy && shouldShowButton && event.status == 1" @click="confirmModal()"  style="margin-bottom: 5px; margin-left:15px" type="submit">Participar</v-btn>
 </v-row>
 <hr class="rounded">
 <v-row >

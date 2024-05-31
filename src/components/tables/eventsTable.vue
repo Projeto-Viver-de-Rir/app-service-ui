@@ -4,11 +4,13 @@ import {defineComponent, computed, onMounted} from 'vue'
 
 import { useEvents } from '../../stores/eventStore'
 import type { event } from '../../entities/event'
-
+import {useRoute, useRouter} from 'vue-router'
 
 
 interface SetupData {
     events: ComputedRef
+    event: ComputedRef,
+    showModelRemove: ComputedRef<boolean>,
 }
 
 const store = useEvents()
@@ -19,11 +21,28 @@ export default defineComponent({
         onMounted(async () => {
             await store.getData();
         });
-
+        const router = useRouter()
        const events = computed(() => store.getList)
-       
+       const event = computed(() => store.event)
+       const showModelRemove = computed(() => store.showModelRemove)
+        const remove = async (id: string)  => {
+            await store.remove(id);
+            router.push({ path: '/Eventos', replace: true });
+        }
+
+        const openModalRemove  = (event: event): void => {
+            console.log("aqui");
+            store.openModalRemove(event);
+        }
+
+        const closeModal = (): void => {
+            store.openModal(false);
+        }
         return {
-            events
+            events,
+            remove,
+            openModalRemove,
+            closeModal
         }
 }});
 
@@ -56,14 +75,15 @@ export default defineComponent({
                     </td>
 <td>
                         <div class="d-flex align-right">
-                            <div class="ml-4" style="width: 100px;">
+                            <div class="ml-6" style="width: 150px;">
                                 <router-link tag="v-btn"
                                     class="btn btn-primary mr-2"
                                     
                                     :to="{name: 'DetailtEvent', params: { id: item.id }}"
                                 >
                                     <v-btn size="small" color="primary" type="submit">Detalhes</v-btn>
-                                </router-link>                                
+                                </router-link>
+                                <v-btn size="small" color="error" @click="openModalRemove(item)" type="submit">Excluir</v-btn>                                
                             </div>
                         </div>
                     </td>
