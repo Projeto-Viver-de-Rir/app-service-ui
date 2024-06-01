@@ -31,7 +31,6 @@ export default defineComponent({
         }
 
         const openModalRemove  = (event: event): void => {
-            console.log("aqui");
             store.openModalRemove(event);
         }
 

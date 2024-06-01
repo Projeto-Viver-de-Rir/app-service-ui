@@ -43,7 +43,7 @@ export const useVolunteers = defineStore('volunteer', () => {
   const isEditing = computed(() => state.isEditing)
   const getData = async () => {
     state.isLoading = true
-    const data = await userRepository.get("","");
+    const data = await userRepository.get("","",1,15);
     state.users = data.result
 
     state.isLoading = false
@@ -64,7 +64,7 @@ export const useVolunteers = defineStore('volunteer', () => {
 
   const filter = async () => {
     state.isLoading = true
-    const data = await userRepository.get(state.filters.name, state.filters.nickname)
+    const data = await userRepository.get(state.filters.name, state.filters.nickname,1,15)
     state.users = data.result
     state.isLoading = false;
   }

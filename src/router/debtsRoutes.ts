@@ -13,8 +13,8 @@ const debtsRoutes = {
         },
         {
             name: 'DetailtDebt',
-            path: '/Mensalidades/Detalhes/:id(\\d+)',
-            component: () => import('@/views/debts/Detail.vue')
+            path: '/Mensalidades/Detalhes/:id',
+            component: () => import('@/views/debts/Edit.vue')
         },
     ]
 };

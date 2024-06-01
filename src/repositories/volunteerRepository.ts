@@ -11,8 +11,8 @@ export class volunteerRepository implements volunteerRepositoryInterface {
     await this.apiService.put('volunteer/'+ volunteer.id, volunteer)
   }
 
-  public async get(name:string, nickname:string): Promise<volunteersResponse> {
-    const response = await this.apiService.invoke('volunteer?name='+name+'&nickname='+nickname)
+  public async get(name:string, nickname:string,page:number, pageSize:number): Promise<volunteersResponse> {
+    const response = await this.apiService.invoke('volunteer?name='+name+'&nickname='+nickname+'&currentPage='+page+'&pageSize='+pageSize)
     return response.data
   }
 
