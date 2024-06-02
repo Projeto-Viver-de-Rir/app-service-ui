@@ -13,10 +13,10 @@ export interface volunteer {
     availability: string,
     comments: string,
     status: string,
-    lastMonthAttendances : string,
-    actualMonthAttendances : string,
-    lastMonthAbsences : string,
-    actualMonthAbsences : string,
+    lastMonthAttendances : number,
+    actualMonthAttendances : number,
+    lastMonthAbsences : number,
+    actualMonthAbsences : number,
   }
 
   export interface volunteersResponse {

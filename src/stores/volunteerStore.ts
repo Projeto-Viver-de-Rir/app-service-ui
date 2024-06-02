@@ -53,11 +53,8 @@ export const useVolunteers = defineStore('volunteer', () => {
     state.isLoading = true
     const data = await userRepository.getById(id);
     state.user = data;  
+    console.log(data);
     state.initialUser = data;
-    state.users.lastMonthAttendances = "0";
-    state.users.actualMonthAttendances  = "0";
-    state.users.lastMonthAbsences  = "0";
-    state.users.actualMonthAbsences  = "0";
     state.isLoading = false
 
 }

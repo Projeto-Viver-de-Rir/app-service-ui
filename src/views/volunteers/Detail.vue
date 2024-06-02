@@ -121,7 +121,14 @@ export default defineComponent({
 
 <template>
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
-
+    <v-row v-if="!isLoading && user !== null">
+        <v-col cols="6" md="4" >
+            <presenceCards :current="user.actualMonthAttendances" :history="user.lastMonthAttendances"></presenceCards>
+        </v-col>
+        <v-col cols="6" md="4" style="padding-left: 5px">
+            <absencesCards :current="user.actualMonthAbsences" :history="user.lastMonthAbsences"></absencesCards>
+        </v-col>
+    </v-row>
     <v-row>
         <UiParentCard v-if="!isLoading && user !== null"> 
             <v-row  v-if="!isEditing">
