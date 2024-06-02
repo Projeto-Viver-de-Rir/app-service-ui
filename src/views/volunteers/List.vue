@@ -6,14 +6,12 @@ import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 import volunteersTable from '@/components/tables/volunteersTable.vue';
 import {useRoute, useRouter} from 'vue-router'
-
 import { useVolunteers } from '../../stores/volunteerStore'
-
-
 
 interface SetupData {
     filters: ComputedRef;
     getUsers: () => void;
+    isLoading: ComputedRef<bool>
 }
 
 export default defineComponent({
@@ -41,6 +39,7 @@ export default defineComponent({
         const router = useRouter()
         const store = useVolunteers()
         const filters = computed(() => store.filters);
+        const isLoading = computed(() => store.isLoading);
         const getUsers = (): void => {
             store.filter()
         }
@@ -49,7 +48,7 @@ export default defineComponent({
             filters,
             getUsers,
             page,
-            breadcrumbs
+            breadcrumbs,
         }
     }
 })
@@ -57,6 +56,7 @@ export default defineComponent({
 </script>
 
 <template>
+
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <v-row>
         <v-col cols="12" md="12">

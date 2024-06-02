@@ -176,7 +176,7 @@ export const useEvents = defineStore('events', () => {
         city: eventToSent?.city,
         meetingPoint: eventToSent?.meetingPoint,
         occupancy : eventToSent?.occupancy,
-        happenAt: "2024-05-25T10:00:00Z",
+        happenAt: eventToSent?.happenAt,
         status: 1
       });
     state.isLoading = false
