@@ -185,6 +185,7 @@ export const useEvents = defineStore('events', () => {
   const confirmVacancy = async ()  => {
     state.isLoading = true
     state.showModel = false;
+    state.showModelRemove = false;
     const authStore = useAuthStore();
     await presenceRepository.create(state.event.id, authStore.user.id);
     state.isLoading = false
@@ -199,7 +200,9 @@ export const useEvents = defineStore('events', () => {
     if(state.volunteersConfirmed.presences.length > 0)
       await repository.finish(state.event.id, state.volunteersConfirmed);
     
+
     state.showModel = false;
+    state.showModelRemove = false;
     state.isLoading = false;
   }
 
@@ -282,6 +285,7 @@ export const useEvents = defineStore('events', () => {
     state.events = data.result
 
     state.showModel = false;
+    state.showModelRemove = false;
     state.isLoading = false;
   }
 

@@ -116,7 +116,7 @@ export default defineComponent({
             </v-col>
             <v-col cols="12" md="4">
                 <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Horário de Início:</v-label>
-                <v-text-field disabled="!isEditing">{{ new Date(event.happenAt).getHours() + ":"+ new Date(event.happenAt).getMinutes() }}</v-text-field>
+                <v-text-field disabled="!isEditing">{{ new Date(event.happenAt).getHours() + ":"+ (new Date(event.happenAt).getMinutes() < 10 ? '0' : '') + new Date(event.happenAt).getMinutes() }}</v-text-field>
             </v-col>
         </v-row>       
         <v-row style="display: flex;

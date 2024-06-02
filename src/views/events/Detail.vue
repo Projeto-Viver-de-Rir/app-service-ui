@@ -260,7 +260,7 @@ export default defineComponent({
         <v-row>
         <v-col cols="12" md="12">
             <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Hora:</v-label>
-            <h1>{{ new Date(event.happenAt).getHours() + ":"+ new Date(event.happenAt).getMinutes() }}</h1>
+            <h1>{{ new Date(event.happenAt).getHours() + ":"+ (new Date(event.happenAt).getMinutes() < 10 ? '0' : '') + new Date(event.happenAt).getMinutes() }}</h1>
         </v-col>
     </v-row>
     <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Você tem certeza que irá comparecer?</v-label>
