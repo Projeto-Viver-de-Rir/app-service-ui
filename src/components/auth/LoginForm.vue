@@ -6,8 +6,8 @@ import { Form } from 'vee-validate';
 const checkbox = ref(false);
 const valid = ref(false);
 const show1 = ref(false);
-const password = ref('Oi@123456');
-const email = ref('dev-viniciusmachado@gmail.com');
+const password = ref('');
+const email = ref('');
 const passwordRules = ref([
     (v: string) => !!v || 'Senha é obrigatória'
 ]);
