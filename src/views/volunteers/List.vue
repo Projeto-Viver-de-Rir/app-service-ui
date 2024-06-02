@@ -5,6 +5,7 @@ import type {ComputedRef, Ref} from 'vue'
 import BaseBreadcrumb from '@/components/shared/BaseBreadcrumb.vue';
 import UiParentCard from '@/components/shared/UiParentCard.vue';
 import volunteersTable from '@/components/tables/volunteersTable.vue';
+
 import {useRoute, useRouter} from 'vue-router'
 import { useVolunteers } from '../../stores/volunteerStore'
 
@@ -19,7 +20,7 @@ export default defineComponent({
     components: {
         BaseBreadcrumb,
         UiParentCard,
-        volunteersTable
+        volunteersTable,
     },
     setup(): SetupData {
         const page = ref({ title: 'Voluntários' });
@@ -49,6 +50,7 @@ export default defineComponent({
             getUsers,
             page,
             breadcrumbs,
+            isLoading
         }
     }
 })
@@ -56,7 +58,7 @@ export default defineComponent({
 </script>
 
 <template>
-
+    <div v-if="isLoading" class="loading"></div>
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <v-row>
         <v-col cols="12" md="12">

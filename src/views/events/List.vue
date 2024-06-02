@@ -31,7 +31,8 @@ interface SetupData {
     showModel: ComputedRef<boolean>,
     showModelRemove: ComputedRef<boolean>,
     event: ComputedRef
-    nextMonth: ComputedRef
+    nextMonth: ComputedRef,
+    isLoading: ComputedRef<boolean>,
 }
 
 export default defineComponent({
@@ -79,10 +80,12 @@ export default defineComponent({
         const nextMonth = computed(() => store.nextMonth);
         const filters  = computed(() => store.filters);
         const event = computed(() => store.getEvent);
+        const isLoading = computed(() => store.isLoading)
        const showModelRemove = computed(() => store.showModelRemove)
         return {
             filters,
             getEvents,
+            isLoading,
             page,
             breadcrumbs,
             nextMonth,
@@ -100,6 +103,7 @@ export default defineComponent({
 </script>
 
 <template>
+    <div v-if="isLoading" class="loading"></div>
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <v-row>
         <v-col cols="12" md="12">

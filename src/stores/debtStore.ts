@@ -55,7 +55,7 @@ interface debtState {
     const startDateGenerateDebts = computed(() => state.startDateGenerateDebts)
     const endDateGenerateDebts = computed(() => state.endDateGenerateDebts)
     const generateDebtsRequest = computed(() => state.generateDebtsRequest)
-
+    const isLoading = computed(() => state.isLoading)
     const getById = async (id: string): Promise<void> => {
         state.isLoading = true
         const data = await repository.getById(id);
@@ -164,6 +164,7 @@ interface debtState {
         openModalGenerateDebts,
         closeModalGenerateDebts,
         generateDebts,
-        generateDebtsRequest
+        generateDebtsRequest,
+        isLoading
     }
   });

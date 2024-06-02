@@ -12,6 +12,7 @@ import { useDebts } from '../../stores/debtStore'
 
 interface SetupData {
     filters: ComputedRef;
+    isLoading: ComputedRef<boolean>,
     debt: ComputedRef;
     users: ComputedRef;
     getDebts: () => void;
@@ -55,7 +56,7 @@ export default defineComponent({
         const generateDebtsRequest = computed(() => store.generateDebtsRequest)
         const users = computed(() => store.users)
  
-
+        const isLoading = computed(() => store.isLoading)
         const format = (date) => {
             const day = date.getDate();
             const month = (date.getMonth() + 1).toString().padStart(2, "0")
@@ -104,7 +105,8 @@ export default defineComponent({
             generateDebts,
             showModelGenerateDebts,
             generateDebtsRequest,
-                   users
+            users,
+            isLoading
         }
     }
 })
@@ -112,6 +114,7 @@ export default defineComponent({
 </script>
 
 <template>
+    <div v-if="isLoading" class="loading"></div>
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <v-row>
         <v-col cols="12" md="12">

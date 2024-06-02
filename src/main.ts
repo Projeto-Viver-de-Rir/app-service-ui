@@ -28,7 +28,7 @@ import regisContainer from './di/registration'
 
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
-
+import './scss/loading.css';
 const i18n = createI18n({
     locale: 'en',
     messages: messages,

@@ -120,6 +120,7 @@ export default defineComponent({
 </script>
 
 <template>
+    <div v-if="isLoading" class="loading"></div>
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <v-row v-if="!isLoading && user !== null">
         <v-col cols="6" md="4" >

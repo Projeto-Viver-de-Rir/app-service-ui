@@ -81,6 +81,7 @@ export default defineComponent({
 </script>
 
 <template>
+    <div v-if="isLoading" class="loading"></div>
     <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs"></BaseBreadcrumb>
     <UiParentCard v-if="!isLoading && debt !== null">
         <v-row>
