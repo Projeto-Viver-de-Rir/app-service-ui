@@ -1,15 +1,15 @@
 const MainRoutes = {
     path: '/main',
     meta: {
-        requiresAuth: false
+        requiresAuth: true
     },
     redirect: '/main',
-    component: () => import('@/layouts/public/index.vue'),
+    component: () => import('@/layouts/full/FullLayout.vue'),
     children: [
         {
-            name: 'Starter',
-            path: '/',
-            component: () => import('@/views/Index.vue')
+            name: 'Dashboard',
+            path: '/Dashboard',
+            component: () => import('@/views/Dashboard.vue')
         }
     ]
 };

@@ -46,7 +46,7 @@ export default defineComponent({
                     <td>
                         <div class="d-flex align-left">
                               <div>
-                                <h6 class="text-h6">{{ item.volunteerId }}</h6>
+                                <h6 class="text-h6">{{ item.volunteer.name }}</h6>
                             </div>
                         </div>
                     </td>

@@ -6,6 +6,11 @@ const AuthRoutes = {
     },
     children: [
         {
+            name: 'Starter',
+            path: '/',
+            component: () => import('@/views/Index.vue')
+        },
+        {
             name: 'Side Login',
             path: '/auth/login',
             component: () => import('@/views/authentication/SideLogin.vue')

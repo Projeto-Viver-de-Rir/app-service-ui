@@ -11,33 +11,34 @@ export class Api implements ApiInterface {
   
   async invoke<T = any>(url: string): Promise<AxiosResponse<T>> {
     
-    const auth: any = useAuthStore();
+    let accessToken = localStorage.getItem("token");
     const config = {
       headers: {
-         Authorization: "Bearer " + auth.token
+         Authorization: "Bearer " + accessToken
       }
     }
 
     return await this.client.request({
       url,
       headers: {
-        Authorization: "Bearer " + auth.token
+        Authorization: "Bearer " + accessToken
       }
     })
   }
 
   async invokeWithToken<T = any>(url: string, token:string): Promise<AxiosResponse<T>> {
     
+    let accessToken = localStorage.getItem("token");
     const config = {
       headers: {
-         Authorization: "Bearer " + token
+         Authorization: "Bearer " + accessToken
       }
     }
 
     return await this.client.request({
       url,
       headers: {
-        Authorization: "Bearer " + token
+        Authorization: "Bearer " + accessToken
       }
     })
   }
@@ -45,10 +46,10 @@ export class Api implements ApiInterface {
   async post<T = any>(url : string, request: T) : Promise<void> {   
     
     const auth: any = useAuthStore();
-
+    let accessToken = localStorage.getItem("token");
     const config = {
       headers: {
-         Authorization: "Bearer " + auth.token
+         Authorization: "Bearer " + accessToken
       }
     }
     return await this.client.post(url, request, config).then(function (response) {
@@ -61,10 +62,10 @@ export class Api implements ApiInterface {
   async delete<T = any>(url : string) : Promise<void> {   
     
     const auth: any = useAuthStore();
-
+    let accessToken = localStorage.getItem("token");
     const config = {
       headers: {
-         Authorization: "Bearer " + auth.token
+         Authorization: "Bearer " + accessToken
       }
     }
     return await this.client.delete(url, config).then(function (response) {

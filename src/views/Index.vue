@@ -7,12 +7,13 @@ import PhotoGallery from '@/components/landingPage/section/photoGallery.vue';
 import UserReview from '@/components/landingPage/section/userReview.vue';
 import AskQuestion from '@/components/landingPage/section/askQuestion.vue';
 import Footer from '@/components/landingPage/layout/Footer.vue';
-
 import 'aos/dist/aos.css';
 import AOS from 'aos';
-
+import { useAuthStore } from '@/stores/auth';
 onMounted(() => {
     AOS.init();
+    const authStore = useAuthStore();
+        authStore.clearSession();
 });
 
 </script>

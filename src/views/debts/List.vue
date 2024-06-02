@@ -160,7 +160,7 @@ export default defineComponent({
     <v-row>
         <v-col cols="12" md="12">
             <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Voluntário:</v-label>
-            <h1>{{debt.volunteerId}}</h1>
+            <h1>{{debt.volunteer.name}}</h1>
         </v-col>
     </v-row>
     <v-row>

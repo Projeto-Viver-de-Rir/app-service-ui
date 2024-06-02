@@ -93,7 +93,7 @@ export default defineComponent({
         <v-row>
         <v-col cols="12" md="6">
             <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Voluntário:</v-label>
-            <v-text-field v-model="debt.volunteerId" :disabled="true"></v-text-field>
+            <v-text-field v-model="debt.volunteer.name" :disabled="true"></v-text-field>
         </v-col>
         <v-col cols="12" md="6">
             <v-label class="text-subtitle-1 font-weight-semibold text-lightText">Competência:</v-label>

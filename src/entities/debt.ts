@@ -6,9 +6,15 @@ export interface debt {
     dueDate: Date,
     volunteerId: string,
     paidAt: Date | null,
-    paidBy: string
+    paidBy: string,
+    volunteer: volunteerDebt
   }
 
+  export interface volunteerDebt {
+    id: string,
+    name: string,
+    accountId: string,
+  }
 
   export class payRequest {
     constructor(

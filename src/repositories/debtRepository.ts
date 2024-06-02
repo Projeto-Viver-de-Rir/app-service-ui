@@ -10,6 +10,7 @@ export class debtRepository implements debtRepositoryInterface {
     constructor(@inject('ApiService') private apiService: Api) {}
     public async getDebts(volunteerId: string, name: string,page:number, pageSize:number): Promise<debtsResponse> {
         const response = await this.apiService.invoke('debt?volunteerId='+volunteerId+'&name='+name+'&currentPage='+page+'&pageSize='+pageSize)
+        console.log(response);
         return response.data
     }
     public async getById(id: string): Promise<debtResponse> {

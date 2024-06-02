@@ -69,7 +69,7 @@ interface debtState {
         state.debts = data.result
 
         const userData = await userRepository.get("","",1,2000);
-        console.log(userData);
+        state.users = [];
         userData.result.forEach((element)=>{
             state.users.push({value:element.id, title:element.name});
         });

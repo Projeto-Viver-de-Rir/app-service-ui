@@ -1,7 +1,14 @@
 <script setup lang="ts">
+import { ref, onMounted } from 'vue';
 import Logo from '@/layouts/full/logo/Logo.vue';
+import { useAuthStore } from '@/stores/auth';
 /* Login form */
 import LoginForm from '@/components/auth/LoginForm.vue';
+    onMounted(() => {
+        const authStore = useAuthStore();
+        authStore.startSession();
+});
+
 </script>
 
 <template>
@@ -10,7 +17,7 @@ import LoginForm from '@/components/auth/LoginForm.vue';
             <v-col cols="12" lg="7" xl="8"
                 class="d-lg-flex align-center justify-center authentication position-relative">
                 <div class="">
-                    <img src="@/assets/images/bg_login.jpg"/>
+                    <img src="@/assets/images/landingPage/background-starter.png" />
                 </div>
             </v-col>
             <v-col cols="12" lg="5" xl="4" class="d-flex align-center justify-center">

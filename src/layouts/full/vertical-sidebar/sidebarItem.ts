@@ -33,7 +33,7 @@ const sidebarItem: menu[] = [
     {
         title: 'Dashboard',
         icon: DashboardIcon,
-        to: '/'
+        to: '/Dashboard'
     },
     {
         title: 'Eventos',
