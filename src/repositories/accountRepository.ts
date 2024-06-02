@@ -12,5 +12,8 @@ export class accountRepository implements accountRepositoryInterface {
     const response = await this.apiService.invoke('account/myself')
     return response.data
   }
-
+  public async getCurrentUserWithToken(token: string): Promise<accountResponse> {
+    const response = await this.apiService.invokeWithToken('account/myself', token)
+    return response.data
+  }
 }

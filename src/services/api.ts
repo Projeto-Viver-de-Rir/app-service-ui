@@ -5,7 +5,7 @@ import { useAuthStore } from '@/stores/auth';
 
 export class Api implements ApiInterface {
   client = axios.create({
-    baseURL: 'https://localhost:7123/api/',
+    baseURL: 'https://institutional-app-iwaxs.ondigitalocean.app/api/',
     timeout: 9000
   })
   
@@ -22,6 +22,22 @@ export class Api implements ApiInterface {
       url,
       headers: {
         Authorization: "Bearer " + auth.token
+      }
+    })
+  }
+
+  async invokeWithToken<T = any>(url: string, token:string): Promise<AxiosResponse<T>> {
+    
+    const config = {
+      headers: {
+         Authorization: "Bearer " + token
+      }
+    }
+
+    return await this.client.request({
+      url,
+      headers: {
+        Authorization: "Bearer " + token
       }
     })
   }

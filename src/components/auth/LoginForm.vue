@@ -7,7 +7,7 @@ const checkbox = ref(false);
 const valid = ref(false);
 const show1 = ref(false);
 const password = ref('Oi@123456');
-const email = ref('dev-vinicicius.machado@gmail.com');
+const email = ref('dev-viniciusmachado@gmail.com');
 const passwordRules = ref([
     (v: string) => !!v || 'Senha é obrigatória'
 ]);
