@@ -10,7 +10,18 @@ import {
     UserCircleIcon,
     CashBanknoteIcon,
     GrainIcon,
-    DashboardIcon
+    DashboardIcon,
+    UsersIcon,
+    BrandApplePodcastIcon,
+    BoxMultiple0Icon,
+    CashIcon,
+    UserSearchIcon,
+    CoinIcon,
+    UserExclamationIcon,
+    SettingsIcon,
+    CalendarTimeIcon,
+    FriendsIcon,
+    SettingsAutomationIcon
 } from 'vue-tabler-icons';
 
 export interface menu {
@@ -33,23 +44,88 @@ const sidebarItem: menu[] = [
     {
         title: 'Dashboard',
         icon: DashboardIcon,
-        to: '/Dashboard'
+        to: '/dashboard'
     },
     {
         title: 'Eventos',
         icon: CalendarEventIcon,
-        to: '/Eventos'
+        to: '/eventos'
     },
     {
         title: 'Voluntários',
+        icon: UsersIcon,
+        to: '/voluntarios'
+    },
+    { header: 'Minha área' },
+    {
+        title: 'Meu Perfil',
         icon: UserCircleIcon,
-        to: '/Voluntarios'
+        to: '/eventos'
     },
     {
-        title: 'Mensalidade',
+        title: 'Minhas Mensalidades',
         icon: CashBanknoteIcon,
-        to: '/Mensalidades'
-    }
+        to: '/mensalidades'
+    },    
+    { header: 'Grupos de trabalho' },
+    {
+        title: 'Executivo',
+        icon: BrandApplePodcastIcon,
+        to: '/a'
+    },
+    {
+        title: 'Coordenação',
+        icon: UserSearchIcon,
+        to: '/d'
+    },    
+    {
+        title: 'Conselho consultivo',
+        icon: BoxMultiple0Icon,
+        to: '/b'
+    },
+    {
+        title: 'Conselho fiscal',
+        icon: CashIcon,
+        to: '/c'
+    },
+    { header: 'Gestão' },
+    {
+        title: 'Mensalidades',
+        icon: CoinIcon,
+        to: '/eventos'
+    },
+    {
+        title: 'Presença no trimestre',
+        icon: AwardIcon,
+        to: '/eventos'
+    },
+    {
+        title: 'Inadimplência atual',
+        icon: UserExclamationIcon,
+        to: '/eventos'
+    },
+    {
+        title: 'Configurações',
+        icon: SettingsIcon,
+        to: '/',
+        children: [
+            {
+                title: 'Eventos',
+                icon: CalendarTimeIcon,
+                to: '/schedule-event(transformar)'
+            },
+            {
+                title: 'Equipes',
+                icon: FriendsIcon,
+                to: '/team(transformar)'
+            },                        
+            {
+                title: 'Sistema',
+                icon: SettingsAutomationIcon,
+                to: '/config(transformar)'
+            }
+        ]
+    }    
 ];
 
 export default sidebarItem;
