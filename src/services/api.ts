@@ -76,11 +76,10 @@ export class Api implements ApiInterface {
     });
   }
   async put<T = any>(url : string, request: T) : Promise<void> {    
-    const auth: any = useAuthStore();
-
+    let accessToken = localStorage.getItem("token");
     const config = {
       headers: {
-         Authorization: "Bearer " + auth.token
+         Authorization: "Bearer " + accessToken
       }
     }
     return await this.client.put(url, request, config).then(function (response) {
