@@ -19,9 +19,11 @@ import { ref } from 'vue';
                         </v-col>
                         <v-col cols="12" lg="4" sm="4" data-aos="fade-up">
                             <p>
-                                A ONG "Viver de Rir" surgiu de um projeto de conclusão de curso dedicado à humanização do ambiente hospitalar. 
-                                Durante a pesquisa, uma abordagem inovadora foi descoberta: criar um ambiente hospitalar alegre e descontraído para pacientes, 
-                                reduzindo o tempo de internação por meio de adaptações comportamentais. Essa descoberta inspirou a fundação da ONG, 
+                                A ONG "Viver de Rir" surgiu de um projeto de mestrado dedicado à humanização hospitalar. 
+                                Durante a pesquisa abordagens inovadoras foram estudadas e mostravam o benefício de um ambiente 
+                                hospitalar alegre e descontraído para os pacientes, melhorando a qualidade do período de internação, 
+                                assim como a redução desse tempo, melhor resposta pós operatória e outras vantagens através de abordagens 
+                                simples e terapêuticas, mas não pela equipe assistencial. Essa descoberta inspirou a fundação da ONG, 
                                 que compartilha valores alinhados com essa abordagem.
                             </p>
                         </v-col>

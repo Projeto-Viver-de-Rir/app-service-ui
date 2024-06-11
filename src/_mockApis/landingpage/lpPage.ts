@@ -24,7 +24,7 @@ const userReview: UserReviewTypes[] = [
     {
         img: review1,
         title: 'Cristian Machado',
-        subtitle: 'Palhaço voluntária desde 2018',
+        subtitle: 'Palhaço voluntário desde 2018',
         review: 'Fazer parte da ONG Viver de Rir, e poder transmitir um pouco de atenção, uma brincadeira, um sorriso, ou até mesmo um simples olhar, faz com que tudo na vida valha a pena. E a retribuição e o reconhecimento de nossa presença a cada visita, alimenta nossa alma...'
     },
     {

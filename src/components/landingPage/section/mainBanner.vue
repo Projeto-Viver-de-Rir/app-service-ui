@@ -32,7 +32,7 @@
                             >Missão</span
                         >
                         <p class="pt-8 pb-6 text-h5 font-weight-regular" data-aos="fade-up" data-aos-duration="800">
-                            Proporcionar acolhimento com alegria, empatia e amor, através da figura do palhaço, promovendo o protagonismo nas relações com as pessoas, em situação de vulnerabilidade.
+                            Proporcionar acolhimento com alegria, empatia e amor, através da figura do palhaço, promovendo o protagonismo nas relações com as pessoas em situação de vulnerabilidade.
                         </p>
                     </div>
                 </v-col>
@@ -42,7 +42,7 @@
                             >Visão</span
                         >
                         <p class="pt-8 pb-6 text-h5 font-weight-regular" data-aos="fade-up" data-aos-duration="800">
-                            Ser reconhecido como uma organização transmissora de alegria e amor, despertando a consciência da humanização e união das pessoas.
+                            Ser reconhecida como uma organização transmissora de alegria e amor, despertando a consciência da humanização e união das pessoas.
                         </p>
                     </div>
                 </v-col>
