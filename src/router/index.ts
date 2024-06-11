@@ -6,6 +6,7 @@ import volunteersRoutes from './volunteersRoutes';
 import { useAuthStore } from '@/stores/auth';
 import debtsRoutes from './debtsRoutes'
 import scheduleEventsRoutes from './scheduleEventsRoutes'
+import teamsRoutes from './teamsRoutes'
 
 export const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +20,8 @@ export const router = createRouter({
         eventsRoutes,
         volunteersRoutes,
         debtsRoutes,
-        scheduleEventsRoutes
+        scheduleEventsRoutes,
+        teamsRoutes
     ]
 });
 

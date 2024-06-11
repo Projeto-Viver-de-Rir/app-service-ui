@@ -117,7 +117,7 @@ const sidebarItem: menu[] = [
             {
                 title: 'Equipes',
                 icon: FriendsIcon,
-                to: '/team(transformar)'
+                to: '/teams'
             },                        
             {
                 title: 'Sistema',
