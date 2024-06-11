@@ -110,9 +110,9 @@ const sidebarItem: menu[] = [
         to: '/',
         children: [
             {
-                title: 'Eventos',
+                title: 'Eventos Planejados',
                 icon: CalendarTimeIcon,
-                to: '/schedule-event(transformar)'
+                to: '/schedule-events'
             },
             {
                 title: 'Equipes',
