@@ -122,7 +122,7 @@ const sidebarItem: menu[] = [
             {
                 title: 'Sistema',
                 icon: SettingsAutomationIcon,
-                to: '/config(transformar)'
+                to: '/configs'
             }
         ]
     }    
