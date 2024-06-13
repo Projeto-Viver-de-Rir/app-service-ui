@@ -40,7 +40,7 @@ interface teamState {
     const searchWithFilters = async () => {
       state.isLoading = true
       
-      const data = await repository.search("", 1, 15)
+      const data = await repository.search("", "", 1, 15)
       state.teams = data.result;
 
       state.isLoading = false;
@@ -49,7 +49,7 @@ interface teamState {
     const filter = async () => {
       state.isLoading = true
       
-      const data = await repository.search(state.filters.name, 1, 15)
+      const data = await repository.search(state.filters.name, "", 1, 15)
       state.teams = data.result;
   
       state.isLoading = false;

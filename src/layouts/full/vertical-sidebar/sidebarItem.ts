@@ -71,22 +71,22 @@ const sidebarItem: menu[] = [
     {
         title: 'Executivo',
         icon: BrandApplePodcastIcon,
-        to: '/a'
+        to: '/working-groups/administrative'
     },
     {
         title: 'Coordenação',
         icon: UserSearchIcon,
-        to: '/d'
+        to: '/working-groups/operational'
     },    
     {
         title: 'Conselho consultivo',
         icon: BoxMultiple0Icon,
-        to: '/b'
+        to: '/working-groups/advisory'
     },
     {
         title: 'Conselho fiscal',
         icon: CashIcon,
-        to: '/c'
+        to: '/working-groups/fiscal'
     },
     { header: 'Gestão' },
     {
