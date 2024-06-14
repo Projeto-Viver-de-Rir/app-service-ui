@@ -41,6 +41,7 @@ export interface menu {
 }
 
 const sidebarItem: menu[] = [
+    { header: 'Início' },
     {
         title: 'Dashboard',
         icon: DashboardIcon,
@@ -60,49 +61,49 @@ const sidebarItem: menu[] = [
     {
         title: 'Meu Perfil',
         icon: UserCircleIcon,
-        to: '/eventos'
+        to: '/personal-profile'
     },
     {
         title: 'Minhas Mensalidades',
         icon: CashBanknoteIcon,
-        to: '/mensalidades'
+        to: '/personal-debts'
     },    
     { header: 'Grupos de trabalho' },
     {
         title: 'Executivo',
         icon: BrandApplePodcastIcon,
-        to: '/a'
+        to: '/working-groups/executive'
     },
     {
         title: 'Coordenação',
         icon: UserSearchIcon,
-        to: '/d'
+        to: '/working-groups/operational'
     },    
     {
         title: 'Conselho consultivo',
         icon: BoxMultiple0Icon,
-        to: '/b'
+        to: '/working-groups/advisory'
     },
     {
         title: 'Conselho fiscal',
         icon: CashIcon,
-        to: '/c'
+        to: '/working-groups/fiscal'
     },
     { header: 'Gestão' },
     {
         title: 'Mensalidades',
         icon: CoinIcon,
-        to: '/eventos'
+        to: '/mensalidades'
     },
     {
         title: 'Presença no trimestre',
         icon: AwardIcon,
-        to: '/eventos'
+        to: '/reports/attendancy'
     },
     {
         title: 'Inadimplência atual',
         icon: UserExclamationIcon,
-        to: '/eventos'
+        to: '/reports/non-payment'
     },
     {
         title: 'Configurações',
