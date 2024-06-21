@@ -13,11 +13,7 @@ const store = useWorkingGroups();
 export default defineComponent({
   name: "WorkingGroupsTable",
   setup(): SetupData {
-    onMounted(async () => {
-      await store.searchAdministrative();
-    });
-
-    const workingGroups = computed(() => store.getAdministrative);
+    const workingGroups = computed(() => store.getWorkingGroups);
     return {
       workingGroups,
     };
@@ -55,7 +51,7 @@ export default defineComponent({
             <v-card-item class="text-center">
               <v-avatar size="80">
                 <img
-                  :src="card.volunteer.photo"
+                  src="@/assets/images/palhaco.png"
                   :alt="card.volunteer.name"
                   width="80"
                 />

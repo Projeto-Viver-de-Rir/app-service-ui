@@ -8,7 +8,7 @@ import { teamRepository } from "../repositories/teamRepository";
 
 interface workingGroupState {
   workingGroups: team[];
-  isLoading: false;
+  isLoading: boolean;
 }
 
 export const useWorkingGroups = defineStore("workingGroups", () => {
@@ -65,7 +65,7 @@ export const useWorkingGroups = defineStore("workingGroups", () => {
     state.isLoading = false;
   };
 
-  const getAdministrative = computed(() => state.workingGroups);
+  const getWorkingGroups = computed(() => state.workingGroups);
 
   return {
     searchFiscal,
@@ -73,7 +73,7 @@ export const useWorkingGroups = defineStore("workingGroups", () => {
     searchLegal,
     searchOperational,
     searchAdministrative,
-    getAdministrative,
+    getWorkingGroups,
     isLoading,
   };
 });

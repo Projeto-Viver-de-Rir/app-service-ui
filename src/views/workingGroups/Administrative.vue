@@ -23,12 +23,16 @@ export default defineComponent({
     workingGroupsTable,
   },
   setup(): SetupData {
+    onMounted(async () => {
+      await store.searchAdministrative();
+    });
+
     const page = ref({ title: "Executivo" });
     const breadcrumbs = ref([
       {
         text: "Grupos de Trabalho",
-        disabled: false,
-        href: "/",
+        disabled: true,
+        href: "#",
       },
       {
         text: "Executivo",
