@@ -1,5 +1,3 @@
 export class eventFilter {
-    constructor(
-      public name: string
-    ) {}
-  }
+  constructor(public name: string) {}
+}

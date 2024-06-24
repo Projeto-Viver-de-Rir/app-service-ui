@@ -1,34 +1,34 @@
 export interface volunteer {
-    id: string
-    name: string
-    nickname: string
-    email: string
-    phone: string
-    address: string,
-    city: string
-    state : string,
-    zip : string,
-    birthDate: string,
-    identifier: string,
-    availability: string,
-    comments: string,
-    status: string,
-    lastMonthAttendances : number,
-    actualMonthAttendances : number,
-    lastMonthAbsences : number,
-    actualMonthAbsences : number,
-  }
+  id: string;
+  name: string;
+  nickname: string;
+  email: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  birthDate: string;
+  identifier: string;
+  availability: string;
+  comments: string;
+  status: string;
+  lastMonthAttendances: number;
+  actualMonthAttendances: number;
+  lastMonthAbsences: number;
+  actualMonthAbsences: number;
+}
 
-  export interface volunteersResponse {
-    result: Array<volunteer>
-    skip: number
-    total: number
-    limit: number
-  }
+export interface volunteersResponse {
+  result: Array<volunteer>;
+  skip: number;
+  total: number;
+  limit: number;
+}
 
-  export interface volunteerResponse {
-    volunteer: volunteer
-    skip: number
-    total: number
-    limit: number
-  }
+export interface volunteerResponse {
+  volunteer: volunteer;
+  skip: number;
+  total: number;
+  limit: number;
+}

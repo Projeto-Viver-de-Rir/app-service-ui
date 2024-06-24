@@ -1,5 +1,3 @@
 export class scheduleEventFilter {
-    constructor(
-      public name: string
-    ) {}
-  }
+  constructor(public name: string) {}
+}

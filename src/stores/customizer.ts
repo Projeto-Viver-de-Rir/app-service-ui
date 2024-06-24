@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import config from '@/config'
-
+import config from "@/config";
 
 export const useCustomizerStore = defineStore({
   id: "customizer",
@@ -11,7 +10,7 @@ export const useCustomizerStore = defineStore({
     setHorizontalLayout: config.setHorizontalLayout, // Horizontal layout
     actTheme: config.actTheme,
     boxed: config.boxed,
-    setBorderCard: config.setBorderCard
+    setBorderCard: config.setBorderCard,
   }),
 
   getters: {},
@@ -32,8 +31,8 @@ export const useCustomizerStore = defineStore({
     SET_THEME(payload: any) {
       this.actTheme = payload;
     },
-    SET_CARD_BORDER(payload: any){
-      this.setBorderCard = payload
-    }
+    SET_CARD_BORDER(payload: any) {
+      this.setBorderCard = payload;
+    },
   },
 });
