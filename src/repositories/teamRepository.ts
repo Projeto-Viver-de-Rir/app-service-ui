@@ -8,10 +8,8 @@ import type { teamsResponse, teamResponse, team } from '@/entities/team'
 export class teamRepository implements teamRepositoryInterface {
     constructor(@inject('ApiService') private apiService: Api) {}
     
-    public async search(name: string, page:number, pageSize:number): Promise<teamsResponse> {      
-        const response = await this.apiService.invoke('team?name=' + name + '&currentPage=' + page + '&pageSize=' + pageSize);
-
-        console.log(response);
+    public async search(name: string, teamType: string, page:number, pageSize:number): Promise<teamsResponse> {      
+        const response = await this.apiService.invoke('team?name=' + name + '&teamType=' + teamType + '&currentPage=' + page + '&pageSize=' + pageSize);
 
         return response.data
     }
