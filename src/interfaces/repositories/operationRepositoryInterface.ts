@@ -1,7 +1,10 @@
-import type { createEventRequest, createDebtsRequest} from '../../entities/operation'
+import type {
+  createEventRequest,
+  createDebtsRequest,
+} from "../../entities/operation";
 
 //abstract
 export interface operationRepositoryInterface {
-    createDebts(request: createDebtsRequest): Promise<void>;
-    createEvents(request: createEventRequest): Promise<void>;
+  createDebts(request: createDebtsRequest): Promise<void>;
+  createEvents(request: createEventRequest): Promise<void>;
 }

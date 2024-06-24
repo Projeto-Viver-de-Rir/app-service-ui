@@ -21,11 +21,8 @@ const dark = computed(() => {
     return false;
   }
 });
-
-
 </script>
 <template>
-  
   <LogoLight v-if="dark" />
   <LogoDark v-else />
 </template>
