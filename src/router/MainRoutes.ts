@@ -18,8 +18,8 @@ const MainRoutes = {
             component: () => import('@/views/Dashboard.vue')
         },
         {
-            name: 'WorkingGroups-Administrative',
-            path: '/working-groups/administrative',
+            name: 'WorkingGroups-Executive',
+            path: '/working-groups/executive',
             component: () => import('@/views/workingGroups/Administrative.vue')
         },
         {
