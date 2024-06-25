@@ -1,37 +1,35 @@
 export interface debt {
-    id: string,
-    name: string,
-    description: string,
-    amount: number,
-    dueDate: Date,
-    volunteerId: string,
-    paidAt: Date | null,
-    paidBy: string,
-    volunteer: volunteerDebt
-  }
+  id: string;
+  name: string;
+  description: string;
+  amount: number;
+  dueDate: Date;
+  volunteerId: string;
+  paidAt: Date | null;
+  paidBy: string;
+  volunteer: volunteerDebt;
+}
 
-  export interface volunteerDebt {
-    id: string,
-    name: string,
-    accountId: string,
-  }
+export interface volunteerDebt {
+  id: string;
+  name: string;
+  accountId: string;
+}
 
-  export class payRequest {
-    constructor(
-      public paidAt: Date
-    ) {}
-  }
+export class payRequest {
+  constructor(public paidAt: Date) {}
+}
 
-  export interface debtsResponse {
-    result: Array<debt>
-    skip: number
-    total: number
-    limit: number
-  }
+export interface debtsResponse {
+  result: Array<debt>;
+  skip: number;
+  total: number;
+  limit: number;
+}
 
-  export interface debtResponse {
-    result: debt
-    skip: number
-    total: number
-    limit: number
-  }
+export interface debtResponse {
+  result: debt;
+  skip: number;
+  total: number;
+  limit: number;
+}

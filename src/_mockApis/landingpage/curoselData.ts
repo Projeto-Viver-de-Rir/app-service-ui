@@ -12,7 +12,7 @@ const testimonialSettings = {
   autoplay: false,
 };
 const testimonialBreakpoints = {
-  300: { itemsToShow: 1 },  
+  300: { itemsToShow: 1 },
   600: { itemsToShow: 1 },
   767: { itemsToShow: 2 },
   991: { itemsToShow: 3 },
@@ -20,4 +20,4 @@ const testimonialBreakpoints = {
   1800: { itemsToShow: 3 },
 };
 
-export{curoselSettings,testimonialSettings,testimonialBreakpoints}
+export { curoselSettings, testimonialSettings, testimonialBreakpoints };
