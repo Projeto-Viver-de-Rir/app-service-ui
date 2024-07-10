@@ -14,6 +14,11 @@ interface debtState {
   debt: debt | null;
   initialDebt: debt | null;
   debts: debt[];
+  personalDebts: {
+    results: debt[] | null;
+    sumAmount: number;
+    count: number;
+  };
   users: [];
   filters: debtFilter;
   isEditing: boolean;
@@ -30,6 +35,11 @@ export const useDebts = defineStore("debts", () => {
   const state = reactive<debtState>({
     debt: null,
     initialDebt: null,
+    personalDebts: {
+      results: null,
+      sumAmount: 0,
+      count: 0,
+    },
     debts: [],
     users: [],
     filters: new debtFilter("", ""),
@@ -48,6 +58,7 @@ export const useDebts = defineStore("debts", () => {
   const userRepository = container.resolve(volunteerRepository);
   const filters = computed(() => state.filters);
   const getList = computed(() => state.debts);
+  const getPersonalDebts = computed(() => state.personalDebts);
   const getDebt = computed(() => state.debt);
   const users = computed(() => state.users);
   const showModel = computed(() => state.showModel);
@@ -67,6 +78,37 @@ export const useDebts = defineStore("debts", () => {
     state.isLoading = true;
     const data = await repository.getDebts("", "", 1, 15);
     state.debts = data.result;
+
+    const userData = await userRepository.get("", "", 1, 2000);
+    state.users = [];
+    userData.result.forEach((element) => {
+      state.users.push({ value: element.id, title: element.name });
+    });
+
+    state.isLoading = false;
+  };
+
+  const getDataByYear = async () => {
+    state.isLoading = true;
+    const data = await repository.getDebts("", "", 1, 15);
+
+    const groupedData: any = {};
+
+    data.result.forEach((item) => {
+      const year = new Date(item.dueDate).getFullYear();
+
+      if (!groupedData[year]) {
+        groupedData[year] = [{ ...item }];
+      } else {
+        groupedData[year] = [...groupedData[year], { ...item }];
+      }
+    });
+
+    state.personalDebts = {
+      results: groupedData,
+      sumAmount: data.result.reduce((acc, cur) => acc + cur.amount, 0),
+      count: data.result.length,
+    };
 
     const userData = await userRepository.get("", "", 1, 2000);
     state.users = [];
@@ -138,8 +180,6 @@ export const useDebts = defineStore("debts", () => {
   };
 
   const generateDebts = async () => {
-    console.log(state.generateDebtsRequest.startsAt);
-    console.log(state.generateDebtsRequest.endsAt);
     state.isLoading = true;
     opRepository.createDebts(
       new createDebtsRequest(
@@ -153,6 +193,7 @@ export const useDebts = defineStore("debts", () => {
     getData,
     filter,
     getList,
+    getPersonalDebts,
     getDebt,
     users,
     filters,
@@ -169,6 +210,7 @@ export const useDebts = defineStore("debts", () => {
     closeModalGenerateDebts,
     generateDebts,
     generateDebtsRequest,
+    getDataByYear,
     isLoading,
   };
 });

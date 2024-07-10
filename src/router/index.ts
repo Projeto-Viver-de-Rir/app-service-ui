@@ -8,6 +8,7 @@ import debtsRoutes from "./debtsRoutes";
 import scheduleEventsRoutes from "./scheduleEventsRoutes";
 import teamsRoutes from "./teamsRoutes";
 import configsRoutes from "./configsRoutes";
+import MyAreaRoutes from "./MyAreaRoutes";
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,7 @@ export const router = createRouter({
     scheduleEventsRoutes,
     teamsRoutes,
     configsRoutes,
+    MyAreaRoutes,
   ],
 });
 

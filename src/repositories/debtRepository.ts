@@ -29,7 +29,6 @@ export class debtRepository implements debtRepositoryInterface {
         "&pageSize=" +
         pageSize
     );
-    console.log(response);
     return response.data;
   }
   public async getById(id: string): Promise<debtResponse> {

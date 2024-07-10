@@ -11,12 +11,6 @@ const MainRoutes = {
       path: "/Dashboard",
       component: () => import("@/views/Dashboard.vue"),
     },
-    //Working-groups
-    {
-      name: "Dashboard",
-      path: "/Dashboard",
-      component: () => import("@/views/Dashboard.vue"),
-    },
     {
       name: "WorkingGroups-Executive",
       path: "/working-groups/executive",
