@@ -1,8 +1,8 @@
 export interface authResponse {
-    token: string
-  }
+  token: string;
+}
 
-  export interface authRequest {
-    email: string,
-    password: string
-  }
+export interface authRequest {
+  email: string;
+  password: string;
+}
