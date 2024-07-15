@@ -6,7 +6,6 @@ const MainRoutes = {
   redirect: "/main",
   component: () => import("@/layouts/full/FullLayout.vue"),
   children: [
-    //Working-groups
     {
       name: "Dashboard",
       path: "/Dashboard",
