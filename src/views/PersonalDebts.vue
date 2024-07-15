@@ -24,7 +24,9 @@ export default defineComponent({
 
   setup(): SetupData {
     onMounted(async () => {
-      await store.getDataByYear();
+      const user = JSON.parse(localStorage.getItem("user") || "");
+
+      await store.getDataByYear(user.id);
     });
 
     const debts = computed(() => store.getPersonalDebts);
@@ -59,7 +61,7 @@ export default defineComponent({
   <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs" />
 
   <template v-if="debts.results">
-    <PersonalDebtsHeader />
+    <PersonalDebtsHeader v-if="debts.count > 0" />
     <personalDebtsTable />
   </template>
 </template>

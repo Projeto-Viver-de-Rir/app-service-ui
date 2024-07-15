@@ -8,6 +8,7 @@ interface SetupData {
   debts: ComputedRef;
   formatCurrency: (amount: number) => string;
   formatDate: (date: Date) => string;
+  formatFullDate: (date: Date) => string;
 }
 
 const store = useDebts();
@@ -19,10 +20,18 @@ export default defineComponent({
     const debts = computed(() => store.getPersonalDebts);
 
     const formatDate = (date: Date) => {
-      const day = date.getDate();
+      const day = date.getDate().toString().padStart(2, "0");
       const month = (date.getMonth() + 1).toString().padStart(2, "0");
 
       return `${day}/${month}`;
+    };
+
+    const formatFullDate = (date: Date) => {
+      const day = date.getDate().toString().padStart(2, "0");
+      const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear();
+
+      return `${day}/${month}/${year}`;
     };
 
     const formatCurrency = (amount: number) => {
@@ -38,6 +47,7 @@ export default defineComponent({
       debts,
       formatCurrency,
       formatDate,
+      formatFullDate,
     };
   },
 });
@@ -111,7 +121,7 @@ export default defineComponent({
                 <td>
                   <div class="d-flex align-left">
                     <div>
-                      <h6 class="text-h6">{{ item.volunteer.name }}</h6>
+                      <h6 class="text-h6">{{ item.name }}</h6>
                     </div>
                   </div>
                 </td>
@@ -120,7 +130,7 @@ export default defineComponent({
                   <div class="d-left">
                     <div>
                       <h6 class="text-h6">
-                        {{ formatDate(new Date(item.dueDate)) }}
+                        {{ formatFullDate(new Date(item.dueDate)) }}
                       </h6>
                     </div>
                   </div>
@@ -139,7 +149,9 @@ export default defineComponent({
                 <td>
                   <div class="d-left">
                     <div>
-                      <h6 v-if="item.value !== null" class="text-h6"></h6>
+                      <h6 v-if="item.paidAt !== null" class="text-h6">
+                        {{ formatFullDate(new Date(item.paidAt)) }}
+                      </h6>
                     </div>
                   </div>
                 </td>
