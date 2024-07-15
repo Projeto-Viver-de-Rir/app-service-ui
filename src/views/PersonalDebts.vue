@@ -61,7 +61,7 @@ export default defineComponent({
   <BaseBreadcrumb :title="page.title" :breadcrumbs="breadcrumbs" />
 
   <template v-if="debts.results">
-    <PersonalDebtsHeader v-if="debts.count > 0" />
+    <PersonalDebtsHeader />
     <personalDebtsTable />
   </template>
 </template>
