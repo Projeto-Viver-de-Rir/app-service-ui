@@ -2,6 +2,7 @@ const debtsRoutes = {
   path: "/Mensalidades",
   meta: {
     requiresAuth: true,
+    roles: ["fiscal", "administrative"],
   },
   redirect: "/main",
   component: () => import("@/layouts/full/FullLayout.vue"),

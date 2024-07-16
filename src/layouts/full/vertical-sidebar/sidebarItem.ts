@@ -38,6 +38,7 @@ export interface menu {
   disabled?: boolean;
   type?: string;
   subCaption?: string;
+  roles?: string[];
 }
 
 const sidebarItem: menu[] = [
@@ -57,6 +58,7 @@ const sidebarItem: menu[] = [
     icon: UsersIcon,
     to: "/voluntarios",
   },
+
   { header: "Minha área" },
   {
     title: "Meu Perfil",
@@ -68,6 +70,7 @@ const sidebarItem: menu[] = [
     icon: CashBanknoteIcon,
     to: "/personal-debts",
   },
+
   { header: "Grupos de trabalho" },
   {
     title: "Executivo",
@@ -89,26 +92,31 @@ const sidebarItem: menu[] = [
     icon: CashIcon,
     to: "/working-groups/fiscal",
   },
+
   { header: "Gestão" },
   {
     title: "Mensalidades",
     icon: CoinIcon,
     to: "/mensalidades",
+    roles: ["fiscal", "administrative"],
   },
   {
     title: "Presença no trimestre",
     icon: AwardIcon,
     to: "/reports/attendancy",
+    roles: ["operational", "administrative"],
   },
   {
     title: "Inadimplência atual",
     icon: UserExclamationIcon,
     to: "/reports/non-payment",
+    roles: ["fiscal", "administrative"],
   },
   {
     title: "Configurações",
     icon: SettingsIcon,
     to: "/",
+    roles: ["administrative"],
     children: [
       {
         title: "Eventos Planejados",
