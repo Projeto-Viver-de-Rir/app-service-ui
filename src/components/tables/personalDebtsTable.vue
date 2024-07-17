@@ -7,7 +7,7 @@ import { useDebts } from "../../stores/debtStore";
 interface SetupData {
   debts: ComputedRef;
   formatCurrency: (amount: number) => string;
-  formatDate: (date: Date) => string;
+  formatDate: (params: { date: Date; displayYear?: boolean }) => string;
 }
 
 const store = useDebts();
@@ -18,11 +18,18 @@ export default defineComponent({
   setup(): SetupData {
     const debts = computed(() => store.getPersonalDebts);
 
-    const formatDate = (date: Date) => {
-      const day = date.getDate();
+    const formatDate = ({
+      date,
+      displayYear,
+    }: {
+      date: Date;
+      displayYear?: boolean;
+    }) => {
+      const day = date.getDate().toString().padStart(2, "0");
       const month = (date.getMonth() + 1).toString().padStart(2, "0");
+      const year = date.getFullYear();
 
-      return `${day}/${month}`;
+      return `${day}/${month}${displayYear && `/${year}`}`;
     };
 
     const formatCurrency = (amount: number) => {
@@ -111,7 +118,7 @@ export default defineComponent({
                 <td>
                   <div class="d-flex align-left">
                     <div>
-                      <h6 class="text-h6">{{ item.volunteer.name }}</h6>
+                      <h6 class="text-h6">{{ item.name }}</h6>
                     </div>
                   </div>
                 </td>
@@ -120,7 +127,12 @@ export default defineComponent({
                   <div class="d-left">
                     <div>
                       <h6 class="text-h6">
-                        {{ formatDate(new Date(item.dueDate)) }}
+                        {{
+                          formatDate({
+                            date: new Date(item.dueDate),
+                            displayYear: true,
+                          })
+                        }}
                       </h6>
                     </div>
                   </div>
@@ -139,7 +151,14 @@ export default defineComponent({
                 <td>
                   <div class="d-left">
                     <div>
-                      <h6 v-if="item.value !== null" class="text-h6"></h6>
+                      <h6 v-if="item.paidAt !== null" class="text-h6">
+                        {{
+                          formatDate({
+                            date: new Date(item.paidAt),
+                            displayYear: true,
+                          })
+                        }}
+                      </h6>
                     </div>
                   </div>
                 </td>

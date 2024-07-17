@@ -88,9 +88,9 @@ export const useDebts = defineStore("debts", () => {
     state.isLoading = false;
   };
 
-  const getDataByYear = async () => {
+  const getDataByYear = async (volunteerId: string) => {
     state.isLoading = true;
-    const data = await repository.getDebts("", "", 1, 15);
+    const data = await repository.getDebts(volunteerId, "", 1, 30);
 
     const groupedData: any = {};
 
@@ -104,10 +104,12 @@ export const useDebts = defineStore("debts", () => {
       }
     });
 
+    const openDebts = data.result.filter((item) => item.paidAt === null);
+
     state.personalDebts = {
       results: groupedData,
-      sumAmount: data.result.reduce((acc, cur) => acc + cur.amount, 0),
-      count: data.result.length,
+      sumAmount: openDebts.reduce((acc, cur) => acc + cur.amount, 0),
+      count: openDebts.length,
     };
 
     const userData = await userRepository.get("", "", 1, 2000);
