@@ -11,6 +11,8 @@ import Logo from "../logo/Logo.vue";
 
 const customizer = useCustomizerStore();
 const sidebarMenu = shallowRef(sidebarItems);
+
+const user = JSON.parse(localStorage.getItem("user") || "");
 </script>
 
 <template>
@@ -38,18 +40,27 @@ const sidebarMenu = shallowRef(sidebarItems);
       <v-list class="pa-6">
         <!---Menu Loop -->
         <template v-for="(item, i) in sidebarMenu">
-          <!---Item Sub Header -->
-          <NavGroup :item="item" v-if="item.header" :key="item.title" />
-          <!---If Has Child -->
-          <NavCollapse
-            class="leftPadding"
-            :item="item"
-            :level="0"
-            v-else-if="item.children"
-          />
-          <!---Single Item-->
-          <NavItem :item="item" v-else class="leftPadding" />
-          <!---End Single Item-->
+          <template
+            v-if="
+              !item.roles ||
+              item.roles?.some((someItem) =>
+                user.permissions.includes(someItem)
+              )
+            "
+          >
+            <!---Item Sub Header -->
+            <NavGroup :item="item" v-if="item.header" :key="item.title" />
+            <!---If Has Child -->
+            <NavCollapse
+              class="leftPadding"
+              :item="item"
+              :level="0"
+              v-else-if="item.children"
+            />
+            <!---Single Item-->
+            <NavItem :item="item" v-else class="leftPadding" />
+            <!---End Single Item-->
+          </template>
         </template>
       </v-list>
     </perfect-scrollbar>

@@ -2,6 +2,7 @@ const configsRoutes = {
   path: "/configs",
   meta: {
     requiresAuth: true,
+    roles: ["administrative"],
   },
   redirect: "/main",
   component: () => import("@/layouts/full/FullLayout.vue"),

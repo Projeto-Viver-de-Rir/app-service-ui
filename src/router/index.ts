@@ -35,6 +35,15 @@ router.beforeEach(async (to, from, next) => {
   const authRequired = !publicPages.includes(to.path);
   const auth: any = useAuthStore();
   let accessToken = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user") || "");
+
+  if (
+    to.meta.roles &&
+    !to.meta.roles?.some((item) => user.permissions.includes(item))
+  ) {
+    auth.returnUrl = to.fullPath;
+    return next("/auth/login");
+  }
 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (authRequired && !accessToken) {
