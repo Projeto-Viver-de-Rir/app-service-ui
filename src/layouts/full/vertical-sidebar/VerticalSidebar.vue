@@ -44,7 +44,7 @@ const user = JSON.parse(localStorage.getItem("user") || "");
             v-if="
               !item.roles ||
               item.roles?.some((someItem) =>
-                user.permissions.includes(someItem)
+                user?.permissions?.includes(someItem)
               )
             "
           >

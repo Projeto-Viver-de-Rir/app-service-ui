@@ -39,7 +39,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (
     to.meta.roles &&
-    !to.meta.roles?.some((item) => user.permissions.includes(item))
+    !to.meta.roles?.some((item) => user?.permissions?.includes(item))
   ) {
     auth.returnUrl = to.fullPath;
     return next("/auth/login");
