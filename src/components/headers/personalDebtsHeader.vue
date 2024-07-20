@@ -42,7 +42,7 @@ export default defineComponent({
               /></v-avatar>
 
               <h5 class="text-h5 ml-4">
-                Olá {{ user.nickname }},
+                Olá {{ user?.nickname }},
                 {{
                   debts.count > 0
                     ? `encontramos algumas pendências`

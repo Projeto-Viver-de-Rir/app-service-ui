@@ -26,7 +26,7 @@ export default defineComponent({
     onMounted(async () => {
       const user = JSON.parse(localStorage.getItem("user") || "");
 
-      await store.getDataByYear(user.id);
+      await store.getDataByYear(user?.id);
     });
 
     const debts = computed(() => store.getPersonalDebts);

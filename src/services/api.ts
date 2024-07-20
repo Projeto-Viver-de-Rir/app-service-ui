@@ -1,26 +1,69 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { router } from "@/router";
 
 import type { ApiInterface } from "../interfaces/services/apiInterface";
 import { useAuthStore } from "@/stores/auth";
 
+const axiosClient = axios.create({
+  baseURL: "https://institutional-app-iwaxs.ondigitalocean.app/api/",
+  timeout: 9000,
+});
+
+axiosClient.interceptors.response.use(
+  (res) => res,
+  async (err: AxiosError) => {
+    const originalRequest = err.config;
+
+    if (err?.response?.status === 401) {
+      try {
+        const refreshToken = localStorage.getItem("refreshToken");
+
+        const newRequest = await axiosClient.post("identity/refresh", {
+          refreshToken,
+        });
+
+        localStorage.setItem("token", newRequest.data.accessToken);
+        localStorage.setItem("refreshToken", newRequest.data.refreshToken);
+
+        originalRequest.headers = {
+          ...originalRequest.headers,
+          Authorization: `Bearer ${newRequest.data.accessToken}`,
+        };
+
+        return axiosClient(originalRequest);
+      } catch (refreshErr) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+
+        router.push({ path: "/auth/login", replace: true });
+
+        return Promise.reject(refreshErr);
+      }
+    }
+
+    return Promise.reject(err);
+  }
+);
+
 export class Api implements ApiInterface {
-  client = axios.create({
-    baseURL: "https://institutional-app-iwaxs.ondigitalocean.app/api/",
-    timeout: 9000,
-  });
+  client = axiosClient;
+
+  getToken(): string {
+    const accessToken = localStorage.getItem("token");
+    return "Bearer " + accessToken;
+  }
 
   async invoke<T = any>(url: string): Promise<AxiosResponse<T>> {
-    let accessToken = localStorage.getItem("token");
     const config = {
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: this.getToken(),
       },
     };
 
     return await this.client.request({
       url,
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: this.getToken(),
       },
     });
   }
@@ -29,27 +72,26 @@ export class Api implements ApiInterface {
     url: string,
     token: string
   ): Promise<AxiosResponse<T>> {
-    let accessToken = localStorage.getItem("token");
     const config = {
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: this.getToken(),
       },
     };
 
     return await this.client.request({
       url,
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: this.getToken(),
       },
     });
   }
 
   async post<T = any>(url: string, request: T): Promise<void> {
     const auth: any = useAuthStore();
-    let accessToken = localStorage.getItem("token");
+
     const config = {
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: this.getToken(),
       },
     };
     return await this.client
@@ -63,10 +105,10 @@ export class Api implements ApiInterface {
   }
   async delete<T = any>(url: string): Promise<void> {
     const auth: any = useAuthStore();
-    let accessToken = localStorage.getItem("token");
+
     const config = {
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: this.getToken(),
       },
     };
     return await this.client
@@ -79,10 +121,9 @@ export class Api implements ApiInterface {
       });
   }
   async put<T = any>(url: string, request: T): Promise<void> {
-    let accessToken = localStorage.getItem("token");
     const config = {
       headers: {
-        Authorization: "Bearer " + accessToken,
+        Authorization: this.getToken(),
       },
     };
     return await this.client

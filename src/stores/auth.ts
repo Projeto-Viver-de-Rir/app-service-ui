@@ -27,8 +27,12 @@ export const useAuthStore = defineStore({
           }
         )
         .then(async (response) => {
-          (async () =>
-            await localStorage.setItem("token", response.data.accessToken))();
+          (async () => {
+            const { accessToken, refreshToken } = response.data;
+
+            await localStorage.setItem("token", accessToken);
+            await localStorage.setItem("refreshToken", refreshToken);
+          })();
 
           const repository = container.resolve(accountRepository);
 
