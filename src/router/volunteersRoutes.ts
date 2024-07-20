@@ -1,5 +1,5 @@
 const volunteersRoutes = {
-  path: "/Voluntarios",
+  path: "/volunteers",
   meta: {
     requiresAuth: true,
   },
@@ -8,12 +8,12 @@ const volunteersRoutes = {
   children: [
     {
       name: "ListUser",
-      path: "/Voluntarios",
+      path: "/volunteers",
       component: () => import("@/views/volunteers/list.vue"),
     },
     {
       name: "DetailtUser",
-      path: "/Voluntarios/Detalhes/:id",
+      path: "/volunteers/Detalhes/:id",
       component: () => import("@/views/volunteers/detail.vue"),
     },
   ],

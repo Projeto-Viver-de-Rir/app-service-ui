@@ -14,7 +14,7 @@ const config: ConfigProps = {
   mini_sidebar: false,
   setHorizontalLayout: false, // Horizontal layout
   actTheme: "PURPLE_THEME",
-  boxed: true,
+  boxed: false,
   setBorderCard: false,
 };
 

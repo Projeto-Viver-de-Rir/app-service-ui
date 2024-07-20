@@ -1,5 +1,5 @@
 const eventsRoutes = {
-  path: "/Eventos",
+  path: "/events",
   meta: {
     requiresAuth: true,
   },
@@ -8,27 +8,27 @@ const eventsRoutes = {
   children: [
     {
       name: "ListEvents",
-      path: "/Eventos",
+      path: "/events",
       component: () => import("@/views/events/list.vue"),
     },
     {
       name: "DetailtEvent",
-      path: "/Eventos/Detalhes/:id",
+      path: "/events/Detalhes/:id",
       component: () => import("@/views/events/detail.vue"),
     },
     {
       name: "CreateEvent",
-      path: "/Eventos/Adicionar",
+      path: "/events/Adicionar",
       component: () => import("@/views/events/detail.vue"),
     },
     {
       name: "ManageVolunteers",
-      path: "/Eventos/Detalhes/:id/Voluntarios",
+      path: "/events/Detalhes/:id/Voluntarios",
       component: () => import("@/views/events/manageVolunteers.vue"),
     },
     {
       name: "FinishVisit",
-      path: "/Eventos/Detalhes/:id/Concluir",
+      path: "/events/Detalhes/:id/Concluir",
       component: () => import("@/views/events/finishVisit.vue"),
     },
   ],

@@ -3,8 +3,6 @@ import { ref, defineComponent, onMounted, computed } from "vue";
 import type { ComputedRef, Ref } from "vue";
 import BaseBreadcrumb from "@/components/shared/BaseBreadcrumb.vue";
 import UiParentCard from "@/components/shared/UiParentCard.vue";
-import absencesCards from "@/components/widgets/cards/absencesCards.vue";
-import presenceCards from "@/components/widgets/cards/presenceCards.vue";
 import { useRoute, useRouter } from "vue-router";
 
 import { useVolunteers } from "../../stores/volunteerStore";
@@ -20,9 +18,7 @@ export default defineComponent({
   name: "volunteerDetail",
   components: {
     BaseBreadcrumb,
-    UiParentCard,
-    absencesCards,
-    presenceCards,
+    UiParentCard
   },
   setup(): SetupData {
     const page = ref({ title: "Voluntários" });
@@ -120,20 +116,6 @@ export default defineComponent({
     :title="page.title"
     :breadcrumbs="breadcrumbs"
   ></BaseBreadcrumb>
-  <v-row v-if="!isLoading && user !== null">
-    <v-col cols="6" md="4">
-      <presenceCards
-        :current="user.actualMonthAttendances"
-        :history="user.lastMonthAttendances"
-      ></presenceCards>
-    </v-col>
-    <v-col cols="6" md="4" style="padding-left: 5px">
-      <absencesCards
-        :current="user.actualMonthAbsences"
-        :history="user.lastMonthAbsences"
-      ></absencesCards>
-    </v-col>
-  </v-row>
   <v-row>
     <UiParentCard v-if="!isLoading && user !== null">
       <v-row v-if="!isEditing">

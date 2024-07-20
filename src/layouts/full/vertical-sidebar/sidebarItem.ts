@@ -51,12 +51,12 @@ const sidebarItem: menu[] = [
   {
     title: "Eventos",
     icon: CalendarEventIcon,
-    to: "/eventos",
+    to: "/events",
   },
   {
     title: "Voluntários",
     icon: UsersIcon,
-    to: "/voluntarios",
+    to: "/volunteers",
   },
 
   { header: "Minha área" },
