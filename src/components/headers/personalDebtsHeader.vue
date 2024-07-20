@@ -7,8 +7,7 @@ import { useDebts } from "../../stores/debtStore";
 
 interface SetupData {
   debts: ComputedRef;
-  user: volunteer;
-  getTotalDebts: () => any;
+  userData: volunteer | null;
 }
 
 const store = useDebts();
@@ -16,11 +15,16 @@ const store = useDebts();
 export default defineComponent({
   name: "PersonalDebtsHeader",
   setup(): SetupData {
-    const user = JSON.parse(localStorage.getItem("user") || "");
+    const user = localStorage.getItem("user");
+    let userData: volunteer | null = null;
+    if (!!user) {
+      userData = JSON.parse(user);
+    }
+
     const debts = computed(() => store.getPersonalDebts);
 
     return {
-      user,
+      userData,
       debts,
     };
   },
@@ -42,7 +46,7 @@ export default defineComponent({
               /></v-avatar>
 
               <h5 class="text-h5 ml-4">
-                Olá {{ user?.nickname }},
+                Olá {{ userData?.nickname }},
                 {{
                   debts.count > 0
                     ? `encontramos algumas pendências`

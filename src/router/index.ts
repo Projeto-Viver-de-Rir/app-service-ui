@@ -9,6 +9,7 @@ import scheduleEventsRoutes from "./scheduleEventsRoutes";
 import teamsRoutes from "./teamsRoutes";
 import configsRoutes from "./configsRoutes";
 import MyAreaRoutes from "./MyAreaRoutes";
+import type { volunteer } from "@/entities/volunteer";
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,14 +36,16 @@ router.beforeEach(async (to, from, next) => {
   const authRequired = !publicPages.includes(to.path);
   const auth: any = useAuthStore();
   let accessToken = localStorage.getItem("token");
-  let user = null;
 
-  if (localStorage.getItem("user") !=  null)
-    user = JSON.parse(localStorage.getItem("user") || "");
+  const user = localStorage.getItem("user");
+  let userData: volunteer | null = null;
+  if (!!user) {
+    userData = JSON.parse(user);
+  }
 
   if (
     to.meta.roles &&
-    !to.meta.roles?.some((item) => user?.permissions?.includes(item))
+    !to.meta.roles?.some((item) => userData?.permissions?.includes(item))
   ) {
     auth.returnUrl = to.fullPath;
     return next("/auth/login");
