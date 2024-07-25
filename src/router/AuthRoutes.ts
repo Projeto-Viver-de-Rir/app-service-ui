@@ -20,6 +20,11 @@ const AuthRoutes = {
       path: "/auth/404",
       component: () => import("@/views/authentication/Error.vue"),
     },
+    {
+      name: "Sign Up",
+      path: "/participate",
+      component: () => import("@/views/authentication/Signup.vue"),
+    },
   ],
 };
 

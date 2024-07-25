@@ -4,6 +4,8 @@ import { container } from "tsyringe";
 import axios from "axios";
 import { accountRepository } from "../repositories/accountRepository";
 
+const API_URL = "https://institutional-app-iwaxs.ondigitalocean.app/api";
+
 export const useAuthStore = defineStore({
   id: "auth",
   state: () => ({
@@ -18,7 +20,7 @@ export const useAuthStore = defineStore({
     async login(email: string, password: string) {
       axios
         .post(
-          "https://institutional-app-iwaxs.ondigitalocean.app/api/identity/login",
+          `${API_URL}/identity/login`,
           {
             email: email,
             password: password,
@@ -66,5 +68,17 @@ export const useAuthStore = defineStore({
       localStorage.removeItem("session");
       router.push({ path: "/auth/login", replace: true });
     },
+    async register(email: string, password: string) {
+      axios
+        .post(
+          `${API_URL}/identity/register`,
+          {
+            email: email,
+            password: password
+          }
+        ).then((res) => {
+          console.log('register response', res);
+        })
+    }
   },
 });
