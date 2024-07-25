@@ -9,6 +9,7 @@ import scheduleEventsRoutes from "./scheduleEventsRoutes";
 import teamsRoutes from "./teamsRoutes";
 import configsRoutes from "./configsRoutes";
 import MyAreaRoutes from "./MyAreaRoutes";
+import reportsRoutes from "./reportsRoutes";
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,6 +27,7 @@ export const router = createRouter({
     teamsRoutes,
     configsRoutes,
     MyAreaRoutes,
+    reportsRoutes,
   ],
 });
 
@@ -37,7 +39,7 @@ router.beforeEach(async (to, from, next) => {
   let accessToken = localStorage.getItem("token");
   let user = null;
 
-  if (localStorage.getItem("user") !=  null)
+  if (localStorage.getItem("user") != null)
     user = JSON.parse(localStorage.getItem("user") || "");
 
   if (
