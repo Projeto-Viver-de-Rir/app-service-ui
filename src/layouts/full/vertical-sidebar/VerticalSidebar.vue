@@ -2,6 +2,7 @@
 import { ref, shallowRef } from "vue";
 import { useCustomizerStore } from "@/stores/customizer";
 import sidebarItems from "./sidebarItem";
+import type { volunteer } from "@/entities/volunteer";
 
 import NavGroup from "./NavGroup/index.vue";
 import NavItem from "./NavItem/index.vue";
@@ -12,7 +13,11 @@ import Logo from "../logo/Logo.vue";
 const customizer = useCustomizerStore();
 const sidebarMenu = shallowRef(sidebarItems);
 
-const user = JSON.parse(localStorage.getItem("user") || "");
+const user = localStorage.getItem("user");
+let userData: volunteer;
+if (!!user) {
+  userData = JSON.parse(user);
+}
 </script>
 
 <template>
@@ -44,7 +49,7 @@ const user = JSON.parse(localStorage.getItem("user") || "");
             v-if="
               !item.roles ||
               item.roles?.some((someItem) =>
-                user?.permissions?.includes(someItem)
+                userData?.permissions?.includes(someItem)
               )
             "
           >
