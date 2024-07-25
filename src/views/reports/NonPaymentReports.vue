@@ -1,12 +1,16 @@
 <script lang="ts">
-import { ref, defineComponent } from "vue";
+import { ref, defineComponent, computed, onMounted } from "vue";
 import type { ComputedRef } from "vue";
+import { useReports } from "@/stores/reportStore";
 
 import BaseBreadcrumb from "@/components/shared/BaseBreadcrumb.vue";
 
 interface SetupData {
   isLoading: ComputedRef<boolean>;
+  debtsReport: ComputedRef;
 }
+
+const store = useReports();
 
 export default defineComponent({
   name: "NonPaymentReports",
@@ -15,24 +19,25 @@ export default defineComponent({
   },
 
   setup(): SetupData {
+    onMounted(async () => {
+      await store.getDebtsReportData();
+    });
+
+    const debtsReport = computed(() => store.getDebtsReport);
     const page = ref({ title: "Inadimplência atual" });
 
     const breadcrumbs = ref([
       {
-        text: "Minha Área",
+        text: "Gerado em 15/05/2024",
         disabled: true,
         href: "/",
-      },
-      {
-        text: "Inadimplência atual",
-        disabled: true,
-        href: "#",
       },
     ]);
 
     return {
       page,
       breadcrumbs,
+      debtsReport,
     };
   },
 });
