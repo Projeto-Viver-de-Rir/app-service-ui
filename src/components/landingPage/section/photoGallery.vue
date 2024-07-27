@@ -13,10 +13,10 @@
     <div class="pb-16">
       <div class="d-flex flex-row mt-sm-8 mt-5 overflow-hidden">
         <div class="slider-group">
-          <img src="@/assets/images/landingPage/background/slider-group.png" />
+          <img src="@/assets/images/landingpage/background/slider-group.png" />
         </div>
         <div class="slider-group">
-          <img src="@/assets/images/landingPage/background/slider-group.png" />
+          <img src="@/assets/images/landingpage/background/slider-group.png" />
         </div>
       </div>
     </div>

@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import { createApp } from "vue";
 import { createPinia } from "pinia";
 import App from "./App.vue";
@@ -13,6 +14,7 @@ import "vue3-carousel/dist/carousel.css";
 import "./_mockApis";
 // import VueDragscroll from "vue-dragscroll";
 
+import VCalendar from "v-calendar";
 import Maska from "maska";
 
 // Table
@@ -21,6 +23,10 @@ import "vue3-easy-data-table/dist/style.css";
 //i18
 import { createI18n } from "vue-i18n";
 import messages from "@/utils/locales/messages";
+import regisContainer from "./di/registration";
+import VueDatePicker from "@vuepic/vue-datepicker";
+import "@vuepic/vue-datepicker/dist/main.css";
+import "./scss/loading.css";
 
 //ScrollTop
 import VueScrollTo from "vue-scrollto";
@@ -42,13 +48,15 @@ app.component("EasyDataTable", Vue3EasyDataTable);
 app.use(PerfectScrollbar);
 // app.use(VueDragscroll);
 app.use(createPinia());
-
+app.use(VCalendar, {});
 app.use(VueTablerIcons);
+app.component("VueDatePicker", VueDatePicker);
 
 app.use(i18n);
 app.use(Maska);
 app.use(VueApexCharts);
 app.use(vuetify).mount("#app");
+regisContainer();
 
 //ScrollTop Use
 // app.use(VueScrollTo);

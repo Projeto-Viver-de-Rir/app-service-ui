@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import { router } from "@/router";
 
 import type { ApiInterface } from "../interfaces/services/apiInterface";
