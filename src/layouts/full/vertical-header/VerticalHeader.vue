@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { useCustomizerStore } from "../../../stores/customizer";
+import { useEcomStore } from "@/stores/apps/eCommerce";
 import {
   GridDotsIcon,
   LanguageIcon,
@@ -25,6 +26,12 @@ function searchbox() {
 }
 watch(priority, (newPriority) => {
   priority.value = newPriority;
+});
+
+// count items
+const store = useEcomStore();
+const getCart = computed(() => {
+  return store.cart;
 });
 </script>
 
@@ -59,13 +66,60 @@ watch(priority, (newPriority) => {
         </v-sheet> -->
 
     <!-- ---------------------------------------------- -->
+    <!-- Search part -->
+    <!-- ---------------------------------------------- -->
+    <v-sheet>
+      <Searchbar />
+    </v-sheet>
+
+    <!---/Search part -->
+
+    <!-- ---------------------------------------------- -->
+    <!-- Mega menu -->
+    <!-- ---------------------------------------------- -->
+    <div class="hidden-md-and-down">
+      <Navigations />
+    </div>
+    <v-spacer />
+    <!-- ---------------------------------------------- -->
+    <!---right part -->
+    <!-- ---------------------------------------------- -->
+    <!-- ---------------------------------------------- -->
+    <!-- translate -->
+    <!-- ---------------------------------------------- -->
+    <LanguageDD />
+
+    <!-- ---------------------------------------------- -->
+    <!-- ShoppingCart -->
+    <!-- ---------------------------------------------- -->
+    <v-btn icon variant="text" color="primary" to="/ecommerce/checkout">
+      <v-badge color="error" :content="getCart?.length">
+        <ShoppingCartIcon stroke-width="1.5" size="22" />
+      </v-badge>
+    </v-btn>
+
+    <!-- ---------------------------------------------- -->
+    <!-- Notification -->
+    <!-- ---------------------------------------------- -->
+    <NotificationDD />
+
+    <!-- right sidebar -->
+    <v-btn
+      variant="text"
+      color="primary"
+      class="hidden-lg-and-up"
+      icon
+      @click.stop="appsdrawer = !appsdrawer"
+    >
+      <GridDotsIcon size="17" stroke-width="1.5" />
+    </v-btn>
+
+    <!-- ---------------------------------------------- -->
     <!-- User Profile -->
     <!-- ---------------------------------------------- -->
-    <v-row>
-      <v-col style="text-align: right" cols="12" md="12">
-        <ProfileDD />
-      </v-col>
-    </v-row>
+    <div class="ml-2">
+      <ProfileDD />
+    </div>
   </v-app-bar>
 
   <!-- ---------------------------------------------- -->

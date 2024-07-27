@@ -1,9 +1,9 @@
-<script setup lang="ts">
-import { ChevronRightIcon } from "vue-tabler-icons";
+<script setup>
 const props = defineProps({
   title: String,
-  breadcrumbs: Array as any,
+  breadcrumbs: Array,
   icon: String,
+  text: String,
 });
 </script>
 
@@ -22,9 +22,7 @@ const props = defineProps({
                 <div class="d-flex align-center text-h3 mt-n4">.</div>
               </template>
               <template v-slot:title="{ item }">
-                <h6 class="text-medium-emphasis text-subtitle-1">
-                  {{ item.title }}
-                </h6>
+                <h6 class="text-subtitle-1">{{ item.text }}</h6>
               </template>
             </v-breadcrumbs>
           </div>

@@ -2,7 +2,9 @@
   "extends": "@vue/tsconfig/tsconfig.web.json",
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
-    "experimentalDecorators": true,
+    "preserveValueImports": false,
+    "importsNotUsedAsValues": "remove",
+    "verbatimModuleSyntax": true,
     "experimentalDecorators": true,
     "baseUrl": ".",
     "paths": {
@@ -10,7 +12,6 @@
     },
     "allowJs": true
   },
-
   "references": [
     {
       "path": "./tsconfig.vite-config.json"
