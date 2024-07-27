@@ -34,7 +34,7 @@ import { notifications } from "@/_mockApis/headerData";
             v-for="item in notifications"
             :key="item.title"
             :value="item"
-            active-color="primary"
+            color="primary"
             class="py-4 px-8"
           >
             <template v-slot:prepend>

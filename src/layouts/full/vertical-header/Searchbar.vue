@@ -39,7 +39,7 @@ import { searchSugg } from "@/_mockApis/headerData";
             v-for="(item, index) in searchSugg"
             :key="index"
             :to="item.href"
-            active-color="primary"
+            color="primary"
             class="px-5 py-2"
           >
             <h6 class="text-subtitle-1 font-weight-bold mb-1">

@@ -9,6 +9,7 @@ import NavItem from "./NavItem/index.vue";
 import NavCollapse from "./NavCollapse/NavCollapse.vue";
 import Profile from "./profile/Profile.vue";
 import Logo from "../logo/Logo.vue";
+import RtlLogo from "../logo/RtlLogo.vue";
 
 const customizer = useCustomizerStore();
 const sidebarMenu = shallowRef(sidebarItems);
@@ -26,7 +27,6 @@ if (!!user) {
     v-model="customizer.Sidebar_drawer"
     elevation="0"
     rail-width="75"
-    mobile-breakpoint="960"
     app
     class="leftSidebar"
     :rail="customizer.mini_sidebar"
@@ -34,10 +34,17 @@ if (!!user) {
     width="270"
   >
     <!---Logo part -->
+    <v-locale-provider v-if="customizer.setRTLLayout" rtl>
+      <div class="pa-5">
+        <RtlLogo />
+      </div>
+    </v-locale-provider>
+    <v-locale-provider v-else>
+      <div class="pa-5">
+        <Logo />
+      </div>
+    </v-locale-provider>
 
-    <div class="pa-5">
-      <Logo />
-    </div>
     <!-- ---------------------------------------------- -->
     <!---Navigation -->
     <!-- ---------------------------------------------- -->
@@ -53,25 +60,24 @@ if (!!user) {
               )
             "
           >
-            <!---Item Sub Header -->
-            <NavGroup :item="item" v-if="item.header" :key="item.title" />
-            <!---If Has Child -->
-            <NavCollapse
-              class="leftPadding"
-              :item="item"
-              :level="0"
-              v-else-if="item.children"
-            />
-            <!---Single Item-->
-            <NavItem :item="item" v-else class="leftPadding" />
-            <!---End Single Item-->
-          </template>
+          <!---Item Sub Header -->
+          <NavGroup :item="item" v-if="item.header" :key="item.title" />
+          <!---If Has Child -->
+          <NavCollapse
+            class="leftPadding"
+            :item="item"
+            :level="0"
+            v-else-if="item.children"
+          />
+          <!---Single Item-->
+          <NavItem :item="item" v-else class="leftPadding" />
+          <!---End Single Item-->
+        </template>
         </template>
       </v-list>
+      <div class="pa-6 userbottom">
+        <Profile />
+      </div>
     </perfect-scrollbar>
-
-    <div class="pa-6 userbottom">
-      <Profile />
-    </div>
   </v-navigation-drawer>
 </template>

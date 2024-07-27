@@ -5,6 +5,7 @@ const BLUE_THEME: ThemeTypes = {
   dark: false,
   variables: {
     "border-color": "#e5eaef",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#5D87FF",
@@ -18,6 +19,7 @@ const BLUE_THEME: ThemeTypes = {
     lightsecondary: "#E8F7FF",
     lightsuccess: "#E6FFFA",
     lighterror: "#FDEDE8",
+    lightinfo: "#EBF3FE",
     lightwarning: "#FEF5E5",
     textPrimary: "#2A3547",
     textSecondary: "#2A3547",
@@ -38,6 +40,7 @@ const AQUA_THEME: ThemeTypes = {
   dark: false,
   variables: {
     "border-color": "#e5eaef",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#0074BA",
@@ -51,6 +54,7 @@ const AQUA_THEME: ThemeTypes = {
     lightsecondary: "#EDFBF7",
     lightsuccess: "#E6FFFA",
     lighterror: "#FDEDE8",
+    lightinfo: "#EBF3FE",
     lightwarning: "#FEF5E5",
     textPrimary: "#2A3547",
     textSecondary: "#2A3547",
@@ -71,6 +75,7 @@ const PURPLE_THEME: ThemeTypes = {
   dark: false,
   variables: {
     "border-color": "#e5eaef",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#763EBD",
@@ -84,6 +89,7 @@ const PURPLE_THEME: ThemeTypes = {
     lightsecondary: "#EDF8FA",
     lightsuccess: "#E6FFFA",
     lighterror: "#FDEDE8",
+    lightinfo: "#EBF3FE",
     lightwarning: "#FEF5E5",
     textPrimary: "#2A3547",
     textSecondary: "#2A3547",
@@ -104,6 +110,7 @@ const GREEN_THEME: ThemeTypes = {
   dark: false,
   variables: {
     "border-color": "#e5eaef",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#0A7EA4",
@@ -117,6 +124,7 @@ const GREEN_THEME: ThemeTypes = {
     lightsecondary: "#FAFBEF",
     lightsuccess: "#E6FFFA",
     lighterror: "#FDEDE8",
+    lightinfo: "#EBF3FE",
     lightwarning: "#FEF5E5",
     textPrimary: "#2A3547",
     textSecondary: "#2A3547",
@@ -137,6 +145,7 @@ const CYAN_THEME: ThemeTypes = {
   dark: false,
   variables: {
     "border-color": "#e5eaef",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#01C0C8",
@@ -150,6 +159,7 @@ const CYAN_THEME: ThemeTypes = {
     lightsecondary: "#FFF5F2",
     lightsuccess: "#E6FFFA",
     lighterror: "#FDEDE8",
+    lightinfo: "#EBF3FE",
     lightwarning: "#FEF5E5",
     textPrimary: "#2A3547",
     textSecondary: "#2A3547",
@@ -170,6 +180,7 @@ const ORANGE_THEME: ThemeTypes = {
   dark: false,
   variables: {
     "border-color": "#e5eaef",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#FA896B",
@@ -183,6 +194,7 @@ const ORANGE_THEME: ThemeTypes = {
     lightsecondary: "#EFF9FF",
     lightsuccess: "#E6FFFA",
     lighterror: "#FDEDE8",
+    lightinfo: "#EBF3FE",
     lightwarning: "#FEF5E5",
     textPrimary: "#2A3547",
     textSecondary: "#2A3547",

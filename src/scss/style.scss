@@ -1,10 +1,11 @@
 @import "./variables";
-@import "vuetify/styles/main.sass";
+@import "vuetify/styles.scss";
 @import "./override";
 @import "./layout/text";
 @import "./layout/reboot";
 @import "./layout/container";
 @import "./layout/sidebar";
+@import "./layout/rtl";
 @import "./layout/topbar";
 @import "./layout/horizontal";
 @import "./layout/dark";

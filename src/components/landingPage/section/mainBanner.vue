@@ -15,7 +15,7 @@
               <div class="rounded-md">
                 <div>
                   <img
-                    src="@/assets/images/landingPage/background-starter.png"
+                    src="@/assets/images/landingpage/background-starter.png"
                   />
                 </div>
               </div>

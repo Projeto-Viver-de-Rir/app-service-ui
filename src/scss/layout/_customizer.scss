@@ -1,4 +1,4 @@
-.customizer-btn {
+.v-btn.customizer-btn {
   position: fixed;
   bottom: 30px;
   right: 30px;
@@ -12,12 +12,12 @@
 
 .btn-group-custom {
   &.v-btn-group {
-    height: 66px;
+    height: 66px !important;
     overflow: unset !important;
     .v-btn {
-      height: 66px;
+      height: 66px !important;
       padding: 0 20px;
-      border: 1px solid rgb(var(--v-theme-borderColor), 0.7);
+      border: 1px solid rgb(var(--v-theme-borderColor), 0.7) !important;
       transition: all 0.1s ease-in 0s;
       &:hover {
         transform: scale(1.05);
@@ -44,30 +44,30 @@
 }
 
 // all theme colors
-.themeBlue,
-.themeDarkBlue {
+.v-avatar.themeBlue,
+.v-avatar.themeDarkBlue {
   background: #5d87ff;
 }
-.themeAqua,
-.themeDarkAqua {
+.v-avatar.themeAqua,
+.v-avatar.themeDarkAqua {
   background: #0074ba;
 }
 
-.themePurple,
-.themeDarkPurple {
+.v-avatar.themePurple,
+.v-avatar.themeDarkPurple {
   background: #763ebd;
 }
-.themeGreen,
-.themeDarkGreen {
+.v-avatar.themeGreen,
+.v-avatar.themeDarkGreen {
   background: #0a7ea4;
 }
 
-.themeCyan,
-.themeDarkCyan {
+.v-avatar.themeCyan,
+.v-avatar.themeDarkCyan {
   background: #01c0c8;
 }
 
-.themeOrange,
-.themeDarkOrange {
+.v-avatar.themeOrange,
+.v-avatar.themeDarkOrange {
   background: #fa896b;
 }

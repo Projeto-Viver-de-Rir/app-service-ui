@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { useCustomizerStore } from "../../../stores/customizer";
+import { useEcomStore } from "@/stores/apps/eCommerce";
 // Icon Imports
 import {
   GridDotsIcon,
@@ -11,6 +12,7 @@ import {
   ShoppingCartIcon,
 } from "vue-tabler-icons";
 import Logo from "../logo/Logo.vue";
+import RtlLogo from "../logo/RtlLogo.vue";
 
 // dropdown imports
 import LanguageDD from "../vertical-header/LanguageDD.vue";
@@ -32,6 +34,12 @@ watch(priority, (newPriority) => {
   // yes, console.log() is a side effect
   priority.value = newPriority;
 });
+
+// count items
+const store = useEcomStore();
+const getCart = computed(() => {
+  return store.cart;
+});
 </script>
 
 <template>
@@ -48,9 +56,17 @@ watch(priority, (newPriority) => {
           : 'v-toolbar__content px-6'
       "
     >
-      <div class="hidden-md-and-down">
-        <Logo />
-      </div>
+      <v-locale-provider v-if="customizer.setRTLLayout" rtl>
+        <div class="hidden-md-and-down">
+          <RtlLogo />
+        </div>
+      </v-locale-provider>
+      <v-locale-provider v-else>
+        <div class="hidden-md-and-down">
+          <Logo />
+        </div>
+      </v-locale-provider>
+
       <v-btn
         class="hidden-lg-and-up ms-3"
         icon
@@ -78,7 +94,57 @@ watch(priority, (newPriority) => {
         <Searchbar :closesearch="searchbox" />
       </v-sheet>
 
+      <!-- ------------------------------------------------>
+      <!-- Search part -->
+      <!-- ------------------------------------------------>
+      <v-sheet class="mx-2 d-none d-lg-block">
+        <Searchbar />
+      </v-sheet>
+
+      <!---/Search part -->
+
+      <!-- ------------------------------------------------>
+      <!-- Mega menu -->
+      <!-- ------------------------------------------------>
+      <div class="hidden-md-and-down">
+        <Navigations />
+      </div>
+
       <v-spacer />
+      <!-- ---------------------------------------------- -->
+      <!---right part -->
+      <!-- ---------------------------------------------- -->
+
+      <!-- ---------------------------------------------- -->
+      <!-- translate -->
+      <!-- ---------------------------------------------- -->
+      <LanguageDD />
+
+      <!-- ---------------------------------------------- -->
+      <!-- Notification -->
+      <!-- ---------------------------------------------- -->
+
+      <NotificationDD />
+
+      <!-- ---------------------------------------------- -->
+      <!-- ShoppingCart -->
+      <!-- ---------------------------------------------- -->
+      <v-btn icon variant="text" color="primary" to="/ecommerce/checkout">
+        <v-badge color="error" :content="getCart?.length">
+          <ShoppingCartIcon stroke-width="1.5" size="22" />
+        </v-badge>
+      </v-btn>
+
+      <!-- right sidebar -->
+      <v-btn
+        class="hidden-lg-and-up ml-3"
+        icon
+        rounded="sm"
+        @click.stop="appsdrawer = !appsdrawer"
+        variant="flat"
+      >
+        <GridDotsIcon size="17" stroke-width="1.5" />
+      </v-btn>
 
       <!-- ---------------------------------------------- -->
       <!-- User Profile -->
