@@ -2,6 +2,9 @@
   &.v-app-bar .v-toolbar__content {
     padding: 0;
   }
+  .v-toolbar {
+    background: rgb(var(--v-theme-surface));
+  }
 }
 //
 // mega menu

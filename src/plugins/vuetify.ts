@@ -2,7 +2,8 @@ import { createVuetify } from "vuetify";
 import "@mdi/font/css/materialdesignicons.css";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-// import { BLUE_THEME} from '@/theme/LightTheme';
+//DragScroll
+import { VueDraggableNext } from "vue-draggable-next";
 import {
   BLUE_THEME,
   AQUA_THEME,
@@ -21,7 +22,9 @@ import {
 } from "@/theme/DarkTheme";
 
 export default createVuetify({
-  components,
+  components: {
+    draggable: VueDraggableNext,
+  },
   directives,
 
   theme: {

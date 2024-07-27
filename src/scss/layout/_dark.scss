@@ -8,4 +8,7 @@ div[class*="v-theme--DARK_"] {
     box-shadow: rgb(145 158 171 / 30%) 0px 0px 2px 0px,
       rgb(145 158 171 / 2%) 0px 12px 24px -4px !important;
   }
+  .v-field__outline {
+    --v-field-border-opacity: 0.38 !important;
+  }
 }

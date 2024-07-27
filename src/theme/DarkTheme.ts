@@ -5,6 +5,7 @@ const DARK_BLUE_THEME: ThemeTypes = {
   dark: true,
   variables: {
     "border-color": "#333F55",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#5D87FF",
@@ -18,6 +19,7 @@ const DARK_BLUE_THEME: ThemeTypes = {
     lightsecondary: "#1C455D",
     lightsuccess: "#1B3C48",
     lighterror: "#4B313D",
+    lightinfo: "#223662",
     lightwarning: "#4D3A2A",
     textPrimary: "#EAEFF4",
     textSecondary: "#7C8FAC",
@@ -38,6 +40,7 @@ const DARK_AQUA_THEME: ThemeTypes = {
   dark: true,
   variables: {
     "border-color": "#333F55",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#0074BA",
@@ -51,6 +54,7 @@ const DARK_AQUA_THEME: ThemeTypes = {
     lightsecondary: "#0C4339",
     lightsuccess: "#1B3C48",
     lighterror: "#4B313D",
+    lightinfo: "#223662",
     lightwarning: "#4D3A2A",
     textPrimary: "#EAEFF4",
     textSecondary: "#7C8FAC",
@@ -71,6 +75,7 @@ const DARK_PURPLE_THEME: ThemeTypes = {
   dark: true,
   variables: {
     "border-color": "#333F55",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#763EBD",
@@ -84,6 +89,7 @@ const DARK_PURPLE_THEME: ThemeTypes = {
     lightsecondary: "#09454B",
     lightsuccess: "#1B3C48",
     lighterror: "#4B313D",
+    lightinfo: "#223662",
     lightwarning: "#4D3A2A",
     textPrimary: "#EAEFF4",
     textSecondary: "#7C8FAC",
@@ -104,6 +110,7 @@ const DARK_GREEN_THEME: ThemeTypes = {
   dark: true,
   variables: {
     "border-color": "#333F55",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#0A7EA4",
@@ -117,6 +124,7 @@ const DARK_GREEN_THEME: ThemeTypes = {
     lightsecondary: "#282917",
     lightsuccess: "#1B3C48",
     lighterror: "#4B313D",
+    lightinfo: "#223662",
     lightwarning: "#4D3A2A",
     textPrimary: "#EAEFF4",
     textSecondary: "#7C8FAC",
@@ -137,6 +145,7 @@ const DARK_CYAN_THEME: ThemeTypes = {
   dark: true,
   variables: {
     "border-color": "#333F55",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#01C0C8",
@@ -150,6 +159,7 @@ const DARK_CYAN_THEME: ThemeTypes = {
     lightsecondary: "#40241C",
     lightsuccess: "#1B3C48",
     lighterror: "#4B313D",
+    lightinfo: "#223662",
     lightwarning: "#4D3A2A",
     textPrimary: "#EAEFF4",
     textSecondary: "#7C8FAC",
@@ -170,6 +180,7 @@ const DARK_ORANGE_THEME: ThemeTypes = {
   dark: true,
   variables: {
     "border-color": "#333F55",
+    "border-opacity": 1,
   },
   colors: {
     primary: "#FA896B",
@@ -183,6 +194,7 @@ const DARK_ORANGE_THEME: ThemeTypes = {
     lightsecondary: "#082E45",
     lightsuccess: "#1B3C48",
     lighterror: "#4B313D",
+    lightinfo: "#223662",
     lightwarning: "#4D3A2A",
     textPrimary: "#EAEFF4",
     textSecondary: "#7C8FAC",

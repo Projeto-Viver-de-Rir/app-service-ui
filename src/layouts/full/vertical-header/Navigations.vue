@@ -68,7 +68,13 @@ import { HelpIcon, ChevronDownIcon } from "vue-tabler-icons";
       </div>
     </v-sheet>
   </v-menu>
-  <v-btn variant="text" color="primary">Chat </v-btn>
-  <v-btn variant="text" color="primary">Calendar </v-btn>
-  <v-btn variant="text" color="primary">Email </v-btn>
+  <router-link to="/apps/chats" class="text-decoration-none">
+    <v-btn variant="text" color="primary">Chat </v-btn>
+  </router-link>
+  <router-link to="/apps/calendar" class="text-decoration-none">
+    <v-btn variant="text" color="primary">Calendar </v-btn>
+  </router-link>
+  <router-link to="/apps/notes" class="text-decoration-none">
+    <v-btn variant="text" color="primary">Notes </v-btn>
+  </router-link>
 </template>

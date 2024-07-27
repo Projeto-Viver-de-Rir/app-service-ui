@@ -221,3 +221,11 @@
     }
   }
 }
+
+.row-up {
+  z-index: 1;
+  position: relative;
+}
+.prev-btn {
+  margin: 0 110px;
+}

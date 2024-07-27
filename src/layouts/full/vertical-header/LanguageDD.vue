@@ -54,7 +54,7 @@ import flag4 from "@/assets/images/flag/icon-flag-fr.svg";
         <v-list-item
           v-for="(item, index) in languageDD"
           :key="index"
-          active-color="primary"
+          color="primary"
           :active="$i18n.locale == item.value"
           class="d-flex align-center"
           @click="() => ($i18n.locale = item.value)"
