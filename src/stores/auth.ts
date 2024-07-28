@@ -76,10 +76,7 @@ export const useAuthStore = defineStore({
             email: email,
             password: password
           }
-        ).then((res) => {
-          // if (res.status === 200)
-            // continue
-        }).catch((err) => {
+        ).catch((err) => {
           console.log(err);
           return err;
         });
