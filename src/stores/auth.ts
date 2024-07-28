@@ -69,7 +69,7 @@ export const useAuthStore = defineStore({
       router.push({ path: "/auth/login", replace: true });
     },
     async register(email: string, password: string) {
-      axios
+      return await axios
         .post(
           `${API_URL}/identity/register`,
           {
@@ -77,8 +77,12 @@ export const useAuthStore = defineStore({
             password: password
           }
         ).then((res) => {
-          console.log('register response', res);
-        })
+          // if (res.status === 200)
+            // continue
+        }).catch((err) => {
+          console.log(err);
+          return err;
+        });
     }
   },
 });
