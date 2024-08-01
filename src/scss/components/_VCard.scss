@@ -1,6 +1,6 @@
 // Outline Card
 .v-card--variant-outlined {
-  border-color: rgba(var(--v-theme-borderColor));
+  border-color: rgba(var(--v-theme-borderColor)) !important;
 }
 
 .v-card--variant-elevated,

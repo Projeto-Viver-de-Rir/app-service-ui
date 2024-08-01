@@ -2,17 +2,23 @@
 import { ref, shallowRef } from "vue";
 import { useCustomizerStore } from "@/stores/customizer";
 import sidebarItems from "./sidebarItem";
+import type { volunteer } from "@/entities/volunteer";
 
 import NavGroup from "./NavGroup/index.vue";
 import NavItem from "./NavItem/index.vue";
 import NavCollapse from "./NavCollapse/NavCollapse.vue";
 import Profile from "./profile/Profile.vue";
 import Logo from "../logo/Logo.vue";
+import RtlLogo from "../logo/RtlLogo.vue";
 
 const customizer = useCustomizerStore();
 const sidebarMenu = shallowRef(sidebarItems);
 
-const user = JSON.parse(localStorage.getItem("user") || "");
+const user = localStorage.getItem("user");
+let userData: volunteer;
+if (!!user) {
+  userData = JSON.parse(user);
+}
 </script>
 
 <template>
@@ -21,7 +27,6 @@ const user = JSON.parse(localStorage.getItem("user") || "");
     v-model="customizer.Sidebar_drawer"
     elevation="0"
     rail-width="75"
-    mobile-breakpoint="960"
     app
     class="leftSidebar"
     :rail="customizer.mini_sidebar"
@@ -29,10 +34,17 @@ const user = JSON.parse(localStorage.getItem("user") || "");
     width="270"
   >
     <!---Logo part -->
+    <v-locale-provider v-if="customizer.setRTLLayout" rtl>
+      <div class="pa-5">
+        <RtlLogo />
+      </div>
+    </v-locale-provider>
+    <v-locale-provider v-else>
+      <div class="pa-5">
+        <Logo />
+      </div>
+    </v-locale-provider>
 
-    <div class="pa-5">
-      <Logo />
-    </div>
     <!-- ---------------------------------------------- -->
     <!---Navigation -->
     <!-- ---------------------------------------------- -->
@@ -44,29 +56,28 @@ const user = JSON.parse(localStorage.getItem("user") || "");
             v-if="
               !item.roles ||
               item.roles?.some((someItem) =>
-                user?.permissions?.includes(someItem)
+                userData?.permissions?.includes(someItem)
               )
             "
           >
-            <!---Item Sub Header -->
-            <NavGroup :item="item" v-if="item.header" :key="item.title" />
-            <!---If Has Child -->
-            <NavCollapse
-              class="leftPadding"
-              :item="item"
-              :level="0"
-              v-else-if="item.children"
-            />
-            <!---Single Item-->
-            <NavItem :item="item" v-else class="leftPadding" />
-            <!---End Single Item-->
-          </template>
+          <!---Item Sub Header -->
+          <NavGroup :item="item" v-if="item.header" :key="item.title" />
+          <!---If Has Child -->
+          <NavCollapse
+            class="leftPadding"
+            :item="item"
+            :level="0"
+            v-else-if="item.children"
+          />
+          <!---Single Item-->
+          <NavItem :item="item" v-else class="leftPadding" />
+          <!---End Single Item-->
+        </template>
         </template>
       </v-list>
+      <div class="pa-6 userbottom">
+        <Profile />
+      </div>
     </perfect-scrollbar>
-
-    <div class="pa-6 userbottom">
-      <Profile />
-    </div>
   </v-navigation-drawer>
 </template>

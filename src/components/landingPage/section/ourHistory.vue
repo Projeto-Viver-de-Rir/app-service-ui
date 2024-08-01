@@ -21,7 +21,7 @@ import { ref } from "vue";
         <div class="position-relative lp_wrapper">
           <v-row class="mt-3 row-up">
             <v-col cols="12" lg="8" sm="8" data-aos="fade-up">
-              <img src="@/assets/images/landingPage/our-history-a.png" />
+              <img src="@/assets/images/landingpage/our-history-a.png" />
             </v-col>
             <v-col cols="12" lg="4" sm="4" data-aos="fade-up">
               <p>
@@ -49,12 +49,12 @@ import { ref } from "vue";
               </p>
             </v-col>
             <v-col cols="12" lg="8" sm="8" data-aos="fade-up">
-              <img src="@/assets/images/landingPage/our-history-b.png" />
+              <img src="@/assets/images/landingpage/our-history-b.png" />
             </v-col>
           </v-row>
           <v-row class="mt-3 row-up">
             <v-col cols="12" lg="8" sm="8" data-aos="fade-up">
-              <img src="@/assets/images/landingPage/our-history-c.png" />
+              <img src="@/assets/images/landingpage/our-history-c.png" />
             </v-col>
             <v-col cols="12" lg="4" sm="4" data-aos="fade-up">
               <p>

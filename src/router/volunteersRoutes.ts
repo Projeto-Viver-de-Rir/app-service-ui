@@ -9,12 +9,12 @@ const volunteersRoutes = {
     {
       name: "ListUser",
       path: "/volunteers",
-      component: () => import("@/views/volunteers/list.vue"),
+      component: () => import("@/views/volunteers/List.vue"),
     },
     {
       name: "DetailtUser",
       path: "/volunteers/Detalhes/:id",
-      component: () => import("@/views/volunteers/detail.vue"),
+      component: () => import("@/views/volunteers/Detail.vue"),
     },
   ],
 };

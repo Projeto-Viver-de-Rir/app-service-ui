@@ -18,7 +18,7 @@ export default defineComponent({
   name: "volunteerDetail",
   components: {
     BaseBreadcrumb,
-    UiParentCard
+    UiParentCard,
   },
   setup(): SetupData {
     const page = ref({ title: "Voluntários" });

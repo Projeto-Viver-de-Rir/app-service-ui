@@ -39,7 +39,7 @@ export default defineComponent({
   components: {
     BaseBreadcrumb,
     UiParentCard,
-    eventTable
+    eventTable,
   },
   setup(): SetupData {
     const page = ref({ title: "Eventos" });
@@ -103,64 +103,77 @@ export default defineComponent({
 <template>
   <div v-if="isLoading" class="loading"></div>
   <v-row>
-        <v-col cols="12">
-            <UiParentCard title="Eventos">
-                <v-row>
-                    <v-col cols="12" lg="12">
-                      <div style="float: right;">
-                        <v-btn
-                                      size="large"
-                                      @click="openModal()"
-                                      style="margin-right: 15px"
-                                      color="warning"
-                                      type="submit">Gerar agenda</v-btn>
+    <v-col cols="12">
+      <UiParentCard title="Eventos">
+        <v-row>
+          <v-col cols="12" lg="12">
+            <div style="float: right">
+              <v-btn
+                size="large"
+                @click="openModal()"
+                style="margin-right: 15px"
+                color="warning"
+                type="submit"
+                >Gerar agenda</v-btn
+              >
 
-                                    <router-link
-                                      tag="v-btn"
-                                      class="btn btn-success mr-2"
-                                      :to="{ name: 'CreateEvent' }">
-                                      <v-btn size="large" color="success" type="submit">Adicionar</v-btn>
-                                    </router-link>
-                      </div>
-                      <v-expansion-panels>
-                          <v-expansion-panel elevation="10">
-                              <v-expansion-panel-title>
-                                  <v-row no-gutters>
-                                      <v-col cols="12" md="5" class="d-flex justify-start">
-                                          <h6 class="text-h6">Filtros</h6>
-                                      </v-col>
-                                      <v-col cols="12" md="6" class="d-flex justify-start  mt-md-0 mt-3">
-                                          <h6 class="text-subtitle-1">Você não está filtrando nada.</h6>
-                                      </v-col>
-                                  </v-row>
-                              </v-expansion-panel-title>
-                              <v-expansion-panel-text>
-                                <v-row>
-                                  <v-col cols="10" md="10">
-                                    <v-text-field label="Nome" v-model="filters.name"> </v-text-field>
-                                  </v-col>
-                                  <v-col cols="2" md="2">
-                                    <v-btn
-                                      size="large"
-                                      @click="getEvents()"
-                                      style="margin-right: 15px"
-                                      color="primary"
-                                      type="submit"
-                                      >Filtrar</v-btn>
-                                  </v-col>
-                                </v-row>
-                              </v-expansion-panel-text>
-                              <v-divider></v-divider>
-                          </v-expansion-panel>
-                      </v-expansion-panels>                      
+              <router-link
+                tag="v-btn"
+                class="btn btn-success mr-2"
+                :to="{ name: 'CreateEvent' }"
+              >
+                <v-btn size="large" color="success" type="submit"
+                  >Adicionar</v-btn
+                >
+              </router-link>
+            </div>
+            <v-expansion-panels>
+              <v-expansion-panel elevation="10">
+                <v-expansion-panel-title>
+                  <v-row no-gutters>
+                    <v-col cols="12" md="5" class="d-flex justify-start">
+                      <h6 class="text-h6">Filtros</h6>
                     </v-col>
-                    <v-col cols="12" md="12">
-                      <eventTable></eventTable>
+                    <v-col
+                      cols="12"
+                      md="6"
+                      class="d-flex justify-start mt-md-0 mt-3"
+                    >
+                      <h6 class="text-subtitle-1">
+                        Você não está filtrando nada.
+                      </h6>
                     </v-col>
-                </v-row>
-            </UiParentCard>
-        </v-col>
-    </v-row>
+                  </v-row>
+                </v-expansion-panel-title>
+                <v-expansion-panel-text>
+                  <v-row>
+                    <v-col cols="10" md="10">
+                      <v-text-field label="Nome" v-model="filters.name">
+                      </v-text-field>
+                    </v-col>
+                    <v-col cols="2" md="2">
+                      <v-btn
+                        size="large"
+                        @click="getEvents()"
+                        style="margin-right: 15px"
+                        color="primary"
+                        type="submit"
+                        >Filtrar</v-btn
+                      >
+                    </v-col>
+                  </v-row>
+                </v-expansion-panel-text>
+                <v-divider></v-divider>
+              </v-expansion-panel>
+            </v-expansion-panels>
+          </v-col>
+          <v-col cols="12" md="12">
+            <eventTable></eventTable>
+          </v-col>
+        </v-row>
+      </UiParentCard>
+    </v-col>
+  </v-row>
 
   <v-dialog v-model="showModel" width="450">
     <UiParentCard title="Gerar agenda">

@@ -12,12 +12,11 @@ import { fakeBackend } from "@/utils/helpers/fake-backend";
 import "vue3-carousel/dist/carousel.css";
 //Mock Api data
 import "./_mockApis";
+// import VueDragscroll from "vue-dragscroll";
 
 import VCalendar from "v-calendar";
-import VueRecaptcha from "vue3-recaptcha-v2";
 import Maska from "maska";
-// print
-// import print from 'vue3-print-nb';
+
 // Table
 import Vue3EasyDataTable from "vue3-easy-data-table";
 import "vue3-easy-data-table/dist/style.css";
@@ -25,10 +24,16 @@ import "vue3-easy-data-table/dist/style.css";
 import { createI18n } from "vue-i18n";
 import messages from "@/utils/locales/messages";
 import regisContainer from "./di/registration";
-
 import VueDatePicker from "@vuepic/vue-datepicker";
 import "@vuepic/vue-datepicker/dist/main.css";
 import "./scss/loading.css";
+
+//ScrollTop
+import VueScrollTo from "vue-scrollto";
+
+//LightBox
+import VueEasyLightbox from "vue-easy-lightbox";
+
 const i18n = createI18n({
   locale: "en",
   messages: messages,
@@ -41,17 +46,24 @@ fakeBackend();
 app.use(router);
 app.component("EasyDataTable", Vue3EasyDataTable);
 app.use(PerfectScrollbar);
+// app.use(VueDragscroll);
 app.use(createPinia());
 app.use(VCalendar, {});
 app.use(VueTablerIcons);
 app.component("VueDatePicker", VueDatePicker);
-// app.use(print);
-app.use(VueRecaptcha, {
-  siteKey: "6LdzqbcaAAAAALrGEZWQHIHUhzJZc8O-KSTdTTh_",
-  alterDomain: false, // default: false
-});
+
 app.use(i18n);
 app.use(Maska);
 app.use(VueApexCharts);
 app.use(vuetify).mount("#app");
 regisContainer();
+
+//ScrollTop Use
+// app.use(VueScrollTo);
+app.use(VueScrollTo, {
+  duration: 1000,
+  easing: "ease",
+});
+
+//Lightbox
+app.use(VueEasyLightbox);

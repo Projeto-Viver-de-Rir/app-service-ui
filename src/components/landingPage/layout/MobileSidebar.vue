@@ -6,8 +6,8 @@ import {
   MailIcon,
   MessagesIcon,
 } from "vue-tabler-icons";
-import QuickLinks from "@/components/landingpage/layout/PageMenuQuicklinks.vue";
-import AppsLink from "@/components/landingpage/layout/PageMegamenu.vue";
+import QuickLinks from "@/components/landingPage/layout/PageMenuQuicklinks.vue";
+import AppsLink from "@/components/landingPage/layout/PageMegamenu.vue";
 import { useCustomizerStore } from "@/stores/customizer";
 import Logo from "@/layouts/full/logo/Logo.vue";
 const customizer = useCustomizerStore();

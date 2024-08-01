@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import axios, { AxiosError } from "axios";
 import { router } from "@/router";
 
 import type { ApiInterface } from "../interfaces/services/apiInterface";
@@ -32,8 +32,9 @@ axiosClient.interceptors.response.use(
 
         return axiosClient(originalRequest);
       } catch (refreshErr) {
-        localStorage.removeItem("accessToken");
+        localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
+        localStorage.removeItem("user");
 
         router.push({ path: "/auth/login", replace: true });
 

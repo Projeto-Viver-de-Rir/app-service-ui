@@ -17,6 +17,7 @@ export interface volunteer {
   actualMonthAttendances: number;
   lastMonthAbsences: number;
   actualMonthAbsences: number;
+  permissions: string[];
 }
 
 export interface volunteersResponse {
