@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { Form } from "vee-validate";
 
-const valid = ref(true);
 const password = ref("");
 const email = ref("");
 const passwordRules = ref([
@@ -22,8 +21,10 @@ async function validate(values: any, { setErrors }: any) {
   await authStore
   .register(email.value, password.value)
     .then(({ response }) => {
-      if (response?.data?.status !== 200)
-        setErrors({ apiError: response.data.title })
+      if (response?.data?.status !== 200) {
+        const { errors } = response.data;
+        setErrors({ apiError: errors })
+      }
     })
     .catch((error) => setErrors({ apiError: error }));
 }
@@ -51,10 +52,16 @@ async function validate(values: any, { setErrors }: any) {
       block
       type="submit"
       flat
-      >Sign Up</v-btn
+      >Registrar</v-btn
     >
     <div v-if="errors.apiError" class="mt-2">
-      <v-alert color="error">{{ errors.apiError }}</v-alert>
+      <v-alert color="error">
+        Não foi possível criar seu cadastro. Motivos:
+        <p class="pl-5" v-if="typeof errors.apiError === 'object'" v-for="(error, i) in errors.apiError" :key="i">
+          <span v-if="Array.isArray(error)" v-for="(message) in error" :key="i">{{ message }}</span>
+        </p>
+        <p class="pl-5" v-else>{{ errors.apiError }}</p>
+      </v-alert>
     </div>
   </Form>
 </template>

@@ -16,7 +16,7 @@ const customizer = useCustomizerStore();
       >
         <v-card-item class="pa-sm-8">
           <!-- Logo -->
-          <div class="mt-xl-0 my-5 mw-100 d-flex align-center text-center">
+          <div class="mt-xl-0 my-5 mw-100 d-flex align-center justify-center">
             <img
               src="@/assets/images/red_nose.png"
               width="50"
@@ -27,7 +27,7 @@ const customizer = useCustomizerStore();
               Viver de rir
             </h2>
           </div>
-          <div class="mb-8">Seja bem vindo ao processo de inscrição e vários blablabla</div>
+          <div class="mb-8">Seja bem vindo ao processo de inscrição para novos voluntários da nossa instituição.</div>
 
           <div class="d-flex align-center text-center mb-6">
             <div class="w-100 px-5 auth-divider position-relative"></div>
@@ -44,7 +44,7 @@ const customizer = useCustomizerStore();
               class="v-theme--BLUE_THEME text-primary text-body-1 opacity-1 pl-2" 
               href="/auth/login"
             >
-              Sign In
+              Login
             </v-btn>
           </h6>
         </v-card-item>        
