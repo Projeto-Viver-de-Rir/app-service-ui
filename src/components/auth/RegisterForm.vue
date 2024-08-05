@@ -19,17 +19,19 @@ const confirmed = ref(false);
 
 async function validate(values: any, { setErrors }: any) {
   const authStore = useAuthStore();
+  setErrors({});
 
   await authStore
   .register(email.value, password.value)
-    .then(({ response }) => {
-      if (response?.status === 200) {
-        confirmed.value = true;
+    .then((response) => {
+      if (!response || response.status !== 200) {
+        const errors = response?.response?.data?.errors || "Ocorreu um erro geral.";
+        setErrors({ apiError: errors });
+
         return;
       }
 
-      const errors = response?.data?.errors || "Ocorreu um erro geral.";
-      setErrors({ apiError: errors });
+      confirmed.value = true;
     })
     .catch((error) => setErrors({ apiError: error }));
 }
@@ -70,7 +72,7 @@ async function validate(values: any, { setErrors }: any) {
       </v-alert>
     </div>
 
-    <v-alert color="success" v-if="confirmed">Seu cadastro foi realizado! <br />
+    <v-alert color="success" v-if="confirmed" class="mt-2">Seu cadastro foi realizado! <br />
       Em breve você deverá receber um e-mail para continuar seu cadastro.
     </v-alert>
   </Form>
