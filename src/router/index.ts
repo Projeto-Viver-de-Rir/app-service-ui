@@ -10,6 +10,7 @@ import teamsRoutes from "./teamsRoutes";
 import configsRoutes from "./configsRoutes";
 import MyAreaRoutes from "./MyAreaRoutes";
 import type { volunteer } from "@/entities/volunteer";
+import AccountRoutes from "./AccountRoutes";
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,6 +21,7 @@ export const router = createRouter({
     },
     MainRoutes,
     AuthRoutes,
+    AccountRoutes,
     eventsRoutes,
     volunteersRoutes,
     debtsRoutes,

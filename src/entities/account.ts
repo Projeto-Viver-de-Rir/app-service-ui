@@ -1,16 +1,27 @@
-export interface account {
+interface volunteer {
   id: number;
-  name: string;
-  nickname: string;
-  email: string;
-  photo: string;
-  access_failed_count: number;
-  lockout: string;
+  identifier: string
 }
 
+
 export interface accountResponse {
-  account: account;
-  skip: number;
-  total: number;
-  limit: number;
+  id: number;
+  email: string;
+  photo: string;
+  volunteer: volunteer
+}
+
+
+export interface account {
+  name: string,
+  nickname: string,
+  address: string,
+  city: string,
+  state: string,
+  zip: string,
+  country: string,
+  birthDate: Date,
+  availability: string,
+  identifier: string,
+  photo: string
 }

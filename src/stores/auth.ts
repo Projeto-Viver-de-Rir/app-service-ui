@@ -41,12 +41,18 @@ export const useAuthStore = defineStore({
           var data = await repository.getCurrentUserWithToken(
             response.data.accessToken
           );
+
           this.user = data;
           this.user.photo = this.user.photo || "";
 
           // store user details and jwt in local storage to keep user logged in between page refreshes
           (async () =>
             await localStorage.setItem("user", JSON.stringify(this.user)))();
+
+          if (!data.volunteer) {
+            router.push({ path: "/Enroll", replace: true });
+            return;
+          }
 
           // redirect to previous url or default to home page
           router.push({ path: "/Dashboard", replace: true });
