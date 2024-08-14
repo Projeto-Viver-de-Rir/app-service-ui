@@ -10,13 +10,13 @@ interface accountState {
   isLoading: boolean;
 }
 
-export const useEnroll = defineStore("enroll", () => {
+export const useAccount = defineStore("account", () => {
   const state = reactive<accountState>({
     account: null,
     isLoading: false,
  });
 
-  const enrollRepository = container.resolve(accountRepository);
+  const repository = container.resolve(accountRepository);
   const getAccount = computed(() => state.account);
   const isLoading = computed(() => state.isLoading);
   const getAccountData = async () => {
@@ -31,7 +31,7 @@ export const useEnroll = defineStore("enroll", () => {
   const uploadPhoto = async (file: BinaryData) => {
     state.isLoading = true;
     
-    await enrollRepository.patchPhoto(file);
+    await repository.patchPhoto(file);
 
     state.isLoading = false;
   }
@@ -40,7 +40,7 @@ export const useEnroll = defineStore("enroll", () => {
     state.isLoading = true;
     var accountToSent = state.account;
 
-    await enrollRepository.update({
+    await repository.update({
       name: accountToSent?.name,
       nickname: accountToSent?.nickname,
       address: accountToSent?.address,

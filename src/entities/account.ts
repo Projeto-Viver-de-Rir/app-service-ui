@@ -1,6 +1,17 @@
-interface volunteer {
-  id: number;
-  identifier: string
+export class accountVolunteer {
+  constructor(
+    public name: string,
+    public nickname: string, 
+    public address: string,
+    public city: string, 
+    public state: string,
+    public zip: string, 
+    public country: string,
+    public birthDate: Date, 
+    public availability: string,
+    public identifier: string, 
+    public photo: string,
+  ) {}
 }
 
 
@@ -8,7 +19,7 @@ export interface accountResponse {
   id: number;
   email: string;
   photo: string;
-  volunteer: volunteer
+  volunteer: accountVolunteer
 }
 
 

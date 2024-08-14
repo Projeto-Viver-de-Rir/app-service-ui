@@ -5,8 +5,8 @@ import BaseBreadcrumb from "@/components/shared/BaseBreadcrumb.vue";
 import UiParentCard from "@/components/shared/UiParentCard.vue";
 import { useRoute, useRouter } from "vue-router";
 
-import { useEnroll } from "../../stores/enrollStore";
-import type { storeToRefs } from "pinia";
+import { useAccount } from "../../stores/accountStore";
+import AccountTabs from "@/components/account/AccountTabs.vue";
 
 interface SetupData {
   account: ComputedRef;
@@ -19,6 +19,7 @@ export default defineComponent({
   components: {
     BaseBreadcrumb,
     UiParentCard,
+    AccountTabs
   },
   setup(): SetupData {
     const page = ref({ title: "Bem vindo!" });
@@ -31,14 +32,13 @@ export default defineComponent({
     ]);
     const route = useRoute();
     const router = useRouter();
-    const store = useEnroll();
+    const store = useAccount();
 
     onMounted(async () => {
       await store.getAccountData();
     });
     const account = computed(() => store.getAccount);
     const isLoading = computed(() => store.isLoading);
-    const isEditing = computed(() => store.isEditing);
 
     const save = async () => {
        await store.save();
@@ -46,9 +46,8 @@ export default defineComponent({
     };
 
     return {
-    account,
+      account,
       isLoading,
-      isEditing,
       breadcrumbs,
       save,
       page
@@ -65,11 +64,7 @@ export default defineComponent({
   ></BaseBreadcrumb>
   <v-row>
     <UiParentCard v-if="!isLoading && account !== null">
-      <v-row v-if="!isEditing">
-        <v-col cols="12" md="12" style="text-align: right">
-          teste
-        </v-col>
-      </v-row>
-    </UiParentCard>
+      <AccountTabs />
+    </UiParentCard>  
   </v-row>
 </template>
