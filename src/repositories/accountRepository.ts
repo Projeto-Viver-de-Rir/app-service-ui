@@ -24,7 +24,10 @@ export class accountRepository implements accountRepositoryInterface {
   public async update(account: account): Promise<void> {
     await this.apiService.post("account/enroll", account);
   }
-  public async patchPhoto(file: BinaryData): Promise<void> {
-    await this.apiService.patch("account/photo", file);
+
+  public async patchPhoto(file: Blob) {
+    const formData = new FormData();
+    formData.append('file', file)
+    return await this.apiService.patch("account/photo", formData);
   }
 }

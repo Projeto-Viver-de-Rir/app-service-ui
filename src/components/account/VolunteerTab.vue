@@ -1,20 +1,16 @@
 <script setup lang="ts">
 import { accountVolunteer } from '@/entities/account';
-import {  ref } from 'vue';
+import {  reactive, ref } from 'vue';
 
 const props = defineProps({
-  volunteer: accountVolunteer,
+  volunteer: {
+    type: Object as () => accountVolunteer,
+    required: true
+  },
+  saveVolunteer: Function
 });
 
-const name = ref(props.volunteer?.name || "");
-const nickname = ref(props.volunteer?.nickname || "");
-const identifier = ref(props.volunteer?.identifier || "");
-const birthDate = ref(props.volunteer?.birthDate || "");
-const address = ref(props.volunteer?.address || "");
-const zip = ref(props.volunteer?.zip || "");
-const city = ref(props.volunteer?.city || "");
-const state = ref(props.volunteer?.state || "");
-const country = ref(props.volunteer?.country || "");
+const formData = reactive(props.volunteer);
 
 const format = (date:Date) => {
     const day = date.getDate();
@@ -23,6 +19,10 @@ const format = (date:Date) => {
 
     return day + "/" + month + "/" + year;
 };
+
+const save = async () => {
+    return await props.saveVolunteer();
+}
 
 </script>
 
@@ -42,7 +42,7 @@ const format = (date:Date) => {
                                             color="primary"
                                             variant="outlined"
                                             type="text"
-                                            v-model="name"
+                                            v-model="formData.name"
                                             hide-details
                                         />
                                 </v-col>
@@ -52,7 +52,7 @@ const format = (date:Date) => {
                                             color="primary"
                                             variant="outlined"
                                             type="text"
-                                            v-model="nickname"
+                                            v-model="formData.nickname"
                                             hide-details
                                         />
                                 </v-col>
@@ -62,7 +62,7 @@ const format = (date:Date) => {
                                             color="primary"
                                             variant="outlined"
                                             type="text"
-                                            v-model="identifier"
+                                            v-model="formData.identifier"
                                             hide-details
                                         />
                                 </v-col>
@@ -71,7 +71,7 @@ const format = (date:Date) => {
                                 <v-col cols="12" md="3">        
                                         <v-label class="mb-2 font-weight-medium">Data de Nascimento:</v-label>
                                         <VueDatePicker
-                                            v-model="birthDate"
+                                            v-model="formData.birthDate"
                                             :format="format"
                                             :enableTimePicker="false"
                                         />
@@ -82,7 +82,7 @@ const format = (date:Date) => {
                                             color="primary"
                                             variant="outlined"
                                             type="text"
-                                            v-model="zip"
+                                            v-model="formData.zip"
                                             hide-details
                                         />
                                 </v-col>
@@ -92,7 +92,7 @@ const format = (date:Date) => {
                                             color="primary"
                                             variant="outlined"
                                             type="email"
-                                            v-model="address"
+                                            v-model="formData.address"
                                             hide-details
                                         ></v-text-field>
                                 </v-col>
@@ -102,7 +102,7 @@ const format = (date:Date) => {
                                             color="primary"
                                             variant="outlined"
                                             type="text"
-                                            v-model="city"
+                                            v-model="formData.city"
                                             hide-details
                                         ></v-text-field>
                                 </v-col>
@@ -112,7 +112,7 @@ const format = (date:Date) => {
                                             color="primary"
                                             variant="outlined"
                                             type="text"
-                                            v-model="state"
+                                            v-model="formData.state"
                                             hide-details
                                         ></v-text-field>
                                 </v-col>
@@ -122,7 +122,7 @@ const format = (date:Date) => {
                                             color="primary"
                                             variant="outlined"
                                             type="text"
-                                            v-model="country"
+                                            v-model="formData.country"
                                             hide-details
                                         ></v-text-field>
                                 </v-col>
@@ -133,8 +133,7 @@ const format = (date:Date) => {
             </v-col>
         </v-row>
         <div class="d-flex justify-end mt-5">
-            <v-btn size="large" color="primary" class="mr-4" flat>Salvar</v-btn>
-            <v-btn size="large" class="bg-lighterror text-error"  flat>Cancelar</v-btn>
+            <v-btn size="large" color="primary" class="mr-4" flat :onclick="save">Salvar</v-btn>
         </div>
     </v-card>
 </template>

@@ -24,15 +24,9 @@ export interface accountResponse {
 
 
 export interface account {
-  name: string,
-  nickname: string,
-  address: string,
-  city: string,
-  state: string,
-  zip: string,
-  country: string,
-  birthDate: Date,
-  availability: string,
-  identifier: string,
-  photo: string
+  id: number;
+  email: string;
+  phone: string;
+  photo: string;
+  volunteer: accountVolunteer
 }

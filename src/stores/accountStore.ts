@@ -24,16 +24,11 @@ export const useAccount = defineStore("account", () => {
 
     const data = JSON.parse(localStorage.getItem("user")|| "");
     state.account = data;
-
     state.isLoading = false;
   };
 
-  const uploadPhoto = async (file: BinaryData) => {
-    state.isLoading = true;
-    
-    await repository.patchPhoto(file);
-
-    state.isLoading = false;
+  const uploadPhoto = async (file: Blob) => {   
+    return await repository.patchPhoto(file);
   }
 
   const save = async () => {
