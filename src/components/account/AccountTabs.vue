@@ -1,9 +1,11 @@
 <script lang="ts">
-import { computed, defineComponent, onMounted, reactive, ref, type ComputedRef } from "vue";
+import { computed, defineComponent, onMounted, reactive, ref } from "vue";
 import { UserCircleIcon, AlertCircleIcon } from "vue-tabler-icons";
-import AccountTab from "./AccountTab.vue";
-import VolunteerTab from "./VolunteerTab.vue";
-import { useAccount } from "@/stores/accountStore";
+import { useAccountData } from "@/stores/accountStore";
+import AvatarForm from "./forms/AvatarForm.vue";
+import AccountForm from "./forms/AccountForm.vue";
+import VolunteerForm from "./forms/VolunteerForm.vue";
+import { type accountEnroll } from "@/entities/account";
 
 interface EssentialData {
   photo: string;
@@ -27,21 +29,24 @@ interface VolunteerData {
 export default defineComponent({
   name: 'AccountTabs',
   components: {
-    AccountTab,
-    VolunteerTab
+    AvatarForm,
+    AccountForm,
+    VolunteerForm
   },
 
-  setup() {
+  setup() {    
 
     const tab = ref("1");
-    const store = useAccount();
+
+    const store = useAccountData();
 
     onMounted(async () => {
         await store.getAccountData();
     })
     
-    const account = ref(store.getAccount);
-    // Define initial form data
+    
+    const account = computed(() => store.getAccount);
+
     const basicData = reactive<EssentialData>({
         photo: account.value?.photo || "",
         email: account.value?.email || "",
@@ -57,26 +62,45 @@ export default defineComponent({
         zip: account.value?.volunteer?.zip || "", 
         country: account.value?.volunteer?.country || "",
         birthDate: account.value?.volunteer?.birthDate, 
-        availability: account.value?.volunteer?.address || "",
+        availability: account.value?.volunteer?.availability || "",
         identifier: account.value?.volunteer?.address || "",
     });
 
-    const save = async () => {
-        console.log(volunteerData, 'account');
-        console.log(basicData, 'account')
-        // await store.save().then((res) => {
-        //     console.log(res);
+    const isEnroll = ref(store.isEnroll);
+    const errors = ref([]);
 
-        //     if (res.status === 200)
-        //         router.push({ path: "/dashboard", replace: true });
-        // });
-    };
+
+    const save = async () => {
+        const user : accountEnroll = {
+            name: volunteerData.name || "",
+            photo: basicData.photo || "",
+            nickname: volunteerData.nickname || "",
+            address: volunteerData.address || "",
+            city: volunteerData.city || "",
+            state: volunteerData.state || "",
+            country: volunteerData.country || "",
+            zip: volunteerData.zip || "",
+            birthDate: new Date(volunteerData.birthDate || ""),
+            identifier: volunteerData.identifier || "",
+            availability: volunteerData.availability || "",
+        };
+
+        const response = await store.setEnroll(user);
+
+        if (!response || response.status !== 200) {
+            // get errors here
+        }
+    }
 
     const uploadPhoto = async (file: Blob) => {
         const response = await store.uploadPhoto(file);
-
-        if (response?.status === 200)
+        if (response?.data) {
             basicData.photo = response.data;
+        }
+    }
+
+    const resetPhoto = () => {
+       basicData.photo = "";
     }
 
     const changeTab = () => {
@@ -84,14 +108,18 @@ export default defineComponent({
         else tab.value = "1"
     }
 
-    // Return the component's properties and methods
+    const isVolunteersDisabled = computed(() => !basicData.photo);
+
     return {
       tab,
-      changeTab,
-      uploadPhoto,
-      volunteerData,
       basicData,
-      save
+      volunteerData,
+      changeTab,
+      isEnroll,
+      uploadPhoto,
+      resetPhoto,
+      save,
+      isVolunteersDisabled
     };
   }
 })
@@ -105,18 +133,53 @@ export default defineComponent({
                 <UserCircleIcon stroke-width="1.5" width="20" />
                 Conta
             </v-tab>
-            <v-tab value="2" class="flex-row">
+            <v-tab value="2" class="flex-row" >
                 <AlertCircleIcon stroke-width="1.5" width="20" />
                 Voluntário
             </v-tab>
         </v-tabs>
-        <v-card-text class="bg-grey100 rounded-md mt-4">
+        <v-card-text class="bg-grey100 rounded-md" style="padding: 0">
             <v-window v-model="tab">
                 <v-window-item value="1">
-                    <AccountTab :tab="tab" :changeTab="changeTab" :uploadAvatar="uploadPhoto" :email="basicData?.email" :cellphone="basicData?.phone" />
+                    <!-- <AccountTab :tab="tab" :changeTab="changeTab" :uploadAvatar="uploadPhoto" :email="basicData?.email" :cellphone="basicData?.phone" /> -->
+                    <v-card elevation="10" >
+                        <v-row class="ma-sm-n2 ma-n1">
+                            <v-col cols="12" sm="6">
+                                <v-card elevation="10">
+                                    <v-card-item>
+                                        <AvatarForm :uploadAvatar="uploadPhoto" :resetAvatar="resetPhoto"/>
+                                    </v-card-item>
+                                </v-card>
+                            </v-col>
+                            <v-col cols="12" sm="6">
+                                <v-card elevation="10">
+                                    <v-card-item>
+                                        <AccountForm :email="basicData?.email" :cellphone="basicData?.phone" :isEnroll="isEnroll" />
+                                    </v-card-item>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+                        <div class="d-flex justify-end mt-5">
+                            <v-btn size="large" color="primary" class="mr-4" flat @click="changeTab" :disabled="isVolunteersDisabled">Continuar</v-btn>
+                        </div>
+                    </v-card>
                 </v-window-item>
                 <v-window-item value="2">
-                    <VolunteerTab :volunteer="volunteerData" :saveVolunteer="save" />
+                    <!-- <VolunteerTab :volunteer="volunteerData" :saveVolunteer="save" /> -->
+                    <v-card elevation="10" >
+                        <v-row class="ma-sm-n2 ma-n1">
+                            <v-col cols="12">
+                                <v-card elevation="10">
+                                    <v-card-item>
+                                        <VolunteerForm :volunteer="volunteerData" />
+                                    </v-card-item>
+                                </v-card>
+                            </v-col>
+                        </v-row>
+                        <div class="d-flex justify-end mt-5">
+                            <v-btn size="large" color="primary" class="mr-4" flat :onclick="save">Salvar</v-btn>
+                        </div>
+                    </v-card>
                 </v-window-item>
             </v-window>
         </v-card-text>

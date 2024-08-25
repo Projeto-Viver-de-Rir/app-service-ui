@@ -30,3 +30,17 @@ export interface account {
   photo: string;
   volunteer: accountVolunteer
 }
+
+export interface accountEnroll {
+  name: string,
+  nickname: string,
+  address: string,
+  city: string,
+  state: string,
+  zip: string,
+  country: string,
+  birthDate: Date,
+  availability: string,
+  identifier: string,
+  photo: string
+}

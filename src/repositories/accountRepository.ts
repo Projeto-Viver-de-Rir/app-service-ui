@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
 import type { accountRepositoryInterface } from "../interfaces/repositories/accountRepositoryInterface";
-import type { accountResponse, account } from "../entities/account";
+import type { accountResponse, account, accountEnroll } from "../entities/account";
 import type { Api } from "../services/api";
 
 @injectable()
@@ -21,8 +21,8 @@ export class accountRepository implements accountRepositoryInterface {
     );
     return response.data;
   }
-  public async update(account: account): Promise<void> {
-    await this.apiService.post("account/enroll", account);
+  public async update(account: accountEnroll): Promise<void> {
+    return await this.apiService.post("account/enroll", account);
   }
 
   public async patchPhoto(file: Blob) {

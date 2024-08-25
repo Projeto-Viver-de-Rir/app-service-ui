@@ -50,7 +50,7 @@ export const useAuthStore = defineStore({
             await localStorage.setItem("user", JSON.stringify(this.user)))();
 
           if (!data.volunteer) {
-            router.push({ path: "/Enroll", replace: true });
+            router.push({ path: "/account/enroll", replace: true });
             return;
           }
 
