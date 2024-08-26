@@ -34,16 +34,14 @@ export default defineComponent({
     VolunteerForm
   },
 
-  setup() {    
-
+  setup() {
     const tab = ref("1");
-
     const store = useAccountData();
+    const form = ref(false);
 
     onMounted(async () => {
         await store.getAccountData();
-    })
-    
+    });    
     
     const account = computed(() => store.getAccount);
 
@@ -70,7 +68,10 @@ export default defineComponent({
     const errors = ref([]);
 
 
-    const save = async () => {
+    const submit = async () => {
+
+        if (!form) return;
+
         const user : accountEnroll = {
             name: volunteerData.name || "",
             photo: basicData.photo || "",
@@ -114,11 +115,12 @@ export default defineComponent({
       tab,
       basicData,
       volunteerData,
+      form,
       changeTab,
       isEnroll,
       uploadPhoto,
       resetPhoto,
-      save,
+      submit,
       isVolunteersDisabled
     };
   }
@@ -139,49 +141,49 @@ export default defineComponent({
             </v-tab>
         </v-tabs>
         <v-card-text class="bg-grey100 rounded-md" style="padding: 0">
-            <v-window v-model="tab">
-                <v-window-item value="1">
-                    <!-- <AccountTab :tab="tab" :changeTab="changeTab" :uploadAvatar="uploadPhoto" :email="basicData?.email" :cellphone="basicData?.phone" /> -->
-                    <v-card elevation="10" >
-                        <v-row class="ma-sm-n2 ma-n1">
-                            <v-col cols="12" sm="6">
-                                <v-card elevation="10">
-                                    <v-card-item>
+            <v-form v-model="form" @submit.prevent="submit" validate-on="input">
+                <v-window v-model="tab">
+                    <v-window-item value="1">
+                        <v-card elevation="10" >
+                            <v-row class="ma-sm-n2 ma-n1">
+                                <v-col cols="12" sm="6">
+                                    <v-card elevation="10">
                                         <AvatarForm :uploadAvatar="uploadPhoto" :resetAvatar="resetPhoto"/>
-                                    </v-card-item>
-                                </v-card>
-                            </v-col>
-                            <v-col cols="12" sm="6">
-                                <v-card elevation="10">
-                                    <v-card-item>
+                                    </v-card>
+                                </v-col>
+                                <v-col cols="12" sm="6">
+                                    <v-card elevation="10">
                                         <AccountForm :email="basicData?.email" :cellphone="basicData?.phone" :isEnroll="isEnroll" />
-                                    </v-card-item>
-                                </v-card>
-                            </v-col>
-                        </v-row>
-                        <div class="d-flex justify-end mt-5">
-                            <v-btn size="large" color="primary" class="mr-4" flat @click="changeTab" :disabled="isVolunteersDisabled">Continuar</v-btn>
-                        </div>
-                    </v-card>
-                </v-window-item>
-                <v-window-item value="2">
-                    <!-- <VolunteerTab :volunteer="volunteerData" :saveVolunteer="save" /> -->
-                    <v-card elevation="10" >
-                        <v-row class="ma-sm-n2 ma-n1">
-                            <v-col cols="12">
-                                <v-card elevation="10">
-                                    <v-card-item>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                            <div class="d-flex justify-end mt-5">
+                                <v-btn size="large" color="primary" class="mr-4" flat @click="changeTab" :disabled="isVolunteersDisabled">Continuar</v-btn>
+                            </div>
+                        </v-card>
+                    </v-window-item>
+                    <v-window-item value="2">
+                        <!-- <VolunteerTab :volunteer="volunteerData" :saveVolunteer="save" /> -->
+                        <v-card elevation="10" >
+                            <v-row class="ma-sm-n2 ma-n1">
+                                <v-col cols="12">
+                                    <v-card elevation="10">
                                         <VolunteerForm :volunteer="volunteerData" />
-                                    </v-card-item>
-                                </v-card>
-                            </v-col>
-                        </v-row>
-                        <div class="d-flex justify-end mt-5">
-                            <v-btn size="large" color="primary" class="mr-4" flat :onclick="save">Salvar</v-btn>
-                        </div>
-                    </v-card>
-                </v-window-item>
-            </v-window>
+                                    </v-card>
+                                </v-col>
+                            </v-row>
+                            <div class="d-flex justify-end mt-5">
+                                <v-btn 
+                                    size="large" 
+                                    color="primary" 
+                                    class="mr-4" 
+                                    type="submit" flat 
+                                    :disabled="!form">Salvar</v-btn>
+                            </div>
+                        </v-card>
+                    </v-window-item>
+                </v-window>
+            </v-form>
         </v-card-text>
     </v-card>
 </template>

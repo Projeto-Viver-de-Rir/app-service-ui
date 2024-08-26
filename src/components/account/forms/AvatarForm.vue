@@ -7,12 +7,13 @@ const props = defineProps<{
     uploadAvatar: Function,
     resetAvatar: Function,
 }>()
-
 const currentPhoto = ref(props.photo ?? defaultImage);
 const rules = ref([
     (value: string) => !!value || "A foto é obrigatória",
-    (value: { size: number }) =>
-        !value || value.size < 2000000 || "A foto deve ter no máximo 2 MB!",
+    (value: any) =>{
+        return !value || !value.length || value[0].size < 2000000 || "A foto deve ter no máximo 2 MB"
+    }
+        
 ]);
 
 const onFileChange = async (e: any) => {
@@ -27,7 +28,7 @@ const openFileDialog = () => {
 
 </script>
 <template>
-    <v-form>
+    <v-card-item>
         <h5 class="text-h5">Alteração de perfil</h5>
         <div class="text-subtitle-1 text-medium-emphasis mt-2">Altere sua foto de perfil aqui</div>
         <div class="text-center mt-6 mb-6">
@@ -41,5 +42,5 @@ const openFileDialog = () => {
             <v-btn color="error" class="mx-2" variant="outlined" flat :onClick=props.resetAvatar>Redefinir</v-btn>
         </div>
         <div class="text-subtitle-1 text-medium-emphasis text-center my-sm-8 my-6">Formatos permitidos: JPG, GIF ou PNG. Tamanho máximo 2MB</div>
-    </v-form>
+    </v-card-item>
 </template>

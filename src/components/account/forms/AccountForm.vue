@@ -6,7 +6,7 @@ const props = defineProps<{
 }>();
 </script>
 <template>
-    <v-form>
+    <v-card-item>
         <h5 class="text-h5">Itens essenciais</h5>
         <div class="text-subtitle-1 text-medium-emphasis mt-2">To change your password please confirm here</div>
         <div class="mt-5">
@@ -28,5 +28,5 @@ const props = defineProps<{
                 :disabled="!props.isEditing"
             />
         </div>
-    </v-form>
+    </v-card-item>
 </template>
