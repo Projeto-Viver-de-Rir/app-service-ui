@@ -1,9 +1,18 @@
 <script setup  lang="ts">
+import { useAccountData } from "@/stores/accountStore";
+import { reactive } from "vue";
+const store = useAccountData();
+
 const props = defineProps<{
-    email?: String,
-    cellphone?: String,
     isEditing?:Boolean
 }>();
+
+const data = reactive({
+    email: store.account?.email || "",
+    phone: store.account?.phone || ""
+});
+
+
 </script>
 <template>
     <v-card-item>
@@ -15,7 +24,7 @@ const props = defineProps<{
                 color="primary"
                 variant="outlined"
                 type="email"
-                v-model="props.email"
+                v-model="data.email"
                 :disabled="!props.isEditing"
             />
             <v-label class="mb-2 font-weight-medium">Celular</v-label>
@@ -23,7 +32,7 @@ const props = defineProps<{
                 color="primary"
                 variant="outlined"
                 type="tel"
-                v-model="props.cellphone"
+                v-model="data.phone"
                 v-maska="'(##) #####-####'"
                 :disabled="!props.isEditing"
             />

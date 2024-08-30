@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { reactive, ref  } from 'vue';
+import { ref  } from 'vue';
 import defaultImage from '@/assets/images/profile/user-1.jpg';
+import { useAccountData } from "@/stores/accountStore";
 
-const props = defineProps<{
-    photo?: string,
-    uploadAvatar: Function,
-    resetAvatar: Function,
-}>()
-const currentPhoto = ref(props.photo ?? defaultImage);
+
+const store = useAccountData();
+
+const currentPhoto = ref(defaultImage);
 const error = ref('');
 
 const onFileChange = async (e: any) => {
@@ -28,7 +27,7 @@ const onFileChange = async (e: any) => {
     error.value = '';
 
     currentPhoto.value = URL.createObjectURL(file);
-    await props.uploadAvatar(file);
+    await store.uploadPhoto(file);
 }
 
 const openFileDialog = () => {
