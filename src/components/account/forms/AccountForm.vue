@@ -11,7 +11,7 @@ const props = defineProps<{
         <div class="text-subtitle-1 text-medium-emphasis mt-2">To change your password please confirm here</div>
         <div class="mt-5">
             <v-label class="mb-2 font-weight-medium">E-mail</v-label>
-            <v-text-field
+            <VTextField
                 color="primary"
                 variant="outlined"
                 type="email"
@@ -19,7 +19,7 @@ const props = defineProps<{
                 :disabled="!props.isEditing"
             />
             <v-label class="mb-2 font-weight-medium">Celular</v-label>
-            <v-text-field
+            <VTextField
                 color="primary"
                 variant="outlined"
                 type="tel"

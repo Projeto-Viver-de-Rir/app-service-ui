@@ -7,6 +7,7 @@ import AccountForm from "./forms/AccountForm.vue";
 import VolunteerForm from "./forms/VolunteerForm.vue";
 import { type account, type accountEnroll } from "@/entities/account";
 import { router } from "@/router";
+import { Form } from "vee-validate";
 
 interface EssentialData {
   photo: string;
@@ -32,7 +33,8 @@ export default defineComponent({
   components: {
     AvatarForm,
     AccountForm,
-    VolunteerForm
+    VolunteerForm,
+    Form
   },
 
   setup() {
@@ -63,14 +65,8 @@ export default defineComponent({
 
     const isEnroll = ref(store.isEnroll);
 
-    let errors = ref('');
-
-    const submit = async () => {
-
-        if (!form) return;
-
-        debugger;
-
+    const submit = async (values: any, { setErrors }: any) => {
+      
         const user : accountEnroll = {
             name: volunteerData.name || "",
             photo: basicData.photo || "",
@@ -86,27 +82,25 @@ export default defineComponent({
         };
 
         await store.setEnroll(user).then((response) => {
-            console.log('response', response);
+            if (!response || response?.status !== 200) {
+                console.log('response', response);
+                const errors = response?.response?.data || "Ocorreu um erro geral.";
+                setErrors({ apiError: [errors]});
 
-            if (response?.status !== 200) {
-                const errors = response.data || "Ocorreu um erro geral.";
-                errors.value = errors;
-                
-            } else {
-                const userDataUpdated: account = {
-                    ...basicData,
-                    id: response.data?.id,
-                    volunteer: response.data
-                };
-
-                store.updateUserData(userDataUpdated);
-                
-                router.push({ path: "/dashboard", replace: true });
+                return;
             }
+                
+            const userDataUpdated: account = {
+                ...basicData,
+                id: response.data?.id,
+                volunteer: response.data
+            };
+
+            store.updateUserData(userDataUpdated);            
+            router.push({ path: "/dashboard", replace: true });
         })
         .catch((error) => {
-            errors.value = error.response.data;
-            console.log('setEnroll error', error);
+            setErrors({ apiError: error });
         });
         
     }
@@ -139,8 +133,7 @@ export default defineComponent({
       uploadPhoto,
       resetPhoto,
       submit,
-      isVolunteersDisabled,
-      errors
+      isVolunteersDisabled
     };
   }
 })
@@ -152,19 +145,20 @@ export default defineComponent({
         <v-tabs v-model="tab">
             <v-tab value="1">
                 <UserCircleIcon stroke-width="1.5" width="20" />
-                Conta
+                <span class="ml-2">Conta</span>
             </v-tab>
-            <v-tab value="2" class="flex-row" :disabled="isVolunteersDisabled">
+            <v-tab value="2" class="flex-row">
                 <AlertCircleIcon stroke-width="1.5" width="20" />
-                Voluntário
+                <span class="ml-2">Voluntário</span>
             </v-tab>
         </v-tabs>
+        <v-divider></v-divider>
         <v-card-text class="bg-grey100 rounded-md" style="padding: 0">
-            <v-form v-model="form" @submit.prevent="submit" validate-on="input">
+            <Form @submit="submit" v-slot="{ errors, isSubmitting }">
                 <v-window v-model="tab">
                     <v-window-item value="1">
-                        <v-card elevation="10" >
-                            <v-row class="ma-sm-n2 ma-n1">
+                        <v-card elevation="0" >
+                            <v-row class="pa-sm-6 pa-3 pb-sm-6 pb-6 justify-center">
                                 <v-col cols="12" sm="6">
                                     <v-card elevation="10">
                                         <AvatarForm :uploadAvatar="uploadPhoto" :resetAvatar="resetPhoto"/>
@@ -176,39 +170,46 @@ export default defineComponent({
                                     </v-card>
                                 </v-col>
                             </v-row>
-                            <div class="d-flex justify-end mt-5">
+                            <div class="d-flex justify-end pb-5 pr-5">
                                 <v-btn size="large" color="primary" class="mr-4" flat @click="changeTab" :disabled="isVolunteersDisabled">Continuar</v-btn>
                             </div>
                         </v-card>
                     </v-window-item>
                     <v-window-item value="2">
-                        <v-card elevation="10" >
-                            <v-row class="ma-sm-n2 ma-n1">
-                                <v-col cols="12">
+                        <v-card elevation="0">
+                            <v-row class="pa-sm-6 pa-3 pb-sm-6 pb-6 justify-center">
+                                <v-col cols="12" md="9">
                                     <v-card elevation="10">
                                         <VolunteerForm :volunteer="volunteerData" />
                                     </v-card>
+                                    <div v-if="errors.apiError" class="mt-5">
+                                        <v-alert color="error">
+                                            Não foi possível completar seu cadastro. Motivo(s):
+                                            <p class="pl-5" v-if="Array.isArray(errors.apiError)" v-for="(err, i) in errors.apiError" :key="i">{{ err.errorMessage }}</p>
+                                            <p class="pl-5" v-else>{{ errors.apiError }}</p>
+                                        </v-alert>
+                                    </div>
                                 </v-col>
                             </v-row>
-                            <div class="d-flex justify-end mt-5">
+                            <div class="d-flex justify-end pb-5 pr-5">
+                                <v-btn 
+                                    size="large" 
+                                    color="alert"
+                                    variant="outlined" 
+                                    class="mr-4" 
+                                    flat
+                                    @click="changeTab">Voltar</v-btn>
                                 <v-btn 
                                     size="large" 
                                     color="primary" 
                                     class="mr-4" 
                                     type="submit" flat
-                                    :disabled="!form">Salvar</v-btn>
+                                    :loading="isSubmitting">Concluir</v-btn>
                             </div>
                         </v-card>
                     </v-window-item>
                 </v-window>
-                <div v-if="errors" class="mt-2">
-                    <v-alert color="error">
-                        Não foi possível completar seu cadastro. Motivo(s):
-                        <p class="pl-5" v-if="Array.isArray(errors)" v-for="(err, i) in errors" :key="i">{{ err.errorMessage }}</p>
-                        <p class="pl-5" v-else>{{ errors.apiError }}</p>
-                    </v-alert>
-                </div>
-            </v-form>
+            </Form>
         </v-card-text>
     </v-card>
 </template>

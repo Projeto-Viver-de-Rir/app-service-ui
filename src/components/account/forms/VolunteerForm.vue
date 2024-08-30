@@ -23,8 +23,18 @@ const availability = computed({
 });
 
 const required =  (v: any) => {
-    return !!v || 'Field is required';
+    return !!v || 'Campo obrigatório';
 };
+
+const cpfRules = ref([
+  (v: string) => !!v || "CPF é obrigatório",
+  (v: string) => /[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}$/.test(v) || "Insira um CPF válido",
+]);
+
+const zipRules = ref([
+  (v: string) => !!v || "CEP é obrigatório",
+  (v: string) => /[0-9]{2}\.?[0-9]{3}\-?[0-9]{3}$/.test(v) || "Insira um CEP válido",
+]);
 
 const format = (date:Date) => {
     const day = date.getDate();
@@ -73,110 +83,102 @@ const weekDays = [
         <div class="mt-5">
             <v-row>
                 <v-col cols="12" md="6">
-                        <v-label class="mb-2 font-weight-medium">Nome:</v-label>
-                        <v-text-field
-                            color="primary"
-                            variant="outlined"
-                            type="text"
-                            v-model="formData.name"
-                            :rules="[required]"
-                            hide-details
-                        />
+                    <v-label class="mb-2 font-weight-medium">Nome:</v-label>
+                    <VTextField
+                        color="primary"
+                        variant="outlined"
+                        type="text"
+                        v-model="formData.name"
+                        :rules="[required]"
+                    />
                 </v-col>
                 <v-col cols="12" md="3">
-                        <v-label class="mb-2 font-weight-medium">Apelido:</v-label>
-                        <v-text-field
-                            color="primary"
-                            variant="outlined"
-                            type="text"
-                            v-model="formData.nickname"
-                            :rules="[required]"
-                            hide-details
-                        />
+                    <v-label class="mb-2 font-weight-medium">Apelido:</v-label>
+                    <VTextField
+                        color="primary"
+                        variant="outlined"
+                        type="text"
+                        v-model="formData.nickname"
+                        :rules="[required]"
+                    />
                 </v-col>
                 <v-col cols="12" md="3">        
-                        <v-label class="mb-2 font-weight-medium">CPF:</v-label>
-                        <v-text-field
-                            color="primary"
-                            variant="outlined"
-                            type="text"
-                            v-model="formData.identifier"
-                            :rules="[required]"
-                            hide-details
-                            v-maska="'###.###.###-##'"
-                        />
+                    <v-label class="mb-2 font-weight-medium">CPF:</v-label>
+                    <VTextField
+                        color="primary"
+                        variant="outlined"
+                        type="text"
+                        v-model="formData.identifier"
+                        :rules="cpfRules"
+                        v-maska="'###.###.###-##'"
+                    />
                 </v-col>
             </v-row>
             <v-row>
                 <v-col cols="12" md="3">        
-                        <v-label class="mb-2 font-weight-medium">Data de Nascimento:</v-label>
-                        <VueDatePicker
-                            v-model="formData.birthDate"
-                            :teleport="true"
-                            :format="format"
-                            :enableTimePicker="false"
-                            :rules="[required]"
-                        />
+                    <v-label class="mb-2 font-weight-medium">Data de Nascimento:</v-label>
+                    <VueDatePicker
+                        v-model="formData.birthDate"
+                        :teleport="true"
+                        :format="format"
+                        :enableTimePicker="false"
+                        :rules="[required]"
+                    />
                 </v-col>
                 <v-col cols="12" md="3">        
-                        <v-label class="mb-2 font-weight-medium">CEP:</v-label>
-                        <v-text-field
-                            color="primary"
-                            variant="outlined"
-                            type="text"
-                            :rules="[required]"
-                            v-model="formData.zip"
-                            v-maska="'##.###-###'"
-                            hide-details
-                        />
+                    <v-label class="mb-2 font-weight-medium">CEP:</v-label>
+                    <VTextField
+                        color="primary"
+                        variant="outlined"
+                        type="text"
+                        v-model="formData.zip"
+                        :rules="zipRules"
+                        v-maska="'##.###-###'"
+                    />
                 </v-col>
                 <v-col cols="12" md="6">        
-                        <v-label class="mb-2 font-weight-medium">Endereço:</v-label>
-                        <v-text-field
-                            color="primary"
-                            variant="outlined"
-                            type="email"
-                            v-model="formData.address"
-                            :rules="[required]"
-                            hide-details
-                        ></v-text-field>
+                    <v-label class="mb-2 font-weight-medium">Endereço:</v-label>
+                    <VTextField
+                        color="primary"
+                        variant="outlined"
+                        type="email"
+                        v-model="formData.address"
+                        :rules="[required]"
+                    ></VTextField>
                 </v-col>
                 <v-col cols="12" md="4">        
-                        <v-label class="mb-2 font-weight-medium">Cidade:</v-label>
-                        <v-text-field
-                            color="primary"
-                            variant="outlined"
-                            type="text"
-                            v-model="formData.city"
-                            :rules="[required]"
-                            hide-details
-                        ></v-text-field>
+                    <v-label class="mb-2 font-weight-medium">Cidade:</v-label>
+                    <VTextField
+                        color="primary"
+                        variant="outlined"
+                        type="text"
+                        v-model="formData.city"
+                        :rules="[required]"
+                    ></VTextField>
                 </v-col>
                 <v-col cols="12" md="4">        
-                        <v-label class="mb-2 font-weight-medium">Estado:</v-label>
-                        <v-text-field
-                            color="primary"
-                            variant="outlined"
-                            type="text"
-                            v-model="formData.state"
-                            :rules="[required]"
-                            hide-details
-                        ></v-text-field>
+                    <v-label class="mb-2 font-weight-medium">Estado:</v-label>
+                    <VTextField
+                        color="primary"
+                        variant="outlined"
+                        type="text"
+                        v-model="formData.state"
+                        :rules="[required]"
+                    ></VTextField>
                 </v-col>
                 <v-col cols="12" md="4">        
-                        <v-label class="mb-2 font-weight-medium">País:</v-label>
-                        <v-text-field
-                            color="primary"
-                            variant="outlined"
-                            type="text"
-                            v-model="formData.country"
-                            :rules="[required]"
-                            hide-details
-                        ></v-text-field>
+                    <v-label class="mb-2 font-weight-medium">País:</v-label>
+                    <VTextField
+                        color="primary"
+                        variant="outlined"
+                        type="text"
+                        v-model="formData.country"
+                        :rules="[required]"
+                    ></VTextField>
                 </v-col>
             </v-row>
             <v-row>
-                <v-col cols="12"><span class="mb-2 font-weight-medium font-size-medium">Disponibilidade:</span></v-col>
+                <v-col cols="12"><span class="v-label mb-2 font-weight-medium">Disponibilidade:</span></v-col>
                 <v-col v-for="day in weekDays" :key="day.key" cols="4" md="auto">
                     <v-checkbox
                         v-model="availability"

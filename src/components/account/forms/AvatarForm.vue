@@ -8,22 +8,40 @@ const props = defineProps<{
     resetAvatar: Function,
 }>()
 const currentPhoto = ref(props.photo ?? defaultImage);
-const rules = ref([
-    (value: string) => !!value || "A foto é obrigatória",
-    (value: any) =>{
-        return !value || !value.length || value[0].size < 2000000 || "A foto deve ter no máximo 2 MB"
-    }
-        
-]);
+const error = ref('');
 
 const onFileChange = async (e: any) => {
     const file = e.target.files[0];
+
+    console.log(file);
+
+    if(!['image/png','image/jpeg','image/gif'].includes(file['type'])){
+        error.value = "Formato de arquivo não permitido";
+        return;
+    }
+
+    if (file['size'] > 2000000) {
+        error.value = "A foto deve ter no máximo 2 MB";
+        return;
+    }
+
+    error.value = '';
+
     currentPhoto.value = URL.createObjectURL(file);
     await props.uploadAvatar(file);
 }
 
 const openFileDialog = () => {
-    document.getElementById('fileInputValidation')?.click();
+    document.getElementById('fileInputAvatar')?.click();
+}
+
+const reset = () => {
+    error.value = '';
+    currentPhoto.value = defaultImage;
+
+    const input = document.getElementById('fileInputAvatar');
+    input.value = ''
+    props.resetAvatar();
 }
 
 </script>
@@ -35,11 +53,16 @@ const openFileDialog = () => {
             <v-avatar size="120">
                 <img :src="currentPhoto" height="120" alt="image" />
             </v-avatar>
-            <v-file-input id="fileInputValidation" :rules="rules" :onChange=onFileChange accept="image/png, image/jpeg, image/bmp" style="display: none;"></v-file-input>
+            <v-file-input id="fileInputAvatar" :onChange=onFileChange accept="image/png, image/jpeg, image/gif" style="display: none;"></v-file-input>
         </div>
         <div class="d-flex justify-center">
             <v-btn color="primary" class="mx-2" flat :onclick=openFileDialog>Selecionar</v-btn>
-            <v-btn color="error" class="mx-2" variant="outlined" flat :onClick=props.resetAvatar>Redefinir</v-btn>
+            <v-btn color="error" class="mx-2" variant="outlined" flat :onClick=reset>Redefinir</v-btn>
+        </div>
+        <div v-if="error" class="mt-5">
+            <v-alert color="error">
+                <p class="pl-5">{{ error }}</p>
+            </v-alert>
         </div>
         <div class="text-subtitle-1 text-medium-emphasis text-center my-sm-8 my-6">Formatos permitidos: JPG, GIF ou PNG. Tamanho máximo 2MB</div>
     </v-card-item>

@@ -36,7 +36,11 @@ export const useAccountData = defineStore('account', {
     },
     async setEnroll(user: accountEnroll) {
       const repository = container.resolve(accountRepository);  
-      return repository.update(user);
+      return repository.update(user)
+        .catch((err) => {
+          console.log(err);
+          return err;
+        });
     }
   },
 })

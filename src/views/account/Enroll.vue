@@ -41,9 +41,7 @@ export default defineComponent({
     :title="page.title"
     :breadcrumbs="breadcrumbs"
   ></BaseBreadcrumb>
-  <v-row>
-    <UiParentCard>
-      <AccountTabs />
-    </UiParentCard>  
+  <v-row style="margin: 0;">
+    <AccountTabs />
   </v-row>
 </template>
