@@ -21,7 +21,7 @@ export class accountRepository implements accountRepositoryInterface {
     );
     return response.data;
   }
-  public async update(account: accountEnroll): Promise<void> {
+  public async update(account: accountEnroll) {
     return await this.apiService.post("account/enroll", account);
   }
 

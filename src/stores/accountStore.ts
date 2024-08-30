@@ -3,43 +3,30 @@ import { container } from "tsyringe";
 
 import { accountRepository } from "@/repositories/accountRepository";
 import type { account, accountEnroll } from "@/entities/account";
+import { router } from "@/router";
 
 interface accountState {
   account: account | null;
   isLoading: boolean;
-  isEnroll: boolean;
 }
 
 export const useAccountData = defineStore('account', {
   state: (): accountState => {
     return {
-      account: null,
-      isLoading: false,
-      isEnroll: true
+      account: JSON.parse(localStorage.getItem("user")|| ""),
+      isLoading: false
     }
   },
   getters: {
-    getAccount(state) {
-      return state.account;
-    },
-    getVolunteerData(state) {
-      return state.account.volunteer;
+    isEnroll(state) {
+      return !state.account?.volunteer;
     },
   },
   actions: {
-    // any amount of arguments, return a promise or not
-    getAccountData() {
-      // you can directly mutate the state
-      this.isLoading = true;
+    updateUserData(user: account) {
+      this.account = user;
 
-      const data = JSON.parse(localStorage.getItem("user")|| "");
-
-      // caso o objeto volunteer venha preenchido, considerar que não é processo de enroll
-      if (data.volunteer) this.isEnroll = false;
-      this.account = data;
-      this.isLoading = false;
-    },
-    updateUserData() {
+      localStorage.setItem("user", JSON.stringify(this.account));
 
     },
     async uploadPhoto (file: Blob) {      
@@ -48,27 +35,8 @@ export const useAccountData = defineStore('account', {
       
     },
     async setEnroll(user: accountEnroll) {
-      this.isLoading = true;
-      const repository = container.resolve(accountRepository);
-  
-      console.log({
-        name: user?.name,
-        photo: user?.photo,
-        nickname: user?.nickname,
-        address: user?.address,
-        city: user?.city,
-        state: user?.state,
-        zip: user?.zip,
-        birthDate: user?.birthDate,
-        identifier: user?.identifier,
-        availability: user?.availability,
-      });
-
-      const response = await repository.update(user);
-      console.log('setEnroll', response);
-
-      //localStorage.setItem("user", response.data)
-      //router.push({ path: "/dashboard", replace: true });
+      const repository = container.resolve(accountRepository);  
+      return repository.update(user);
     }
   },
 })

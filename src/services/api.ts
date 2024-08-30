@@ -147,12 +147,6 @@ export class Api implements ApiInterface {
     };
     return await this.client
       .patch(url, request, config)
-      // .then(function (response) {
-      //   console.log(response);
-      // })
-      // .catch(function (error) {
-      //   console.log(error);
-      // });
   }
   
 }

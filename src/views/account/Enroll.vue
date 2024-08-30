@@ -7,7 +7,6 @@ import AccountTabs from "@/components/account/AccountTabs.vue";
 
 interface SetupData {
   account: ComputedRef;
-  isLoading: ComputedRef<boolean>;
   isEditing: ComputedRef<boolean>;
 }
 
@@ -38,7 +37,6 @@ export default defineComponent({
 </script>
 
 <template>
-  <div v-if="isLoading" class="loading"></div>
   <BaseBreadcrumb
     :title="page.title"
     :breadcrumbs="breadcrumbs"

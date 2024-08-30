@@ -5,7 +5,8 @@ import { useAccountData } from "@/stores/accountStore";
 import AvatarForm from "./forms/AvatarForm.vue";
 import AccountForm from "./forms/AccountForm.vue";
 import VolunteerForm from "./forms/VolunteerForm.vue";
-import { type accountEnroll } from "@/entities/account";
+import { type account, type accountEnroll } from "@/entities/account";
+import { router } from "@/router";
 
 interface EssentialData {
   photo: string;
@@ -37,13 +38,9 @@ export default defineComponent({
   setup() {
     const tab = ref("1");
     const store = useAccountData();
-    const form = ref(false);
-
-    onMounted(async () => {
-        await store.getAccountData();
-    });    
+    const form = ref(false);  
     
-    const account = computed(() => store.getAccount);
+    const account = computed(() => store.account);
 
     const basicData = reactive<EssentialData>({
         photo: account.value?.photo || "",
@@ -65,12 +62,14 @@ export default defineComponent({
     });
 
     const isEnroll = ref(store.isEnroll);
-    const errors = ref([]);
 
+    let errors = ref('');
 
     const submit = async () => {
 
         if (!form) return;
+
+        debugger;
 
         const user : accountEnroll = {
             name: volunteerData.name || "",
@@ -86,11 +85,30 @@ export default defineComponent({
             availability: volunteerData.availability || "",
         };
 
-        const response = await store.setEnroll(user);
+        await store.setEnroll(user).then((response) => {
+            console.log('response', response);
 
-        if (!response || response.status !== 200) {
-            // get errors here
-        }
+            if (response?.status !== 200) {
+                const errors = response.data || "Ocorreu um erro geral.";
+                errors.value = errors;
+                
+            } else {
+                const userDataUpdated: account = {
+                    ...basicData,
+                    id: response.data?.id,
+                    volunteer: response.data
+                };
+
+                store.updateUserData(userDataUpdated);
+                
+                router.push({ path: "/dashboard", replace: true });
+            }
+        })
+        .catch((error) => {
+            errors.value = error.response.data;
+            console.log('setEnroll error', error);
+        });
+        
     }
 
     const uploadPhoto = async (file: Blob) => {
@@ -121,7 +139,8 @@ export default defineComponent({
       uploadPhoto,
       resetPhoto,
       submit,
-      isVolunteersDisabled
+      isVolunteersDisabled,
+      errors
     };
   }
 })
@@ -135,7 +154,7 @@ export default defineComponent({
                 <UserCircleIcon stroke-width="1.5" width="20" />
                 Conta
             </v-tab>
-            <v-tab value="2" class="flex-row" >
+            <v-tab value="2" class="flex-row" :disabled="isVolunteersDisabled">
                 <AlertCircleIcon stroke-width="1.5" width="20" />
                 Voluntário
             </v-tab>
@@ -163,7 +182,6 @@ export default defineComponent({
                         </v-card>
                     </v-window-item>
                     <v-window-item value="2">
-                        <!-- <VolunteerTab :volunteer="volunteerData" :saveVolunteer="save" /> -->
                         <v-card elevation="10" >
                             <v-row class="ma-sm-n2 ma-n1">
                                 <v-col cols="12">
@@ -177,12 +195,19 @@ export default defineComponent({
                                     size="large" 
                                     color="primary" 
                                     class="mr-4" 
-                                    type="submit" flat 
+                                    type="submit" flat
                                     :disabled="!form">Salvar</v-btn>
                             </div>
                         </v-card>
                     </v-window-item>
                 </v-window>
+                <div v-if="errors" class="mt-2">
+                    <v-alert color="error">
+                        Não foi possível completar seu cadastro. Motivo(s):
+                        <p class="pl-5" v-if="Array.isArray(errors)" v-for="(err, i) in errors" :key="i">{{ err.errorMessage }}</p>
+                        <p class="pl-5" v-else>{{ errors.apiError }}</p>
+                    </v-alert>
+                </div>
             </v-form>
         </v-card-text>
     </v-card>
