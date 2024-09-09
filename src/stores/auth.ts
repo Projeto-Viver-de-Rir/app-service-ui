@@ -74,13 +74,14 @@ export const useAuthStore = defineStore({
       localStorage.removeItem("session");
       router.push({ path: "/auth/login", replace: true });
     },
-    async register(email: string, password: string) {
+    async register(email: string, phone: string, password: string) {
       return await axios
         .post(
           `${API_URL}/identity/register`,
           {
-            email: email,
-            password: password
+            email,
+            phone,
+            password
           }
         ).catch((err) => {
           console.log(err);

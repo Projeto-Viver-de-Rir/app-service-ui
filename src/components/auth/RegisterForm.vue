@@ -5,6 +5,8 @@ import { Form } from "vee-validate";
 
 const password = ref("");
 const email = ref("");
+const phone = ref("");
+
 const passwordRules = ref([
   (v: string) => !!v || "Senha é obrigatória",
   (v: string) =>
@@ -15,6 +17,11 @@ const emailRules = ref([
   (v: string) => /.+@.+\..+/.test(v) || "Insira um e-mail válido",
 ]);
 
+const phoneRules = ref([
+  (v: string) => !!v || "Telefone é obrigatório",
+  (v: string) => /\(?\d{2,}\)?[ -]?\d{4,}[\-\s]?\d{4}/.test(v) || "Insira um telefone válido",
+]);
+
 const confirmed = ref(false);
 
 async function validate(values: any, { setErrors }: any) {
@@ -22,7 +29,7 @@ async function validate(values: any, { setErrors }: any) {
   setErrors({});
 
   await authStore
-  .register(email.value, password.value)
+  .register(email.value, phone.value, password.value)
     .then((response) => {
       if (!response || response.status !== 200) {
         const errors = response?.response?.data?.errors || "Ocorreu um erro geral.";
@@ -44,6 +51,10 @@ async function validate(values: any, { setErrors }: any) {
   >
     <v-label class="text-subtitle-1 font-weight-semibold pb-2 text-lightText">Email</v-label    >
     <VTextField v-model="email" :rules="emailRules" required></VTextField>
+    
+    <v-label class="text-subtitle-1 font-weight-semibold pb-2 text-lightText">Telefone</v-label    >
+    <VTextField v-model="phone" :rules="phoneRules" v-maska="'(##) #####-####'" required></VTextField>
+    
     <v-label class="text-subtitle-1 font-weight-semibold pb-2 text-lightText">Senha</v-label>
     <VTextField
       v-model="password"
