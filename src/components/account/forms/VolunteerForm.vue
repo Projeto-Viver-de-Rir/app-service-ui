@@ -100,6 +100,12 @@ const weekDays = [
     },
 ]
 
+const dateIsValid = ref(true);
+
+const validateDate = () => {
+    dateIsValid.value = !!formData.birthDate;
+}
+
 const submit = async (values: any, { setErrors }: any) => {
     const response = await store.setEnroll(formData);
 
@@ -156,15 +162,22 @@ const submit = async (values: any, { setErrors }: any) => {
                                     </v-col>
                                 </v-row>
                                 <v-row>
-                                    <v-col cols="12" md="3">        
+                                    <v-col cols="12" md="3" class="v-input-datepicker-custom" :class="{ 'v-input--error': !dateIsValid}">
                                         <v-label class="mb-2 font-weight-medium">Data de Nascimento:</v-label>
                                         <VueDatePicker
                                             v-model="formData.birthDate"
+                                            required
+                                            auto-apply
                                             :teleport="true"
                                             :format="format"
                                             :enableTimePicker="false"
+                                            @closed="validateDate"
+                                            @cleared="validateDate"
                                             :rules="[required]"
                                         />
+                                        <div class="v-input__details">
+                                            <span class="v-messages v-messages__message" v-if="!dateIsValid">Campo obrigatório</span>
+                                         </div>                                       
                                     </v-col>
                                     <v-col cols="12" md="3">        
                                         <v-label class="mb-2 font-weight-medium">CEP:</v-label>
@@ -258,3 +271,17 @@ const submit = async (values: any, { setErrors }: any) => {
         </Form>
     </v-card>
 </template>
+
+<style>
+.dp__input {
+    height: 45px;
+    border-radius: 7px;
+}
+.v-input-datepicker-custom .v-input__details {
+    padding-inline: 16px;
+}
+
+.v-input-datepicker-custom.v-input--error .dp__input {
+    border-color: rgb(var(--v-theme-error))
+}
+</style>
