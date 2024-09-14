@@ -3,6 +3,7 @@
   "include": ["vite.config.*"],
   "compilerOptions": {
     "composite": true,
+    "module": "ESNext",
     "allowJs": true,
     "types": ["node"]
   }

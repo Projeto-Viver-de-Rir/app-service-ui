@@ -17,13 +17,17 @@ export class eventRepository implements eventRepositoryInterface {
   }
 
   public async getEvents(name: string): Promise<eventsResponse> {
-    console.log(name);
     if (name !== "") {
       const response = await this.apiService.invoke("event?name=" + name);
       return response.data;
     }
 
     const response = await this.apiService.invoke("event");
+    return response.data;
+  }
+
+  public async getEventsByQuery(query: string): Promise<eventsResponse> {
+    const response = await this.apiService.invoke("event?" + query);
     return response.data;
   }
 
