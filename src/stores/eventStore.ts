@@ -95,6 +95,14 @@ export const useEvents = defineStore("events", () => {
     state.isLoading = false;
   };
 
+  const getDataByQuery = async (query: string) => {
+    if (!query) throw new Error("Query params not provided");
+    state.isLoading = true;
+    const data = await repository.getEventsByQuery(query);
+    state.events = data.result;
+    state.isLoading = false;
+  };
+
   const getById = async (id: string): Promise<void> => {
     const authStore = useAuthStore();
     state.isLoading = true;
@@ -144,6 +152,10 @@ export const useEvents = defineStore("events", () => {
     state.events = data.result;
     state.isLoading = false;
   };
+
+  const clearFilters = async () => {
+    state.filters = new eventFilter("");
+  }
 
   const edit = async () => {
     state.isEditing = true;
@@ -309,11 +321,13 @@ export const useEvents = defineStore("events", () => {
 
   return {
     getData,
+    getDataByQuery,
     eventLength,
     getList,
     isLoading,
     filter,
     filters,
+    clearFilters,
     getEvent,
     getById,
     getPlaces,
