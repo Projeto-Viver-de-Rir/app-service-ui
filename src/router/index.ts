@@ -34,7 +34,7 @@ export const router = createRouter({
 
 router.beforeEach(async (to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
-  const publicPages = ["/auth/login"];
+  const publicPages = ["/auth/login", "/participate"];
   const authRequired = !publicPages.includes(to.path);
 
   const auth: any = useAuthStore();
@@ -45,6 +45,8 @@ router.beforeEach(async (to, from, next) => {
   if (!!user) {
     userData = JSON.parse(user);
   }
+  
+  const mustEnroll = accessToken && !userData?.volunteer && !to.path.includes('/enroll');
 
   if (
     to.meta.roles &&
@@ -54,11 +56,23 @@ router.beforeEach(async (to, from, next) => {
     return next("/auth/login");
   }
 
+  if (!authRequired && mustEnroll) {
+    return next("/account/enroll");
+  }
+
+  if (!authRequired && accessToken) {
+    return next("/Dashboard");
+  }
+
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     if (authRequired && !accessToken) {
       auth.returnUrl = to.fullPath;
       return next("/auth/login");
-    } else next();
+    } else if (authRequired && mustEnroll) {
+      return next("/account/enroll");
+    } else {
+      next();
+    }
   } else {
     next();
   }

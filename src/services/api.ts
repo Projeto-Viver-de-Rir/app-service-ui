@@ -10,25 +10,23 @@ const axiosClient = axios.create({
 });
 
 axiosClient.interceptors.response.use(
-  (res) => res,
-  async (err: AxiosError) => {
-    const originalRequest = err.config;
-
-    if (err?.response?.status === 401) {
+  response => response,
+  async error => {
+    const originalRequest = error.config;
+    if ((error?.response?.status === 401 || error?.response?.status === 403) && !originalRequest?._retry) {
+      originalRequest._retry = true;
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
+        const refreshToken = localStorage.getItem('refreshToken');
 
-        const newRequest = await axiosClient.post("identity/refresh", {
+        const newRequest = await axiosClient.post("/identity/refresh", {
           refreshToken,
         });
+        const { accessToken, refreshToken: newRefreshToken } = newRequest.data;
 
-        localStorage.setItem("token", newRequest.data.accessToken);
-        localStorage.setItem("refreshToken", newRequest.data.refreshToken);
+        localStorage.setItem('token', accessToken);
+        localStorage.setItem('refreshToken', newRefreshToken);
 
-        originalRequest.headers = {
-          ...originalRequest.headers,
-          Authorization: `Bearer ${newRequest.data.accessToken}`,
-        };
+        originalRequest.headers.Authorization = `Bearer ${newRequest.data.accessToken}`;
 
         return axiosClient(originalRequest);
       } catch (refreshErr) {
@@ -41,8 +39,7 @@ axiosClient.interceptors.response.use(
         return Promise.reject(refreshErr);
       }
     }
-
-    return Promise.reject(err);
+    return Promise.reject(error);
   }
 );
 
