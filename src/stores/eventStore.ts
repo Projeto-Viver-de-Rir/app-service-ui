@@ -132,7 +132,8 @@ export const useEvents = defineStore("events", () => {
       state.volunteersPresent.find(
         (element) => element.id == authStore.user.id
       ) == null;
-    const events = await repository.getEvents("");
+    // ToDo: Questionable whether this is needed or not. I need more context over why we are doing 1+n requests here.
+    const events = await repository.getEvents(""); 
     events.result.forEach(addIfNotExists);
     state.isLoading = false;
   };

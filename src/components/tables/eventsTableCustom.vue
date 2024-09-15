@@ -29,7 +29,7 @@ const { getList: eventsList } = storeToRefs(useEvents());
           <div class="flex-table-body-td">
             <router-link
               tag="v-btn"
-              :to="{ name: 'DetailtEvent', params: { id: item.id } }"
+              :to="{ name: 'EventDetails', params: { id: item.id } }"
             >
               <v-btn size="small" color="primary" type="submit" variant="text"
                 >Detalhes</v-btn
