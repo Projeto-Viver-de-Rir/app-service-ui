@@ -15,8 +15,8 @@ const { getList: eventsList } = storeToRefs(useEvents());
       </div>
       <div class="flex-table-body">
         <div class="flex-table-body-tr" v-for="item in eventsList" :key="item.id">
-          <div class="flex-table-body-td text-md-h6">{{ item.name }}</div>
-          <div class="flex-table-body-td text-md-h6">
+          <div class="flex-table-body-td text-body-1">{{ item.name }}</div>
+          <div class="flex-table-body-td text-body-1">
             {{
               new Date(item.happenAt).toLocaleDateString() +
               " " +
@@ -29,10 +29,9 @@ const { getList: eventsList } = storeToRefs(useEvents());
           <div class="flex-table-body-td">
             <router-link
               tag="v-btn"
-              class="btn btn-primary mr-2"
               :to="{ name: 'DetailtEvent', params: { id: item.id } }"
             >
-              <v-btn size="small" color="primary" type="submit"
+              <v-btn size="small" color="primary" type="submit" variant="text"
                 >Detalhes</v-btn
               >
             </router-link>
