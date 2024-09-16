@@ -1,8 +1,5 @@
 <script setup lang="ts">
 import RegisterForm from "@/components/auth/RegisterForm.vue";
-import { useCustomizerStore } from "../../stores/customizer";
-
-const customizer = useCustomizerStore();
 </script>
 
 <template>

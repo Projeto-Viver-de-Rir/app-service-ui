@@ -6,8 +6,8 @@ import UiParentCard from "@/components/shared/UiParentCard.vue";
 import AccountTabs from "@/components/account/AccountTabs.vue";
 
 interface SetupData {
-  account: ComputedRef;
-  isEditing: ComputedRef<boolean>;
+  page: Ref;
+  breadcrumbs: Ref;
 }
 
 export default defineComponent({
@@ -26,7 +26,6 @@ export default defineComponent({
         href: "#",
       }
     ]);
-
 
     return {
       breadcrumbs,
