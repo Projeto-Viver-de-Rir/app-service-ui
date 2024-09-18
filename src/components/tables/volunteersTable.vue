@@ -18,7 +18,6 @@ export default defineComponent({
     });
 
     const users = computed(() => store.getList);
-    console.log(users);
     return {
       users,
     };
