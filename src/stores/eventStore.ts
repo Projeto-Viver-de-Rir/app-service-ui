@@ -109,15 +109,15 @@ export const useEvents = defineStore("events", () => {
     state.isEditing = false;
     state.showModel = false;
     const data = await repository.getById(id);
-    const dataVolunteers = await presenceRepository.getById(id);
     state.volunteersPresent = [];
     state.action = "D";
-    dataVolunteers.result.forEach((f) =>
+    data.presences.forEach((f) =>
       state.volunteersPresent.push({
         presenceId: f.id,
         attented: true,
         id: f.volunteer.id,
         name: f.volunteer.name,
+        nickname: f.volunteer.nickname,
         photo: f.volunteer.photo != null ? f.eventPresenceVolunteer.photo : "",
       })
     );
@@ -125,27 +125,26 @@ export const useEvents = defineStore("events", () => {
     state.event = data;
     state.initialEvent = data;
     state.numberConfirmed = state.volunteersPresent.length;
-    console.log(
-      state.volunteersPresent.find((element) => element.id == authStore.user.id)
-    );
     state.shouldShowButton =
       state.volunteersPresent.find(
         (element) => element.id == authStore.user.id
       ) == null;
     // ToDo: Questionable whether this is needed or not. I need more context over why we are doing 1+n requests here.
-    const events = await repository.getEvents(""); 
-    events.result.forEach(addIfNotExists);
+    // Inactivated this. Uncomment if something breaks
+    // const events = await repository.getEvents(""); 
+    // events.result.forEach(addIfNotExists);
     state.isLoading = false;
   };
 
-  function addIfNotExists(item: event) {
-    if (!state.places.includes(item.name)) {
-      const index = state.places.indexOf("Outros");
-      state.places.splice(index, 1);
-      state.places.push(item.name);
-      state.places.push("Outros");
-    }
-  }
+  // Inactivated this. Uncomment if something breaks
+  // function addIfNotExists(item: event) {
+  //   if (!state.places.includes(item.name)) {
+  //     const index = state.places.indexOf("Outros");
+  //     state.places.splice(index, 1);
+  //     state.places.push(item.name);
+  //     state.places.push("Outros");
+  //   }
+  // }
 
   const filter = async () => {
     state.isLoading = true;
@@ -206,7 +205,7 @@ export const useEvents = defineStore("events", () => {
     state.showModel = false;
     state.showModelRemove = false;
     const authStore = useAuthStore();
-    await presenceRepository.create(state.event.id, authStore.user.id);
+    await presenceRepository.create(state.event.id, authStore.user.volunteer.id);
     state.isLoading = false;
   };
 
@@ -244,6 +243,16 @@ export const useEvents = defineStore("events", () => {
     console.log(state.volunteersDeleted);
     state.numberConfirmed = state.numberConfirmed - 1;
   };
+
+  const removeParticipant = async (volunteer: any): Promise<void> => {
+    state.isLoading = true;
+    try { 
+      await presenceRepository.delete(volunteer.presenceId);
+    } catch (e) {
+      throw new Error(`error while removing pariticipant => ${e}`);
+    }
+    state.isLoading = false;
+  }
 
   const saveVonlunteers = async () => {
     state.isLoading = true;
@@ -337,6 +346,7 @@ export const useEvents = defineStore("events", () => {
     edit,
     cancel,
     removeVolunteer,
+    removeParticipant,
     isOtherSelecteced,
     selectOther,
     save,
