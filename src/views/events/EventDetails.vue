@@ -182,8 +182,9 @@ const showValidatePresenceDialog = () => {
   data.displayValidatePresenceModal = true;
 }
 
-const hideValidatePresenceDialog = () => {
+const hideValidatePresenceDialog = ({ snackBar } : { snackBar: SnackBarProps}) => {
   data.displayValidatePresenceModal = false;
+  data.snackBar = snackBar;
 }
 
 const setWindowWidth = () => {
@@ -480,23 +481,6 @@ onUnmounted(async () => {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
   
-}
-.individual-card {
-  display: flex;
-  align-items: center;
-  padding: 20px;
-  @media (max-width: 1500px) {
-    flex-direction: column;
-  }
-}
-.info-wrapper {
-  display: flex;
-  align-items: center;
-  &-name {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
 }
 :deep(.v-tab__slider) {
   height: 0;

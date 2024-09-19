@@ -18,7 +18,7 @@ defineProps({
 <template>
   <v-card class="individual-card border" elevation="0">
     <div class="info-wrapper">
-      <v-avatar size="50" v-if="isUserAvatarAvailable(individual.volunteer.photo)">
+      <v-avatar size="50" v-if="isUserAvatarAvailable(individual.volunteer?.photo)">
         <img :src="individual.volunteer.photo" height="50" />
       </v-avatar>
       <v-avatar size="50" v-else>
@@ -33,7 +33,7 @@ defineProps({
           >{{ individual.volunteer.nickname }}</v-label>
       </div>
     </div>
-    <div class="ml-lg-auto" >
+    <div class="ml-auto" >
       <v-tooltip activator="parent" location="top" v-if="action.tooltip">{{action.tooltip}}</v-tooltip>
       <v-btn
         v-if="action.visible"
@@ -42,7 +42,6 @@ defineProps({
         :size="action.button.size || 'small'"
         :color="action.button.color || 'default'"
         :variant="action.button.variant || 'text'"
-        class="ml-lg-auto"
         :disabled="action.disabled"
         :to="action.link ? { name: action.link.name, params: action.link.params } : null" />  
     </div>
@@ -52,11 +51,9 @@ defineProps({
 <style lang="scss" scoped>
 .individual-card {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
   padding: 20px;
-  @media (max-width: 1500px) {
-    flex-direction: column;
-  }
 }
 .info-wrapper {
   display: flex;

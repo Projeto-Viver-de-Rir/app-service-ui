@@ -223,6 +223,17 @@ export const useEvents = defineStore("events", () => {
     state.isLoading = false;
   };
 
+  const finishEvent = async (presences: Array<string>) => {
+    state.isLoading = true;
+    try {
+      await repository.finish(state.event.id, { presences });
+      state.isLoading = false;
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error('Unable to finish event')
+    }
+  };
+
   const selectOther = (selected: boolean) => {
     state.isOtherSelecteced = selected;
 
@@ -248,10 +259,11 @@ export const useEvents = defineStore("events", () => {
     state.isLoading = true;
     try { 
       await presenceRepository.delete(volunteer.presenceId);
+      state.isLoading = false;
     } catch (e) {
+      state.isLoading = false;
       throw new Error(`error while removing pariticipant => ${e}`);
     }
-    state.isLoading = false;
   }
 
   const saveVonlunteers = async () => {
@@ -352,6 +364,7 @@ export const useEvents = defineStore("events", () => {
     save,
     changeVolunteer,
     finish,
+    finishEvent,
     CreateNewEvent,
     showModel,
     showModelRemove,
