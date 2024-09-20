@@ -4,8 +4,10 @@ import { router } from "@/router";
 import type { ApiInterface } from "../interfaces/services/apiInterface";
 import { useAuthStore } from "@/stores/auth";
 
+const BASEURL = "https://institutional-app-iwaxs.ondigitalocean.app/api/";
+
 const axiosClient = axios.create({
-  baseURL: "https://institutional-app-iwaxs.ondigitalocean.app/api/",
+  baseURL: BASEURL,
   timeout: 9000,
 });
 
@@ -13,12 +15,12 @@ axiosClient.interceptors.response.use(
   response => response,
   async error => {
     const originalRequest = error.config;
-    if ((error?.response?.status === 401 || error?.response?.status === 403) && !originalRequest?._retry) {
+    if (error?.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         const refreshToken = localStorage.getItem('refreshToken');
 
-        const newRequest = await axiosClient.post("/identity/refresh", {
+        const newRequest = await axios.post(`${BASEURL}identity/refresh`, {
           refreshToken,
         });
         const { accessToken, refreshToken: newRefreshToken } = newRequest.data;
@@ -136,6 +138,8 @@ export class Api implements ApiInterface {
 
   async patch<T = any>(url: string, request: T): Promise<void> {
     const auth: any = useAuthStore();
+
+    console.log('auth', auth.token);
 
     const config = {
       headers: {

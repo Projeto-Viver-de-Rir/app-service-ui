@@ -28,6 +28,7 @@ export interface account {
   email: string;
   phone: string;
   photo: string;
+  permissions?: Array<string>;
   volunteer: accountVolunteer
 }
 
