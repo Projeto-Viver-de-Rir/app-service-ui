@@ -115,7 +115,7 @@ export class Api implements ApiInterface {
         console.log(response);
       })
       .catch(function (error) {
-        console.log(error);
+        throw new Error(error);
       });
   }
   async put<T = any>(url: string, request: T): Promise<void> {
@@ -130,7 +130,7 @@ export class Api implements ApiInterface {
         console.log(response);
       })
       .catch(function (error) {
-        console.log(error);
+        throw new Error(error);
       });
   }
 

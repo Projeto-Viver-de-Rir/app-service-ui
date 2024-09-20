@@ -31,6 +31,18 @@ export const isCurrentUserOperational = (): boolean => {
 }
 
 /**
+ * This method returns a boolean conditioned on the existence of admin role on user permissions.
+ *
+ * @returns true if 'operational' value exists and the user permissions.
+ */
+export const isCurrentUserAllowedToManage = (eventCoordinators: Array<eventVolunteerResponse>): boolean => {
+    const user = authStore.user;
+    if (!user) return false;
+    return user.permissions.includes(UserPermissionTypes.OPERATIONAL) && 
+        !!eventCoordinators.find((c) => c.volunteer.id === user.volunteer.id)
+}
+
+/**
  * Returns a boolean conditioned on the existence of the volunteer.id of the current user on a given presences array.
  * 
  * @param presences Array of presences of the event to be checked

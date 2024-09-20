@@ -5,10 +5,13 @@ import { storeToRefs } from 'pinia';
 import { useEvents } from "@/stores/eventStore";
 import ConfirmParticipationModal from "@/components/modals/ConfirmParticipationModal.vue";
 import ConfirmRemoveParticipantModal from "@/components/modals/ConfirmRemoveParticipantModal.vue";
+import ValidatePresenceModal from "@/components/modals/ValidatePresenceModal.vue";
 import UiParentCard from "@/components/shared/UiParentCard.vue";
-import { eventDate, eventHour, getStatusDescription, isUserAvatarAvailable, eventDateStatus, isEventFull } from "@/utils/event";
-import { isCurrentUserAdministrative, isCurrentUserPresentOnEvent, isCurrentUserTheVolunteer } from "@/utils/permissions";
-import { EventDateStatusTypes } from "@/interfaces/event";
+import ActionBar from "@/components/shared/ActionBar.vue";
+import IndividualCard from "@/components/shared/IndividualCard.vue";
+import { eventDate, eventHour, getStatusDescription, eventDateStatus, isEventFull, eventActions } from "@/utils/event";
+import { isCurrentUserAdministrative, isCurrentUserAllowedToManage, isCurrentUserPresentOnEvent, isCurrentUserTheVolunteer } from "@/utils/permissions";
+import { EventDateStatusTypes, type ActionButton } from "@/interfaces/event";
 import type { event } from "@/entities/event";
 
 const router = useRouter();
@@ -33,6 +36,7 @@ interface EventDetailsDataProps {
   tab: string;
   displayConfirmParticipationModal: boolean;
   displayConfirmRemoveParticipantModal: boolean;
+  displayValidatePresenceModal: boolean;
   participantToRemove: any;
   snackBar: SnackBarProps;
 }
@@ -41,6 +45,7 @@ const data: EventDetailsDataProps = reactive({
   tab: 'tab-1',
   displayConfirmParticipationModal: false,
   displayConfirmRemoveParticipantModal: false,
+  displayValidatePresenceModal: false,
   participantToRemove: null,
   snackBar: {
     color: '',
@@ -78,24 +83,47 @@ const isEventOccupancyFull = computed(() => {
 })
 
 const shouldDisableConfirmParicipationBtn = computed((): boolean => {
-  if(!event.value) return true;
-  return isCurrentUserPresent.value || isEventOccupancyFull.value;
+  if (!event.value) return true;
+  return isCurrentUserPresent.value || isEventOccupancyFull.value || isEventClosed.value;
 })
 
+const disabledConfirmParicipationBtnTooltip = computed((): string => {
+  if (isEventClosed.value) return 'Este evento já aconteceu.';
+  else if (isCurrentUserPresent.value) return 'Você já confirmou participação neste evento.';
+  else if (isEventOccupancyFull.value) return 'Todas as vagas já foram preenchidas.';
+  return '';
+});
+
 const shouldDisplayRemoveVolunteerBtn = (volunteerId: string) => {
+  if (!event.value) return false;
   const isAdmin = isCurrentUserAdministrative();
-  if ( isEventClosed.value) return false;
-  else if (isAdmin && isCurrentUserTheVolunteer(volunteerId)) return false;
+  const isOperational = isCurrentUserAllowedToManage(event.value?.coordinators)
+  // Hide Remove Volunteer btn if the user have confirmed
+  // even if the user is administrative or operational
+  if ((isAdmin || isOperational) && isCurrentUserTheVolunteer(volunteerId)) return false;
+  // Hide Remove Volunteer btn if the event has your date in the past or have been closed.
+  else if (isEventClosed.value) return false;
+  // Show Remove Volunteer btn if the user has administrative privileges.
   else if (isAdmin) return true;
+  // Show Remove Volunteer btn if the user is not administrative, but has operational privileges.
+  else if (isOperational) return true;
   return false;
 }
+
+const shouldDisplayMenu = computed((): boolean => {
+  if (!event.value) return false;
+  const isAdmin = isCurrentUserAdministrative();
+  const isOperational = isCurrentUserAllowedToManage(event.value?.coordinators)
+  return (isAdmin || isOperational);
+});
 
 const confirmedVolunteersList = computed((): Array<any> => {
   if(!eventVolunteers.value.length) return [];
   return eventVolunteers.value.map((x: any) => {
     return {
-      ...x,
-      actionRemoveVisible: shouldDisplayRemoveVolunteerBtn(x.id),
+      volunteer: {
+        ...x,
+      }
     }
   });
 })
@@ -103,6 +131,61 @@ const confirmedVolunteersList = computed((): Array<any> => {
 const tabsDirection = computed((): string => {
   return isMobile.value ? 'vertical' : 'horizontal'
 });
+
+const menuActions = computed((): Array<ActionButton> => {
+  const actions = eventActions();
+  return actions.map((action) => {
+    return {
+      ...action,
+      ...(action.id === 0 ? { onClick: eventStore.edit } : {}),
+      ...(action.id === 1 ? { 
+        onClick: showValidatePresenceDialog,
+        disabled: isEventClosed.value,
+      } : {})
+    }
+  });
+});
+
+const getVolunteerIndividualAction = (individual: any) => {
+  return {
+    id: 0,
+    button: {
+      icon: 'mdi-trash-can-outline',
+      variant: 'outlined',
+      color: 'error'
+    },
+    disabled: isEventAlmostDue.value,
+    tooltip: isEventAlmostDue.value,
+    visible: shouldDisplayRemoveVolunteerBtn(individual.volunteer.id),
+    tooltipLabel: 'Não é possivel remover o voluntário pois o evento inicia em breve.',
+    onClick: () => showConfirmRemoveParticipantDialog(individual)
+  }
+}
+
+const getCoordinatorIndividualAction = (individual: any) => {
+  return {
+    id: 0,
+    button: {
+      icon: 'mdi-card-account-details-outline',
+      variant: 'outlined',
+      color: 'primary'
+    },
+    visible: true,
+    link: {
+      name: 'DetailtUser',
+      params: { id: individual.volunteer.id }
+    },
+  }
+}
+
+const showValidatePresenceDialog = () => {
+  data.displayValidatePresenceModal = true;
+}
+
+const hideValidatePresenceDialog = ({ snackBar } : { snackBar: SnackBarProps}) => {
+  data.displayValidatePresenceModal = false;
+  data.snackBar = snackBar;
+}
 
 const setWindowWidth = () => {
   width.value = window.innerWidth;
@@ -117,6 +200,8 @@ const hideConfirmParticipationDialog = ({ reload, snackBar }: { reload: boolean 
   data.snackBar = snackBar;
   if (reload) {
     loadEvent();
+    // if confirmation success, force focus on confirmed volunteers tab
+    data.tab = 'tab-2';
   }
 }
 
@@ -130,7 +215,7 @@ const removeParticipant = async (participant: any) => {
 
 const showConfirmRemoveParticipantDialog = (participant: any): void => {
   data.displayConfirmRemoveParticipantModal = true;
-  data.participantToRemove = participant;
+  data.participantToRemove = participant.volunteer;
 }
 
 const hideConfirmRemoveParticipantDialog = async ({ confirm }: { confirm: boolean }): Promise<void> => {
@@ -156,7 +241,10 @@ onUnmounted(async () => {
   <div class="event-details-view">
     <div v-if="isLoading" class="loading" />
     <UiParentCard title="Eventos">
-      <div class="rounded-md outlined-card">
+      <template v-slot:action v-if="shouldDisplayMenu">
+        <ActionBar :actions="menuActions" />
+      </template>
+      <div class="rounded-md border">
         <div class="description-tab">
           <div class="description-container">
             <div class="description-name-container">
@@ -203,8 +291,11 @@ onUnmounted(async () => {
                        @click="showConfirmParticipationDialog">
                   Participar
                 </v-btn>
-                <v-tooltip activator="parent" location="top" v-if="isCurrentUserPresent">Você já confirmou participação neste evento.</v-tooltip>
-                <v-tooltip activator="parent" location="top" v-else-if="isEventOccupancyFull">Todas as vagas já foram preenchidas.</v-tooltip>
+                <v-tooltip v-if="shouldDisableConfirmParicipationBtn"
+                           activator="parent"
+                           location="top">
+                  {{disabledConfirmParicipationBtnTooltip}}
+                </v-tooltip>
               </div>
             </div>
 
@@ -225,7 +316,7 @@ onUnmounted(async () => {
         </div>
       </div>
 
-      <div class="mt-5 rounded-md outlined-card">
+      <div class="mt-5 rounded-md border">
         <v-window v-model="data.tab" class="rounded-md">
           <v-window-item value="tab-1">
             <v-card flat>
@@ -257,41 +348,10 @@ onUnmounted(async () => {
             <div class="individual-container">
               <p class="text-md-h3 mb-5">Confirmados</p>
               <div class="individual-card-container" v-if="eventVolunteers.length">
-                <v-card class="individual-card border" elevation="0" v-for="volunteer in confirmedVolunteersList" :key="volunteer.id">
-                  <div class="info-wrapper">
-                    <v-avatar size="50" v-if="isUserAvatarAvailable(volunteer.photo)">
-                      <img :src="volunteer.photo" height="50" />
-                    </v-avatar>
-                    <v-avatar size="50" v-else>
-                      <img src="@/assets/images/palhaco.png" alt="user" height="50" />
-                    </v-avatar>
-                    <div class="info-wrapper-name ml-2">
-                      <v-label
-                        class="text-subtitle-1 font-weight-semibold text-lightText ml-3"
-                        >{{ volunteer.name }}</v-label>
-                      <v-label
-                        class="text-subtitle-1 text-lightText ml-3"
-                        >{{ volunteer.nickname }}</v-label>
-                    </div>
-                  </div>
-                  <div class="ml-lg-auto" v-if="volunteer.actionRemoveVisible">
-                    <v-tooltip activator="parent" location="top" v-if="isEventAlmostDue">Não é possivel remover o voluntário pois o evento inicia em breve.</v-tooltip>
-                    <v-btn v-if="!isMobile"
-                          size="small"
-                          color="error"
-                          variant="outlined"
-                          :disabled="isEventAlmostDue"
-                          @click="showConfirmRemoveParticipantDialog(volunteer)"
-                          icon="mdi-trash-can-outline" />
-                    <v-btn v-else 
-                          size="small"
-                          color="error"
-                          class="mt-4"
-                          :disabled="isEventAlmostDue"
-                          @click="showConfirmRemoveParticipantDialog(volunteer)"
-                          variant="outlined">Remover voluntário</v-btn>
-                  </div>
-                </v-card>
+                <IndividualCard v-for="individual in confirmedVolunteersList" 
+                                :key="individual.id"
+                                :action="getVolunteerIndividualAction(individual)"
+                                :individual="individual"  />
               </div>
               <p class="text-body-1" v-else>
                 <span>Nenhum voluntário confirmado.</span>
@@ -303,32 +363,10 @@ onUnmounted(async () => {
             <div class="individual-container">
               <p class="text-md-h3 mb-5">Coordenadores</p>
               <div class="individual-card-container" v-if="event?.coordinators?.length">
-                <v-card class="individual-card border" elevation="0" v-for="coordinator in event?.coordinators" :key="coordinator.id">
-                  <div class="info-wrapper">
-                    <v-avatar size="50" v-if="isUserAvatarAvailable(coordinator.volunteer.photo)">
-                      <img :src="coordinator.volunteer.photo" height="50" />
-                    </v-avatar>
-                    <v-avatar size="50" v-else>
-                      <img src="@/assets/images/palhaco.png" alt="user" height="50" />
-                    </v-avatar>
-                    <div class="info-wrapper-name ml-2">
-                      <v-label
-                        class="text-subtitle-1 font-weight-semibold text-lightText ml-3"
-                        >{{ coordinator.volunteer.name }}</v-label>
-                      <v-label
-                        class="text-subtitle-1 text-lightText ml-3"
-                        >{{ coordinator.volunteer.nickname }}</v-label>
-                    </div>
-                  </div>
-                  <router-link tag="v-btn"
-                               class="ml-lg-auto"
-                               :to="{ name: 'DetailtUser', params: { id: coordinator.volunteer.id } }">
-                    <v-btn size="small"
-                          color="primary"
-                          variant="outlined"
-                          icon="mdi-card-account-details-outline" />
-                  </router-link>
-                </v-card>
+                <IndividualCard v-for="individual in event?.coordinators" 
+                                :key="individual.id"
+                                :action="getCoordinatorIndividualAction(individual)"
+                                :individual="individual"  />
               </div>
               <p class="text-body-1" v-else>
                 Nenhum coordenador associado a este evento.
@@ -355,6 +393,12 @@ onUnmounted(async () => {
       :dialog="data.displayConfirmRemoveParticipantModal"
       @closeConfirmRemoveParticipantModal="hideConfirmRemoveParticipantDialog" />
 
+    <!-- Modal Validate Volunteers Presence -->
+    <ValidatePresenceModal
+      v-if="data.displayValidatePresenceModal"
+      :dialog="data.displayValidatePresenceModal"
+      @closeValidatePresenceModal="hideValidatePresenceDialog" />
+
     <!-- Feedback SnackBar -->
     <v-snackbar v-model="data.snackBar.show">
       {{ data.snackBar.message }}
@@ -370,14 +414,6 @@ onUnmounted(async () => {
 </template>
 
 <style lang="scss" scoped>
-.outlined-card {
-  display: flex;
-  flex-direction: column;
-  border-color: rgba(var(--v-border-color), var(--v-border-opacity));
-  border-style: solid;
-  border-width: thin;
-}
-
 .icon-label {
   display: flex;
   align-items: center;
@@ -444,23 +480,7 @@ onUnmounted(async () => {
   @media (max-width: 960px) {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
-  .individual-card {
-    display: flex;
-    align-items: center;
-    padding: 20px;
-    @media (max-width: 1500px) {
-      flex-direction: column;
-    }
-  }
-  .info-wrapper {
-    display: flex;
-    align-items: center;
-    &-name {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
+  
 }
 :deep(.v-tab__slider) {
   height: 0;

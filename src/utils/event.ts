@@ -2,8 +2,10 @@
  * @fileoverview Compilation of methods that helps display event info.
  */
 
+
 import type { event } from "@/entities/event";
-import { EventDateStatusTypes } from "@/interfaces/event";
+import { EventDateStatusTypes, type ActionButton } from "@/interfaces/event";
+import { useEvents } from "@/stores/eventStore";
 
 /**
  * This method returns a string value based on the event status.
@@ -96,4 +98,36 @@ export const eventDateStatus = (date: Date | string): EventDateStatusTypes | str
  */
 export const isEventFull = (event: event): boolean => {
     return event.capacity === 0;
+}
+
+/**
+ * Returns a boolean conditioned on the difference between occupancy and capacity.
+ * 
+ * @param event Event to be checked
+ * @returns true if the event capacity is lower than event.occupancy.
+ */
+export const eventActions = (): Array<ActionButton> => {
+    const currentEvent = useEvents().getEvent;
+    return [
+        {
+            id: 0,
+            label: 'Editar',
+            button: {
+                icon: 'mdi-pencil'
+            },
+            link: {
+                name: 'DetailtEvent',
+                params: { id: currentEvent?.id }
+            },
+            visible: true,
+        },
+        {
+            id: 1,
+            label: 'Concluir',
+            button: {
+                icon: 'mdi-check-circle-outline'
+            },
+            visible: true,
+        },
+    ]
 }
