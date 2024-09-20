@@ -1,6 +1,5 @@
 <script lang="ts">
 import { computed, defineComponent, onMounted, reactive, ref } from "vue";
-import { UserCircleIcon, AlertCircleIcon } from "vue-tabler-icons";
 import { useAccountData } from "@/stores/accountStore";
 import AvatarForm from "./forms/AvatarForm.vue";
 import AccountForm from "./forms/AccountForm.vue";
@@ -23,7 +22,7 @@ export default defineComponent({
         else tab.value = "1"
     }
 
-    const isVolunteersDisabled = computed(() => !store.account.photo);
+    const isVolunteersDisabled = computed(() => !store.account?.photo);
 
     return {
       tab,

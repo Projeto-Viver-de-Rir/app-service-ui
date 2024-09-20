@@ -9,8 +9,8 @@ import scheduleEventsRoutes from "./scheduleEventsRoutes";
 import teamsRoutes from "./teamsRoutes";
 import configsRoutes from "./configsRoutes";
 import MyAreaRoutes from "./MyAreaRoutes";
-import type { volunteer } from "@/entities/volunteer";
 import AccountRoutes from "./AccountRoutes";
+import type { account } from "@/entities/account";
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -35,41 +35,43 @@ export const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   // redirect to login page if not logged in and trying to access a restricted page
   const publicPages = ["/auth/login", "/participate"];
-  const authRequired = !publicPages.includes(to.path);
+  const authRequiredRoutes = !publicPages.includes(to.path);
 
   const auth: any = useAuthStore();
-  let accessToken = localStorage.getItem("token");
+  const accessToken: string | null = localStorage.getItem("token");
 
   const user = localStorage.getItem("user");
-  let userData: volunteer | null = null;
+  let userData: account | null = null;
   if (!!user) {
     userData = JSON.parse(user);
   }
   
-  const mustEnroll = accessToken && !userData?.volunteer && !to.path.includes('/enroll');
+  const mustEnroll = accessToken && !userData?.volunteer;
 
   if (
     to.meta.roles &&
-    !to.meta.roles?.some((item) => userData?.permissions?.includes(item))
+    !to.meta.roles?.some((item: string) => userData?.permissions?.includes(item))
   ) {
     auth.returnUrl = to.fullPath;
     return next("/auth/login");
   }
 
-  if (!authRequired && mustEnroll) {
+  if (!authRequiredRoutes && mustEnroll) {
     return next("/account/enroll");
   }
 
-  if (!authRequired && accessToken) {
+  if (!authRequiredRoutes && accessToken) {
     return next("/Dashboard");
   }
 
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (authRequired && !accessToken) {
+    if (authRequiredRoutes && !accessToken) {
       auth.returnUrl = to.fullPath;
       return next("/auth/login");
-    } else if (authRequired && mustEnroll) {
+    } else if (authRequiredRoutes && mustEnroll && !to.path.includes('/enroll')) {
       return next("/account/enroll");
+    } else if (to.path.includes('/enroll') && !mustEnroll) {
+      return next("/Dashboard");
     } else {
       next();
     }

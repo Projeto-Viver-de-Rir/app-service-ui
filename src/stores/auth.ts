@@ -18,7 +18,7 @@ export const useAuthStore = defineStore({
   }),
   actions: {
     async login(email: string, password: string) {
-      axios
+      return await axios
         .post(
           `${API_URL}/identity/login`,
           {
@@ -28,7 +28,7 @@ export const useAuthStore = defineStore({
             twoFactorRecoveryCode: "string",
           }
         )
-        .then(async (response) => {
+        .then(async (response) => {          
           (async () => {
             const { accessToken, refreshToken } = response.data;
 
@@ -57,9 +57,6 @@ export const useAuthStore = defineStore({
           // redirect to previous url or default to home page
           router.push({ path: "/Dashboard", replace: true });
         })
-        .catch((err) => {
-          console.log(err);
-        });
     },
     startSession() {
       localStorage.setItem("session", new Date());

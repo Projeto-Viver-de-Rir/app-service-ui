@@ -3,7 +3,6 @@ import { ref  } from 'vue';
 import defaultImage from '@/assets/images/profile/user-1.jpg';
 import { useAccountData } from "@/stores/accountStore";
 
-
 const store = useAccountData();
 
 const currentPhoto = ref(defaultImage);
@@ -11,8 +10,6 @@ const error = ref('');
 
 const onFileChange = async (e: any) => {
     const file = e.target.files[0];
-
-    console.log(file);
 
     if(!['image/png','image/jpeg','image/gif'].includes(file['type'])){
         error.value = "Formato de arquivo não permitido";
@@ -39,8 +36,9 @@ const reset = () => {
     currentPhoto.value = defaultImage;
 
     const input = document.getElementById('fileInputAvatar');
-    input.value = ''
-    props.resetAvatar();
+    input.value = '';
+
+    if (store.account) store.account.photo = '';
 }
 
 </script>
