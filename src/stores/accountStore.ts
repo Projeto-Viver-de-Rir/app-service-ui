@@ -27,7 +27,6 @@ export const useAccountData = defineStore('account', {
     async uploadPhoto(file: Blob) {      
       const repository = container.resolve(accountRepository);
       await repository.patchPhoto(file).then((res) => {
-        console.log('uploadphoto', res);
         if (res && res.status === 200) {
           this.account.photo = res.data;
         }
@@ -53,7 +52,6 @@ export const useAccountData = defineStore('account', {
       return repository.update(user)
         .then((response) => {
           if (!response || response?.status !== 200) {
-            console.log('response', response);
             return { errors: response?.response?.data || "Ocorreu um erro geral." };
           }
                 
