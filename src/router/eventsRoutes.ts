@@ -17,6 +17,16 @@ const eventsRoutes = {
       component: () => import("@/views/events/Detail.vue"),
     },
     {
+      name: "EventDetails",
+      path: "/events/details/:id",
+      component: () => import("@/views/events/EventDetails.vue"),
+      beforeEnter: (to: any) => {
+        if (!to.params?.id) {
+          return { name: 'dashboard' };
+        }
+      }
+    },
+    {
       name: "CreateEvent",
       path: "/events/Adicionar",
       component: () => import("@/views/events/Detail.vue"),

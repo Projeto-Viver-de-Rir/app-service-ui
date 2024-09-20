@@ -1,4 +1,4 @@
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError, type AxiosResponse } from "axios";
 import { router } from "@/router";
 
 import type { ApiInterface } from "../interfaces/services/apiInterface";
@@ -117,7 +117,7 @@ export class Api implements ApiInterface {
         console.log(response);
       })
       .catch(function (error) {
-        console.log(error);
+        throw new Error(error);
       });
   }
   async put<T = any>(url: string, request: T): Promise<void> {
@@ -132,7 +132,7 @@ export class Api implements ApiInterface {
         console.log(response);
       })
       .catch(function (error) {
-        console.log(error);
+        throw new Error(error);
       });
   }
 

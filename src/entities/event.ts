@@ -9,11 +9,22 @@ export interface event {
   date: string;
   time: string;
   occupancy: number;
+  capacity: number;
+  presences: Array<eventVolunteerResponse>;
+  coordinators: Array<eventVolunteerResponse>;
+  status: number;
+}
+
+export interface eventVolunteerResponse {
+  id: number;
+  volunteer: eventVolunteers;
 }
 
 export interface eventVolunteers {
   id: number;
+  accountId: string;
   name: string;
+  nickname: string;
   photo: string;
 }
 

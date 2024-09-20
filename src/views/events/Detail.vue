@@ -33,12 +33,12 @@ export default defineComponent({
       {
         text: "Dashboard",
         disabled: false,
-        href: "/",
+        href: "/dashboard",
       },
       {
         text: "Eventos",
         disabled: false,
-        href: "/Eventos",
+        href: "/events",
       },
       {
         text: "Detalhes",
@@ -66,7 +66,7 @@ export default defineComponent({
 
     const save = async () => {
       await store.save();
-      router.push({ path: "/Eventos", replace: true });
+      router.push({ path: "/events", replace: true });
     };
 
     const changeName = (option: any): void => {
@@ -83,7 +83,7 @@ export default defineComponent({
 
     const confirmVacancy = async () => {
       await store.confirmVacancy();
-      router.push({ path: "/Eventos", replace: true });
+      router.push({ path: "/events", replace: true });
     };
 
     const format = (date) => {

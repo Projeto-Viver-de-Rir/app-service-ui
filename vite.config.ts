@@ -1,5 +1,6 @@
 import { fileURLToPath, URL } from 'url';
 import { defineConfig } from 'vite';
+import typescript from '@rollup/plugin-typescript';
 import vue from '@vitejs/plugin-vue';
 import vuetify from 'vite-plugin-vuetify';
 
@@ -7,6 +8,7 @@ import vuetify from 'vite-plugin-vuetify';
 export default defineConfig({
     plugins: [
         vue(),
+        // typescript(), Several typescript warnings and errors being displayed after setting up rollup plugin. uncomment to check
         vuetify({
             autoImport: true,
             styles: { configFile: 'src/scss/variables.scss' }
