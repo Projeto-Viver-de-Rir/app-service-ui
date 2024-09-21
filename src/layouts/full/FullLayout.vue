@@ -7,6 +7,9 @@ import HorizontalSidebar from "./horizontal-sidebar/HorizontalSidebar.vue";
 import Customizer from "./customizer/Customizer.vue";
 import { useCustomizerStore } from "../../stores/customizer";
 import { pl, zhHans } from "vuetify/locale";
+
+import SnackBarContainer from "@/components/shared/SnackBarContainer.vue";
+
 const customizer = useCustomizerStore();
 </script>
 
@@ -109,4 +112,5 @@ const customizer = useCustomizerStore();
       </v-main>
     </v-app>
   </v-locale-provider>
+  <SnackBarContainer />
 </template>

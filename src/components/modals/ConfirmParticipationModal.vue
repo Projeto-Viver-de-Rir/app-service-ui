@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import type { event } from "@/entities/event";
 import { useEvents } from "@/stores/eventStore";
+import { useSnackBar } from "@/stores/snackBarStore";
 import { eventDate, eventHour } from "@/utils/event";
 import { computed, onMounted, reactive, type PropType } from "vue";
 
 const eventStore = useEvents();
+const snackBarStore = useSnackBar()
 
 const props = defineProps({
   dialog: {
@@ -23,7 +25,6 @@ const props = defineProps({
 
 const data = reactive({
   isSubmitDisabled: true,
-  showSnackBar: false,
   hasError: false,
   timeRemaining: 5,
 })
@@ -34,15 +35,19 @@ const actionConfirmParticipation = async () => {
   data.hasError = false;
   try {
     await eventStore.confirmVacancy();
-    closeModal(true, true);
+    closeModal(true);
   } catch (error) {
     data.hasError = true;
-    closeModal(false, true);
+    closeModal(false);
   }
+  snackBarStore.addToQueue({ 
+    color: snackBarBtnColor.value, 
+    message: snackBarFeedbackLabel.value
+  });
 }
 
-const closeModal = (reload = false, showSnackBar = false) => {
-  emit('closeConfirmParticipationModal', { reload, snackBar: { color: snackBarBtnColor.value, message: snackBarFeedbackLabel.value, show: showSnackBar  } });
+const closeModal = (reload = false) => {
+  emit('closeConfirmParticipationModal', { reload });
 }
 
 const timeRemaningLabel = computed(() => {
@@ -82,7 +87,7 @@ onMounted(async () => {
       <v-card>
         <v-toolbar dark color="primary" style="flex: unset">
           <v-toolbar-title>Confirmação de presença</v-toolbar-title>
-          <v-btn icon color="inherit" @click="closeModal(false, false)" flat>
+          <v-btn icon color="inherit" @click="closeModal(false)" flat>
             <XIcon  width="20" />
           </v-btn>
         </v-toolbar>
@@ -104,7 +109,7 @@ onMounted(async () => {
 
           <v-card-actions class="pa-6">
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" variant="text" @click="closeModal(false, false)" flat>
+            <v-btn color="green darken-1" variant="text" @click="closeModal(false)" flat>
               Cancelar
             </v-btn>
             <v-btn @click="actionConfirmParticipation"

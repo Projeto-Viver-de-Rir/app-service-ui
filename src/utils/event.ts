@@ -125,7 +125,16 @@ export const eventActions = (): Array<ActionButton> => {
             id: 1,
             label: 'Concluir',
             button: {
-                icon: 'mdi-check-circle-outline'
+                icon: 'mdi-check-circle-outline',
+            },
+            visible: true,
+        },
+        {
+            id: 2,
+            label: 'Deletar',
+            button: {
+                icon: 'mdi-trash-can-outline',
+                color: 'error'
             },
             visible: true,
         },
