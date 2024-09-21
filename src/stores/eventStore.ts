@@ -336,6 +336,19 @@ export const useEvents = defineStore("events", () => {
 
     state.showModelRemove = false;
   };
+
+  const deleteSingleEvent = async (event: event) => {
+    if (!event) return;
+    state.isLoading = true;
+    try { 
+      await repository.delete(event.id);
+      state.isLoading = false;
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error(`error while deleting event => ${event.name}`);
+    }
+  };
+
   const openModalRemove = async (event: event) => {
     state.event = event;
     state.showModelRemove = true;
@@ -379,5 +392,6 @@ export const useEvents = defineStore("events", () => {
     volunteersPresent,
     runProcess,
     remove,
+    deleteSingleEvent,
   };
 });

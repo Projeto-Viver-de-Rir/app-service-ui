@@ -6,6 +6,7 @@ import { useEvents } from "@/stores/eventStore";
 import ConfirmParticipationModal from "@/components/modals/ConfirmParticipationModal.vue";
 import ConfirmRemoveParticipantModal from "@/components/modals/ConfirmRemoveParticipantModal.vue";
 import ValidatePresenceModal from "@/components/modals/ValidatePresenceModal.vue";
+import ConfirmDeleteEventModal from "@/components/modals/ConfirmDeleteEventModal.vue";
 import UiParentCard from "@/components/shared/UiParentCard.vue";
 import ActionBar from "@/components/shared/ActionBar.vue";
 import IndividualCard from "@/components/shared/IndividualCard.vue";
@@ -37,6 +38,7 @@ interface EventDetailsDataProps {
   displayConfirmParticipationModal: boolean;
   displayConfirmRemoveParticipantModal: boolean;
   displayValidatePresenceModal: boolean;
+  displayConfirmDeleteEventModal: boolean;
   participantToRemove: any;
   snackBar: SnackBarProps;
 }
@@ -46,6 +48,7 @@ const data: EventDetailsDataProps = reactive({
   displayConfirmParticipationModal: false,
   displayConfirmRemoveParticipantModal: false,
   displayValidatePresenceModal: false,
+  displayConfirmDeleteEventModal: false,
   participantToRemove: null,
   snackBar: {
     color: '',
@@ -140,7 +143,9 @@ const menuActions = computed((): Array<ActionButton> => {
       ...(action.id === 0 ? { onClick: eventStore.edit } : {}),
       ...(action.id === 1 ? { 
         onClick: showValidatePresenceDialog,
-        disabled: isEventClosed.value,
+      } : {}),
+      ...(action.id === 2 ? { 
+        onClick: showConfirmDeleteEventDialog,
       } : {})
     }
   });
@@ -182,9 +187,20 @@ const showValidatePresenceDialog = () => {
   data.displayValidatePresenceModal = true;
 }
 
-const hideValidatePresenceDialog = ({ snackBar } : { snackBar: SnackBarProps}) => {
+const hideValidatePresenceDialog = () => {
   data.displayValidatePresenceModal = false;
-  data.snackBar = snackBar;
+  router.push({ name: "ListEvents" });
+}
+
+const showConfirmDeleteEventDialog = () => {
+  data.displayConfirmDeleteEventModal = true;
+}
+
+const hideConfirmDeleteEventDialog = ({ confirm }: { confirm: boolean }) => {
+  data.displayConfirmDeleteEventModal = false;
+  if (confirm) {
+    router.push({ name: "ListEvents" });
+  }
 }
 
 const setWindowWidth = () => {
@@ -195,9 +211,8 @@ const showConfirmParticipationDialog = () => {
   data.displayConfirmParticipationModal = true;
 }
 
-const hideConfirmParticipationDialog = ({ reload, snackBar }: { reload: boolean , snackBar: SnackBarProps}) => {
+const hideConfirmParticipationDialog = ({ reload }: { reload: boolean }) => {
   data.displayConfirmParticipationModal = false;
-  data.snackBar = snackBar;
   if (reload) {
     loadEvent();
     // if confirmation success, force focus on confirmed volunteers tab
@@ -376,6 +391,7 @@ onUnmounted(async () => {
         </v-window>
       </div>
     </UiParentCard>
+    
 
     <!-- Modal Confirm Participation -->
     <ConfirmParticipationModal
@@ -399,17 +415,12 @@ onUnmounted(async () => {
       :dialog="data.displayValidatePresenceModal"
       @closeValidatePresenceModal="hideValidatePresenceDialog" />
 
-    <!-- Feedback SnackBar -->
-    <v-snackbar v-model="data.snackBar.show">
-      {{ data.snackBar.message }}
-      <template v-slot:actions>
-        <v-btn :color="data.snackBar.color"
-                variant="text"
-                @click="data.snackBar.show = false">
-          Fechar
-        </v-btn>
-      </template>
-    </v-snackbar>
+    <!-- Modal Delete Event -->
+    <ConfirmDeleteEventModal
+      v-if="data.displayConfirmDeleteEventModal"
+      :mobileView="isMobile"
+      :dialog="data.displayConfirmDeleteEventModal"
+      @closeConfirmDeleteEventModal="hideConfirmDeleteEventDialog" />
   </div>
 </template>
 

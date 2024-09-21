@@ -3,8 +3,10 @@ import { storeToRefs } from "pinia";
 import { computed, onMounted, reactive } from "vue";
 import IndividualCard from "@/components/shared/IndividualCard.vue";
 import { useEvents } from "@/stores/eventStore";
+import { useSnackBar } from "@/stores/snackBarStore";
 
 const eventStore = useEvents();
+const snackBarStore = useSnackBar();
 
 const { 
   volunteersPresent: eventVolunteers,
@@ -32,7 +34,11 @@ const actionConfirmPresence = async () => {
   } catch (error) {
     data.hasError = true;
   }
-  closeModal(true);
+  closeModal();
+  snackBarStore.addToQueue({ 
+    color: snackBarBtnColor.value, 
+    message: snackBarFeedbackLabel.value
+  });
 }
 
 const snackBarFeedbackLabel = computed(() => {
@@ -43,8 +49,8 @@ const snackBarBtnColor = computed(() => {
   return data.hasError ? 'error' : 'success';
 })
 
-const closeModal = (showSnackBar = false) => {
-  emit('closeValidatePresenceModal', { snackBar: { color: snackBarBtnColor.value, message: snackBarFeedbackLabel.value, show: showSnackBar  } });
+const closeModal = () => {
+  emit('closeValidatePresenceModal');
 }
 
 const getActionBtnProps = () => {
@@ -78,7 +84,7 @@ onMounted(() => {
       class="dialog-mw">
       <v-card>
         <v-toolbar dark color="primary" style="flex: unset">
-          <v-btn icon color="inherit" @click="closeModal(false)" flat>
+          <v-btn icon color="inherit" @click="closeModal()" flat>
             <XIcon  width="20" />
           </v-btn>
           <v-toolbar-title>Concluir Evento</v-toolbar-title>
