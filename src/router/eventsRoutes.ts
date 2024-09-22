@@ -27,6 +27,11 @@ const eventsRoutes = {
       }
     },
     {
+      name: "EventForm",
+      path: "/events/form/:id?",
+      component: () => import("@/views/events/EventForm.vue"),
+    },
+    {
       name: "CreateEvent",
       path: "/events/Adicionar",
       component: () => import("@/views/events/Detail.vue"),

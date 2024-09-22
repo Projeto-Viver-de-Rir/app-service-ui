@@ -3,6 +3,7 @@ import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useEvents } from "@/stores/eventStore";
+import BaseBreadcrumb from "@/components/shared/BaseBreadcrumb.vue";
 import ConfirmParticipationModal from "@/components/modals/ConfirmParticipationModal.vue";
 import ConfirmRemoveParticipantModal from "@/components/modals/ConfirmRemoveParticipantModal.vue";
 import ValidatePresenceModal from "@/components/modals/ValidatePresenceModal.vue";
@@ -27,12 +28,6 @@ const {
 
 const currentRoute = router.currentRoute.value;
 
-interface SnackBarProps {
-  color: string;
-  message: string;
-  show: boolean;
-}
-
 interface EventDetailsDataProps {
   tab: string;
   displayConfirmParticipationModal: boolean;
@@ -40,7 +35,6 @@ interface EventDetailsDataProps {
   displayValidatePresenceModal: boolean;
   displayConfirmDeleteEventModal: boolean;
   participantToRemove: any;
-  snackBar: SnackBarProps;
 }
 
 const data: EventDetailsDataProps = reactive({
@@ -50,14 +44,21 @@ const data: EventDetailsDataProps = reactive({
   displayValidatePresenceModal: false,
   displayConfirmDeleteEventModal: false,
   participantToRemove: null,
-  snackBar: {
-    color: '',
-    message: '',
-    show: false,
-  }
 })
 
 const width = ref(window.innerWidth)
+
+const breadcrumbs = ref([
+	{
+    text: "Eventos",
+    disabled: false,
+    to: "/events",
+	},
+	{
+    text: "Detalhes",
+    disabled: true,
+	},
+]);
 
 const isMobile = computed(() => {
   return width.value < 960;
@@ -255,7 +256,11 @@ onUnmounted(async () => {
 <template>
   <div class="event-details-view">
     <div v-if="isLoading" class="loading" />
-    <UiParentCard title="Eventos">
+    <BaseBreadcrumb
+			:title="'Eventos'"
+			:breadcrumbs="breadcrumbs"
+    />
+    <UiParentCard title="Evento">
       <template v-slot:action v-if="shouldDisplayMenu">
         <ActionBar :actions="menuActions" />
       </template>

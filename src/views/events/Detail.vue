@@ -231,6 +231,8 @@ export default defineComponent({
         <v-label class="text-subtitle-1 font-weight-semibold text-lightText"
           >Data:</v-label
         >
+
+        {{format(new Date())}}
         <VueDatePicker
           v-model="event.happenAt"
           :format="format"

@@ -31,7 +31,7 @@ export class eventRepository implements eventRepositoryInterface {
     return response.data;
   }
 
-  public async getById(id: string): Promise<eventResponse> {
+  public async getById(id: string): Promise<event> {
     const response = await this.apiService.invoke("event/" + id);
     return response.data;
   }
