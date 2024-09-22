@@ -28,12 +28,11 @@ export default defineComponent({
       {
         text: "Dashboard",
         disabled: false,
-        href: "/",
+        to: "/dashboard",
       },
       {
         text: "Voluntários",
         disabled: true,
-        href: "#",
       },
     ]);
     const route = useRoute();

@@ -116,7 +116,7 @@ export const eventActions = (): Array<ActionButton> => {
                 icon: 'mdi-pencil'
             },
             link: {
-                name: 'DetailtEvent',
+                name: 'EventForm',
                 params: { id: currentEvent?.id }
             },
             visible: true,

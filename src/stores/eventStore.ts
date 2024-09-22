@@ -24,7 +24,7 @@ interface eventState {
   isLoading: boolean;
   numberConfirmed: number;
   isOtherSelecteced: boolean;
-  volunteersPresent: [];
+  volunteersPresent: Array<any>;
   volunteersDeleted: [];
   volunteersConfirmed: finishEventRequest;
   action: string;
@@ -200,6 +200,21 @@ export const useEvents = defineStore("events", () => {
     state.isLoading = false;
   };
 
+  const createOrUpdate = async (event: any) => {
+    state.isLoading = true;
+    try {
+      if (!event.id) {
+        await repository.create(event);
+      } else {
+        await repository.update(event);
+      }
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error(`Unable to ${event.id ? 'update' :  'create' } event`);
+    }
+    state.isLoading = false;
+  };
+
   const confirmVacancy = async () => {
     state.isLoading = true;
     state.showModel = false;
@@ -233,6 +248,24 @@ export const useEvents = defineStore("events", () => {
       throw new Error('Unable to finish event')
     }
   };
+
+  // cleaner and more readable fetch event method
+  const fetchEventById = async (id: string): Promise<void> => {
+    resetEvent();
+    state.isLoading = true;
+    try {
+      const data = await repository.getById(id);
+      state.event = data;
+      state.isLoading = false;
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error('Failed fetching event');
+    }
+  };
+
+  const resetEvent = (): void => {
+    state.event = null;
+  }
 
   const selectOther = (selected: boolean) => {
     state.isOtherSelecteced = selected;
@@ -365,6 +398,9 @@ export const useEvents = defineStore("events", () => {
     clearFilters,
     getEvent,
     getById,
+    fetchEventById,
+    resetEvent,
+    createOrUpdate,
     getPlaces,
     isEditing,
     getNumberConfirmed,
