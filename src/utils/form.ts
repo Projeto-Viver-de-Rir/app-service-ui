@@ -21,5 +21,8 @@ export const eventFormRules = (): Record<string, any> => {
 		city: [
 			(v: string): string | boolean => !!v || 'A Cidade é obrigatória!',
 		],
+		occupancy: [
+			(v: string): string | boolean => !!v || 'Vagas disponíveis é obrigatória!',
+		],
 	}
 }

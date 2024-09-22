@@ -56,25 +56,11 @@ const breadcrumbs = ref([
 	},
 ]);
 
-const width = ref(window.innerWidth)
-
-
-
 const page = ref({ title: "Eventos" });
 const locale = ref('pt-BR');
 const formLabelClass = ref('text-subtitle-1 font-weight-semibold text-lightText mb-1');
 const formRef = ref();
 const rules = ref(eventFormRules());
-
-const isMobile = computed(() => {
-  return width.value < 960;
-})
-
-const tabsDirection = computed((): string => {
-  return isMobile.value ? 'vertical' : 'horizontal'
-});
-
-
 
 const setModelDate = (date: Date) => {
 	const eventDate = new Date(date);
@@ -147,11 +133,36 @@ const prepareModelToSubmit = () => {
 	}
 };
 
+const dateIsValid = computed(() => {
+  return !!data.eventModel.when.date;
+});
+
+const timeIsValid = computed(() => {
+  return !!data.eventModel.when.time;
+});
+
+const disableSubmit = computed(() => {
+  return !data.formValid ||
+		!dateIsValid.value ||
+		!timeIsValid.value;
+})
+
+const validateThenSubmit = async () => {
+	const { valid } = await formRef.value.validate()
+	if (valid) {
+		submit();
+	}
+};
+
 const submit = async (): Promise<void> => {
 	data.loading = true;
 	try {
 		const event = prepareModelToSubmit();
 		await eventStore.createOrUpdate(event);
+		snackBarStore.addToQueue({ 
+			color: 'success', 
+			message: `Evento ${isEdit.value ? 'atualizado' : 'criado' } com sucesso.`
+		});
 		router.push({ name: 'Dashboard' });
 	} catch (error) {
 		snackBarStore.addToQueue({ 
@@ -194,12 +205,11 @@ onUnmounted(async () => {
 		<v-form v-model="data.formValid" 
 						class="form-container" 
 						ref="formRef" 
-						@submit.prevent="submit">
+						@submit.prevent="validateThenSubmit">
 			<div class="tabs-container">
 				<v-tabs
 					v-model="data.tab"
 					color="primary"
-					:direction="tabsDirection"
 				>
 					<v-tab text="Essenciais" value="tab-1" />
 					<v-tab text="Localidade" value="tab-2" />
@@ -215,35 +225,32 @@ onUnmounted(async () => {
 
 								<v-window-item value="tab-1">
 									<v-card title="Essenciais" elevation="0">
-										<v-card-text class="px-8">
+										<v-card-text class="px-8 pb-6">
 											<div class="form-property-data mb-4">
+												<v-label :class="[formLabelClass, 'required']">Nome do evento</v-label>
 												<v-text-field
 													v-model="data.eventModel.name"
-													label="Nome"
 													placeholder="Nome do evento"
 													:rules="rules.name"
 													required
 												></v-text-field>
 											</div>
 											<div class="form-property-data mb-4">
+												<v-label :class="[formLabelClass, 'required']">Ponto de encontro</v-label>
 												<v-text-field
 													v-model="data.eventModel.meetingPoint"
-													label="Ponto de encontro"
 													placeholder="Onde será o local de encontro?"
 													:rules="rules.meetingPoint"
 													required
 												></v-text-field>
 											</div>
 											<div class="form-property-data mb-4">
+												<v-label :class="[formLabelClass]">Informação</v-label>
 												<v-text-field
 													v-model="data.eventModel.description"
-													label="Informação"
 													placeholder="Insira uma informação adicional sobre o evento"
 												></v-text-field>
 											</div>
-										</v-card-text>
-										<v-card-text class="px-8">
-
 										</v-card-text>
 									</v-card>
 								</v-window-item>
@@ -254,18 +261,18 @@ onUnmounted(async () => {
 											<v-card title="Localidade" elevation="0">
 												<v-card-text class="px-8">
 													<div class="form-property-data mb-4">
+														<v-label :class="[formLabelClass, 'required']">Endereço</v-label>
 														<v-text-field
 															v-model="data.eventModel.address"
-															label="Endereço"
 															placeholder="Av. Dezessete de Abril, 36 - Guajuviras"
 															:rules="rules.address"
 															required
 														></v-text-field>
 													</div>
 													<div class="form-property-data">
+														<v-label :class="[formLabelClass, 'required']">Cidade</v-label>
 														<v-text-field
 															v-model="data.eventModel.city"
-															label="Cidade"
 															placeholder="Canoas, RS"
 															:rules="rules.city"
 															required
@@ -285,31 +292,37 @@ onUnmounted(async () => {
 								<v-col cols="12" md="12">
 									<v-card title="Quando" class="border mb-6" elevation="0" style="z-index: 1"> 
 										<v-card-text class="px-8">
-											<v-label :class="formLabelClass">Data</v-label>
+											<v-label :class="[formLabelClass, 'required']">Data</v-label>
 											<VueDatePicker
-												class="mb-5"
 												v-model="data.eventModel.when.date"
 												:locale="locale"
 												:format="formatDate"
 												:enable-time-picker="false"
+												:state="dateIsValid"
 											/>
-											<v-label :class="formLabelClass">Horário</v-label>
+											<div class="ml-4 mt-1 validation-message" v-if="!dateIsValid">Data é obrigatória!</div>
+
+											<v-label :class="[formLabelClass, 'required mt-5']">Horário</v-label>
 											<VueDatePicker
 												v-model="data.eventModel.when.time"
 												:locale="locale"
 												:format="formatTime"
+												:state="timeIsValid"
 												time-picker
 											/>
+											<div class="ml-4 mt-1 validation-message" v-if="!timeIsValid">Horário é obrigatório!</div>
 										</v-card-text>
 									</v-card>
 
 									<v-card title="Vagas" class="border mb-6" elevation="0" style="z-index: 0">
 										<v-card-text class="px-8">
+											<v-label :class="[formLabelClass, 'required']">Vagas disponíveis</v-label>
 											<v-text-field
 												v-model="data.eventModel.occupancy"
 												type="number"
-												label="Vagas disponíveis"
 												placeholder="10"
+												:rules="rules.occupancy"
+												required
 											></v-text-field>
 										</v-card-text>
 									</v-card>
@@ -327,7 +340,7 @@ onUnmounted(async () => {
 														 class="ml-5" 
 														 width="100" 
 														 type="submit"
-														 :disabled="!data.formValid">
+														 :disabled="disableSubmit">
 											 {{ isEdit ? 'Atualizar' : 'Criar' }}
 											</v-btn>
 										</v-card-actions>
@@ -344,3 +357,25 @@ onUnmounted(async () => {
 		</v-form>
   </div>
 </template>
+<style lang="scss" scoped>
+.validation-message {
+	color: red;
+}
+:deep(.dp__input_invalid) {
+	border-color: red;
+	box-shadow: none;
+}
+:deep(.dp__input_valid) {
+	box-shadow: none;
+}
+:deep(.dp__input_valid:hover) {
+	border-color: lightgray;
+}
+:deep(.v-label.required:after) {
+	content: ' *';
+	color: red;
+}
+:deep(.v-label + .v-input--error) {
+	color: red;
+}
+</style>
