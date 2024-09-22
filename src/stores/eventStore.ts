@@ -14,6 +14,8 @@ import { operationRepository } from "../repositories/operationRepository";
 import { useAuthStore } from "@/stores/auth";
 import { fa } from "vuetify/lib/locale/index.mjs";
 
+export const EVENT_PLACES_MORE = 'Outro';
+
 interface eventState {
   event: event | null;
   initialEvent: event | null;
@@ -48,12 +50,11 @@ export const useEvents = defineStore("events", () => {
       "Hospital Criança Conceição",
       "Hospital Conceição (Adulto)",
       "Hospital São Pedro",
-      "SPAAN",
       "Asilo Padre Cacique",
       "FASE Padre Cacique",
       "FASE Cruzeiro",
       "Vila Safira",
-      "Outros",
+      EVENT_PLACES_MORE,
     ],
     event: null,
     initialEvent: null,
