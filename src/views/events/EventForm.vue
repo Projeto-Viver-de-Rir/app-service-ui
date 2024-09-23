@@ -3,7 +3,7 @@ import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import BaseBreadcrumb from "@/components/shared/BaseBreadcrumb.vue";
 import type { event } from "@/entities/event";
-import { useEvents } from "@/stores/eventStore";
+import { EVENT_PLACES_MORE, useEvents } from "@/stores/eventStore";
 import { storeToRefs } from "pinia";
 import { useSnackBar } from "@/stores/snackBarStore";
 import { eventFormRules } from "@/utils/form";
@@ -15,6 +15,7 @@ const snackBarStore = useSnackBar()
 
 const {
   getEvent: event,
+	getPlaces: eventNamesList,
 } = storeToRefs(eventStore);
 
 interface EventFormProps {
@@ -22,12 +23,14 @@ interface EventFormProps {
 	loading: boolean;
 	eventModel: Record<string, any>;
 	formValid: boolean;
+	toggleNameInputType: boolean;
 }
 
 const data: EventFormProps = reactive({
   tab: 'tab-1',
 	loading: false,
 	formValid: false,
+	toggleNameInputType: false,
 	eventModel: {
 		when: {
 			date: new Date(),
@@ -103,6 +106,13 @@ const setEventModel = (event: event) => {
 
 const goBack = () => {
 	router.back();
+};
+
+const onModelChange = (value: any) => {
+	if (value === EVENT_PLACES_MORE) {
+		data.toggleNameInputType = !data.toggleNameInputType
+		data.eventModel.name = 'Novo evento'
+	}
 };
 
 const fetchEvent = async (): Promise<void> => {
@@ -228,12 +238,38 @@ onUnmounted(async () => {
 										<v-card-text class="px-8 pb-6">
 											<div class="form-property-data mb-4">
 												<v-label :class="[formLabelClass, 'required']">Nome do evento</v-label>
-												<v-text-field
+												<v-autocomplete
+													v-if="!data.toggleNameInputType"
 													v-model="data.eventModel.name"
-													placeholder="Nome do evento"
+													:items="eventNamesList"
+													:rules="rules.name"
+													class="rounded"
+													placeholder="Procure um nome na lista"
+													density="comfortable"
+													@update:modelValue="onModelChange"
+													required
+												>
+												
+												</v-autocomplete>
+												<v-text-field
+													v-else
+													v-model="data.eventModel.name"
+													placeholder="Onde será o local de encontro?"
 													:rules="rules.name"
 													required
-												></v-text-field>
+												>
+													<template v-slot:append>
+														<v-tooltip activator="parent"	location="top">
+															Procurar um local sugerido na lista
+														</v-tooltip>
+														<v-slide-x-reverse-transition mode="out-in">
+															<v-icon
+																icon="mdi-arrow-u-left-bottom"
+																@click="data.toggleNameInputType = !data.toggleNameInputType"
+															></v-icon>
+														</v-slide-x-reverse-transition>
+													</template>
+												</v-text-field>
 											</div>
 											<div class="form-property-data mb-4">
 												<v-label :class="[formLabelClass, 'required']">Ponto de encontro</v-label>
@@ -359,10 +395,20 @@ onUnmounted(async () => {
 </template>
 <style lang="scss" scoped>
 .validation-message {
-	color: red;
+	color: rgb(var(--v-theme-error));
+}
+:deep(.v-autocomplete .v-field) {
+	border-width: thin !important;
+	border-style: solid !important;
+	border-color: rgba(var(--v-border-color), var(--v-border-opacity)) !important;
+	border-radius: 6px;
+}
+
+:deep(.v-field--variant-filled .v-field__overlay) {
+	background-color: unset;
 }
 :deep(.dp__input_invalid) {
-	border-color: red;
+	border-color: rgb(var(--v-theme-error));
 	box-shadow: none;
 }
 :deep(.dp__input_valid) {
@@ -373,9 +419,9 @@ onUnmounted(async () => {
 }
 :deep(.v-label.required:after) {
 	content: ' *';
-	color: red;
+	color: rgb(var(--v-theme-error));
 }
 :deep(.v-label + .v-input--error) {
-	color: red;
+	color: rgb(var(--v-theme-error));
 }
 </style>
