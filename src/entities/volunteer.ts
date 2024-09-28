@@ -4,6 +4,7 @@ export interface volunteer {
   nickname: string;
   email: string;
   phone: string;
+  photo: string;
   address: string;
   city: string;
   state: string;
@@ -25,6 +26,9 @@ export interface volunteersResponse {
   skip: number;
   total: number;
   limit: number;
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
 }
 
 export interface volunteerResponse {

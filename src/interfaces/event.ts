@@ -13,7 +13,7 @@ export interface ButtonProps {
 
 export interface RouterLinkProps {
     name: string;
-    params: Record<string, any>;
+    params?: Record<string, any>;
 }
 
 export interface ActionButton {
