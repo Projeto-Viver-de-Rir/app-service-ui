@@ -62,23 +62,6 @@ const horizontalItems: menu[] = [
         to: "/apps/chats",
       },
       {
-        title: "Blog",
-        icon: CircleIcon,
-        to: "/",
-        children: [
-          {
-            title: "Posts",
-            icon: PointIcon,
-            to: "/apps/blog/posts",
-          },
-          {
-            title: "Detail",
-            icon: PointIcon,
-            to: "/apps/blog/early-black-friday-amazon-deals-cheap-tvs-headphones",
-          },
-        ],
-      },
-      {
         title: "E-Commerce",
         icon: CircleIcon,
         to: "/ecommerce/",

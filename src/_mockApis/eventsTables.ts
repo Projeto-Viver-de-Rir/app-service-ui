@@ -25,11 +25,6 @@ import img3 from "@/assets/images/profile/user-3.jpg";
 import img4 from "@/assets/images/profile/user-4.jpg";
 import img5 from "@/assets/images/profile/user-5.jpg";
 import img6 from "@/assets/images/profile/user-6.jpg";
-import authimg1 from "@/assets/images/blog/blog-img1.jpg";
-import authimg2 from "@/assets/images/blog/blog-img2.jpg";
-import authimg3 from "@/assets/images/blog/blog-img3.jpg";
-import authimg4 from "@/assets/images/blog/blog-img4.jpg";
-import authimg5 from "@/assets/images/blog/blog-img5.jpg";
 
 /*Basic Table 1*/
 const basicTableData1: basicTable1[] = [

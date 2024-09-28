@@ -183,10 +183,6 @@ const quickLink: quickLinksType[] = [
     href: "/apps/user/profile",
   },
   {
-    title: "Blog Design",
-    href: "/auth/blog/posts",
-  },
-  {
     title: "Shopping Cart",
     href: "/ecommerce/checkout",
   },
