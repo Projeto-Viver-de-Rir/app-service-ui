@@ -16,7 +16,7 @@ const data = reactive({
   displayConfirmEventScheduleModal: false,
   nameFilter: '',
   statusFilter: 1,
-  filterPanel: 0,
+  filterPanel: 1,
   filterInfo: true,
   itemsPerPage: 10,
   currentPage: 1,
