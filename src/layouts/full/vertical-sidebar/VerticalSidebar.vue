@@ -9,7 +9,6 @@ import NavItem from "./NavItem/index.vue";
 import NavCollapse from "./NavCollapse/NavCollapse.vue";
 import Profile from "./profile/Profile.vue";
 import Logo from "../logo/Logo.vue";
-import RtlLogo from "../logo/RtlLogo.vue";
 
 const customizer = useCustomizerStore();
 const sidebarMenu = shallowRef(sidebarItems);
@@ -34,12 +33,7 @@ if (!!user) {
     width="270"
   >
     <!---Logo part -->
-    <v-locale-provider v-if="customizer.setRTLLayout" rtl>
-      <div class="pa-5">
-        <RtlLogo />
-      </div>
-    </v-locale-provider>
-    <v-locale-provider v-else>
+    <v-locale-provider>
       <div class="pa-5">
         <Logo />
       </div>

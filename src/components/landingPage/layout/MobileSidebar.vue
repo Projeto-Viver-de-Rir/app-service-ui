@@ -16,10 +16,7 @@ const customizer = useCustomizerStore();
 <template>
   <div class="pt-6 lp-mobile-sidebar">
     <div class="ml-6 mb-3">
-      <div v-if="customizer.setRTLLayout" rtl>
-        <RtlLogo />
-      </div>
-      <div v-else>
+      <div>
         <Logo />
       </div>
     </div>

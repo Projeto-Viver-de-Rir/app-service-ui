@@ -12,14 +12,10 @@ import {
   ShoppingCartIcon,
 } from "vue-tabler-icons";
 import Logo from "../logo/Logo.vue";
-import RtlLogo from "../logo/RtlLogo.vue";
 
 // dropdown imports
-import LanguageDD from "../vertical-header/LanguageDD.vue";
-import NotificationDD from "../vertical-header/NotificationDD.vue";
 import ProfileDD from "../vertical-header/ProfileDD.vue";
 import Navigations from "../vertical-header/Navigations.vue";
-import Searchbar from "../vertical-header/Searchbar.vue";
 import RightMobileSidebar from "../vertical-header/RightMobileSidebar.vue";
 
 const customizer = useCustomizerStore();
@@ -56,12 +52,7 @@ const getCart = computed(() => {
           : 'v-toolbar__content px-6'
       "
     >
-      <v-locale-provider v-if="customizer.setRTLLayout" rtl>
-        <div class="hidden-md-and-down">
-          <RtlLogo />
-        </div>
-      </v-locale-provider>
-      <v-locale-provider v-else>
+      <v-locale-provider>
         <div class="hidden-md-and-down">
           <Logo />
         </div>
@@ -78,62 +69,7 @@ const getCart = computed(() => {
         <Menu2Icon size="20" stroke-width="1.5" />
       </v-btn>
 
-      <!-- search mobile -->
-      <v-btn
-        class="hidden-lg-and-up ml-3"
-        icon
-        rounded="sm"
-        variant="flat"
-        size="small"
-        @click="searchbox"
-      >
-        <SearchIcon size="17" stroke-width="1.5" />
-      </v-btn>
-
-      <v-sheet v-if="showSearch" class="search-sheet v-col-12">
-        <Searchbar :closesearch="searchbox" />
-      </v-sheet>
-
-      <!-- ------------------------------------------------>
-      <!-- Search part -->
-      <!-- ------------------------------------------------>
-      <v-sheet class="mx-2 d-none d-lg-block">
-        <Searchbar />
-      </v-sheet>
-
-      <!---/Search part -->
-
-      <!-- ------------------------------------------------>
-      <!-- Mega menu -->
-      <!-- ------------------------------------------------>
-      <div class="hidden-md-and-down">
-        <Navigations />
-      </div>
-
       <v-spacer />
-      <!-- ---------------------------------------------- -->
-      <!---right part -->
-      <!-- ---------------------------------------------- -->
-
-      <!-- ---------------------------------------------- -->
-      <!-- translate -->
-      <!-- ---------------------------------------------- -->
-      <LanguageDD />
-
-      <!-- ---------------------------------------------- -->
-      <!-- Notification -->
-      <!-- ---------------------------------------------- -->
-
-      <NotificationDD />
-
-      <!-- ---------------------------------------------- -->
-      <!-- ShoppingCart -->
-      <!-- ---------------------------------------------- -->
-      <v-btn icon variant="text" color="primary" to="/ecommerce/checkout">
-        <v-badge color="error" :content="getCart?.length">
-          <ShoppingCartIcon stroke-width="1.5" size="22" />
-        </v-badge>
-      </v-btn>
 
       <!-- right sidebar -->
       <v-btn
