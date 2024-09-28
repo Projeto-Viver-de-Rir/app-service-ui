@@ -12,22 +12,6 @@ import { isCurrentUserAdministrative } from "@/utils/permissions";
 import type { ActionButton } from "@/interfaces/event";
 import { eventFullDate, eventHour, eventListActions, getStatusDescription, getStatusFilterOptions, isEventFull } from "@/utils/event";
 
-
-const page = ref({ title: "Dashboard" });
-
-const breadcrumbs = ref([
-  {
-    text: "Dashboard",
-    disabled: false,
-    to: "/dashboard",
-  },
-  {
-    text: "Eventos",
-    disabled: true,
-    href: "#",
-  },
-]);
-
 const data = reactive({
   displayConfirmEventScheduleModal: false,
   nameFilter: '',
@@ -183,11 +167,6 @@ onMounted(async () => {
 
 <template>
   <div class="event-list-view">
-    <BaseBreadcrumb
-      :title="page.title"
-      :breadcrumbs="breadcrumbs"
-    ></BaseBreadcrumb>
-    <!-- <div v-if="isLoading" class="loading"></div> -->
     <v-row>
       <v-col cols="12" md="12">
         <v-expansion-panels v-model="data.filterPanel" class="mb-5">
@@ -210,18 +189,18 @@ onMounted(async () => {
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <v-row :align="'center'">
-                <v-col md="5" sm="12" xs="12">
+                <v-col class="v-col-xs-12" md="5" sm="12" xs="12">
                   <v-label class="mb-2 font-weight-medium">Nome</v-label>
                   <v-text-field
                     v-model="data.nameFilter"
-                    class="mb-md-5 mb-sm-0 mb-5"
+                    class="mb-md-5 mb-sm-0"
                     placeholder="Filtrar por nome"
                     hide-details
                     @keyup.enter="getEvents"
                   ></v-text-field>
                 </v-col>
   
-                <v-col md="5" sm="9" xs="9">
+                <v-col class="v-col-xs-9" md="5" sm="9" xs="9">
                   <v-label class="mb-2 font-weight-medium">Status</v-label>
                   <v-select
                     :items="statusFilterOptions"
@@ -232,7 +211,7 @@ onMounted(async () => {
                     v-model="data.statusFilter" />
                 </v-col>
   
-                <v-col md="2" sm="3" xs="9" class="pb-1">
+                <v-col md="2" sm="3" xs="3" class="pb-1 v-col-xs-3">
                   <v-btn 
                     color="primary"
                     prepend-icon="mdi-filter"
@@ -325,3 +304,47 @@ onMounted(async () => {
     :dialog="data.displayConfirmEventScheduleModal"
     @closeConfirmEventScheduleModal="hideConfirmEventScheduleDialog" />
 </template>
+
+<style lang="scss" scoped>
+/* Hack to fix Vuetify not setting xs style on the current version */
+/* ToDo: upgrade Vuetify version on the future */
+@media (min-width: 480px) {
+  .v-col-xs-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .v-col-xs-9 {
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+  .v-col-xs-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 600px) {
+  .v-col-sm-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .v-col-sm-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 960px) {
+  .v-col-md-2 {
+    flex: 0 0 16.6666666667%;
+    max-width: 16.6666666667%;
+  }
+  .v-col-md-5 {
+    flex: 0 0 41.6666666667%;
+    max-width: 41.6666666667%;
+  }
+}
+
+
+</style>
+
