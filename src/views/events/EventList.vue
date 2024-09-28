@@ -177,7 +177,7 @@ onMounted(async () => {
                   Filtros
                 </v-col>
                 <v-col
-                  class="text--secondary mt-xs-3 mt-3 mt-md-0"
+                  class="text--secondary mt-xs-3 mt-3 mt-md-3"
                   md="8" sm="12" cols="12">
                   <span
                     v-if="!expanded"
