@@ -141,7 +141,7 @@ const menuActions = computed((): Array<ActionButton> => {
   return actions.map((action) => {
     return {
       ...action,
-      ...(action.id === 0 ? { onClick: eventStore.edit } : {}),
+      ...(action.id === 0 ? { onClick: eventStore.edit } : {}), // ToDo: remove this on clean up
       ...(action.id === 1 ? { 
         onClick: showValidatePresenceDialog,
       } : {}),

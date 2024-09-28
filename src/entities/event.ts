@@ -33,6 +33,9 @@ export interface eventsResponse {
   skip: number;
   total: number;
   limit: number;
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
 }
 
 export interface eventResponse {

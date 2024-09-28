@@ -20,6 +20,9 @@ interface eventState {
   event: event | null;
   initialEvent: event | null;
   events: event[];
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
   places: string[];
   filters: eventFilter;
   isEditing: boolean;
@@ -45,6 +48,9 @@ export const useEvents = defineStore("events", () => {
     showModelRemove: false,
     filters: new eventFilter(""),
     events: [],
+    currentPage: 1,
+    totalPages: 0,
+    totalItems: 0,
     places: [
       "Hospital Fêmina",
       "Hospital Criança Conceição",
@@ -77,6 +83,9 @@ export const useEvents = defineStore("events", () => {
   const getList = computed(() => state.events);
   const getEvent = computed(() => state.event);
   const isLoading = computed(() => state.isLoading);
+  const currentPage = computed(() => state.currentPage);
+  const totalPages = computed(() => state.totalPages);
+  const totalItems = computed(() => state.totalItems);
   const isEditing = computed(() => state.isEditing);
   const getPlaces = computed(() => state.places);
   const getNumberConfirmed = computed(() => state.numberConfirmed);
@@ -98,10 +107,18 @@ export const useEvents = defineStore("events", () => {
 
   const getDataByQuery = async (query: string) => {
     if (!query) throw new Error("Query params not provided");
-    state.isLoading = true;
-    const data = await repository.getEventsByQuery(query);
-    state.events = data.result;
-    state.isLoading = false;
+    state.isLoading = true;    
+    try {
+      const data = await repository.getEventsByQuery(query);
+      state.events = data.result;
+      state.currentPage = data.currentPage;
+      state.totalPages = data.totalPages;
+      state.totalItems = data.totalItems;
+      state.isLoading = false;
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error('Unable to fetch events by query')
+    }
   };
 
   const getById = async (id: string): Promise<void> => {
@@ -268,6 +285,20 @@ export const useEvents = defineStore("events", () => {
     state.event = null;
   }
 
+  const processEventSchedule = async () => {
+    state.isLoading = true;
+    try {
+      let date = new Date();
+      var newDate = new Date(date.setMonth(date.getMonth() + 2));
+      var request = new createEventRequest(newDate);
+      await opRepository.createEvents(request);
+      state.isLoading = false;
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error('Failed processing event schedule');
+    }
+  };
+
   const selectOther = (selected: boolean) => {
     state.isOtherSelecteced = selected;
 
@@ -394,6 +425,9 @@ export const useEvents = defineStore("events", () => {
     eventLength,
     getList,
     isLoading,
+    currentPage,
+    totalPages,
+    totalItems,
     filter,
     filters,
     clearFilters,
@@ -402,6 +436,7 @@ export const useEvents = defineStore("events", () => {
     fetchEventById,
     resetEvent,
     createOrUpdate,
+    processEventSchedule,
     getPlaces,
     isEditing,
     getNumberConfirmed,
