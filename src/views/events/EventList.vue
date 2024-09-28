@@ -153,6 +153,12 @@ const dateAndTimeDisplay = (event: any) => {
   return `${eventFullDate(event.happenAt)} às ${eventHour(event.happenAt)}`
 }
 
+const clearFilters = () => {
+  data.nameFilter = '';
+  data.statusFilter = 1;
+  getEvents();
+}
+
 const getEvents = async () => {
   data.lastFiltered = {
     nameFilter: data.nameFilter,
@@ -267,7 +273,6 @@ onMounted(async () => {
             :loading="isLoading"
             :page="currentPage"
             items-per-page-text="Itens por página"
-            no-data-text="Nenhum resultado encontrado para os filtros aplicados."
             loading-text="Carregando... Por favor aguarde"
             @update:itemsPerPage="getEvents"
             @update:page="pageChanged"
@@ -284,6 +289,18 @@ onMounted(async () => {
               >
                 {{ capacityDisplay(item).label }}
               </v-chip>
+            </template>
+
+            <template v-slot:no-data>
+              <p class="align-center d-flex justify-center">
+                <span>Nenhum resultado encontrado para os filtros aplicados.</span>
+                <v-btn size="small"
+                      color="primary" 
+                      variant="text"
+                      class="ml-1"
+                      @click="clearFilters"
+                >Limpar filtros</v-btn>
+              </p>
             </template>
 
             <template v-slot:item.actions="{ item }">
