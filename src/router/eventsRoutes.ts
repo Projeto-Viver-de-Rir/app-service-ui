@@ -9,7 +9,7 @@ const eventsRoutes = {
     {
       name: "ListEvents",
       path: "/events",
-      component: () => import("@/views/events/List.vue"),
+      component: () => import("@/views/events/EventList.vue"),
     },
     {
       name: "DetailtEvent",
@@ -22,7 +22,7 @@ const eventsRoutes = {
       component: () => import("@/views/events/EventDetails.vue"),
       beforeEnter: (to: any) => {
         if (!to.params?.id) {
-          return { name: 'dashboard' };
+          return { name: 'Dashboard' };
         }
       }
     },
