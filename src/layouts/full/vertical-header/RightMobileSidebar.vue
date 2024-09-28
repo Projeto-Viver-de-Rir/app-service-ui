@@ -33,12 +33,6 @@ const open = ref(["Apps"]);
       </v-list-group>
       <v-list-item>
         <template v-slot:prepend>
-          <MessagesIcon width="21" stroke-width="1.5" />
-        </template>
-        <h5 class="text-subtitle-1 ml-2">Chats</h5>
-      </v-list-item>
-      <v-list-item>
-        <template v-slot:prepend>
           <CalendarIcon width="21" stroke-width="1.5" />
         </template>
         <h5 class="text-subtitle-1 ml-2">Calendar</h5>

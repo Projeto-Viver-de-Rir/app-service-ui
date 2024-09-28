@@ -95,7 +95,6 @@ const languageDD: languageType[] = [
 //
 // AppsLink
 //
-import img1 from "@/assets/images/svgs/icon-dd-chat.svg";
 import img2 from "@/assets/images/svgs/icon-dd-cart.svg";
 import img3 from "@/assets/images/svgs/icon-dd-invoice.svg";
 import img4 from "@/assets/images/svgs/icon-dd-date.svg";
@@ -104,12 +103,6 @@ import img6 from "@/assets/images/svgs/icon-dd-lifebuoy.svg";
 import img7 from "@/assets/images/svgs/icon-dd-message-box.svg";
 import img8 from "@/assets/images/svgs/icon-dd-application.svg";
 const appsLink: appsLinkType[] = [
-  {
-    avatar: img1,
-    title: "Chat Application",
-    subtext: "New messages arrived",
-    href: "/apps/chats",
-  },
   {
     avatar: img2,
     title: "eCommerce App",
@@ -211,10 +204,6 @@ const searchSugg: searchType[] = [
   {
     title: "Checkout",
     href: "/ecommerce/checkout",
-  },
-  {
-    title: "Chats",
-    href: "/apps/chats",
   },
   {
     title: "Notes",
