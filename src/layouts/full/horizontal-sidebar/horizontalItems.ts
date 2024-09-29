@@ -88,11 +88,6 @@ const horizontalItems: menu[] = [
         icon: CircleIcon,
         to: "/apps/calendar",
       },
-      {
-        title: "Kanban",
-        icon: CircleIcon,
-        to: "/apps/kanban",
-      },
     ],
   },
 
