@@ -34,9 +34,17 @@ export class volunteerRepository implements volunteerRepositoryInterface {
     return response.data;
   }
 
+  public async getByQuery(query: string): Promise<volunteersResponse> {
+    const response = await this.apiService.invoke("volunteer?"  + query);
+    return response.data;
+  }
+
   public async getById(id: string): Promise<volunteer> {
     const response = await this.apiService.invoke("volunteer/" + id);
-    console.log(response);
     return response.data;
+  }
+
+  public async delete(id: string): Promise<void> {
+    await this.apiService.delete("volunteer/" + id);
   }
 }

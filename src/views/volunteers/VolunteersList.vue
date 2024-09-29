@@ -1,42 +1,41 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue";
+import { computed, onMounted, reactive, watch } from "vue";
 
 import UiParentCard from "@/components/shared/UiParentCard.vue";
-import ActionBar from "@/components/shared/ActionBar.vue";
-import ConfirmEventScheduleModal from "@/components/modals/ConfirmEventScheduleModal.vue";
 
 import { storeToRefs } from 'pinia';
-import { useEvents } from "@/stores/eventStore";
-import { isCurrentUserAdministrative } from "@/utils/permissions";
-import type { ActionButton } from "@/interfaces/event";
-import { eventFullDate, eventHour, eventListActions, getStatusDescription, getStatusFilterOptions, isEventFull } from "@/utils/event";
+import { useVolunteers } from "@/stores/volunteerStore";
 
 const data = reactive({
   displayConfirmEventScheduleModal: false,
   nameFilter: '',
-  statusFilter: 1,
+  nicknameFilter: '',
+  emailFilter: '',
   filterPanel: 1,
   filterInfo: true,
   itemsPerPage: 10,
   currentPage: 1,
   tableHeaders: [
-    { title: 'Nome', key: 'name', sortable: false, align: 'start' },
-    { title: 'Local', key: 'address', sortable: false, align: 'center' },
-    { title: 'Quando', key: 'happenAt', sortable: false, align: 'center' },
-    { title: 'Capacidade', key: 'capacity', sortable: false, align: 'center' },
+    { title: 'Nome', key: 'name', sortable: true, align: 'start' },
+    { title: 'Apelido', key: 'nickname', sortable: true, align: 'center' },
+    { title: 'Email', key: 'email', sortable: false, align: 'center' },
+    { title: 'Telefone', key: 'phone', sortable: false, align: 'center' },
     { title: ' ', key: 'actions', align: 'start' },
   ],
   lastFiltered: {
     nameFilter: '',
-    statusFilter: 0 
-  }
+    nicknameFilter: '',
+    emailFilter: ''
+  },
+  sortOptions: [] as Array<any>,
+  sorted: [] as Array<any>,
 })
 
 const { isLoading, 
-        getList: events,
+        getList: volunteers,
         currentPage,
         totalItems
-} = storeToRefs(useEvents());
+} = storeToRefs(useVolunteers());
 
 watch(
   [() => currentPage.value],
@@ -48,29 +47,16 @@ watch(
   { immediate: true },
 );
 
-const width = ref(window.innerWidth)
-
-const menuActions = computed((): Array<ActionButton> => {
-  const actions = eventListActions();
-  return actions.map((action) => {
-    return {
-      ...action,
-      ...(action.id === 0 ? { onClick: showConfirmEventScheduleDialog } : {}),
-    }
-  });
-});
-
-const isMobile = computed(() => {
-  return width.value < 960;
-})
-
 const eventQuery = computed(() => {
   let query = `currentPage=${data.currentPage}&pageSize=${data.itemsPerPage}`;
   if (data.nameFilter) {
     query = `${query}&name=${data.nameFilter}`
   }
-  if (data.statusFilter > 0) {
-    query = `${query}&status=${data.statusFilter}`
+  if (data.nicknameFilter) {
+    query = `${query}&nickname=${data.nicknameFilter}`
+  }
+  if (data.emailFilter) {
+    query = `${query}&email=${data.emailFilter}`
   }
   return query;
 })
@@ -80,7 +66,8 @@ const filteredInfo = computed(() => {
   const sufixPrefix = '</span>';
   let info = 'Você está visualizando os registros';
   if (!data.lastFiltered.nameFilter && 
-      !data.lastFiltered.statusFilter) 
+      !data.lastFiltered.nicknameFilter &&
+      !data.lastFiltered.emailFilter) 
       return `${info} ${tagPrefix}sem filtros${sufixPrefix} aplicados.`;
     
   if (data.lastFiltered.nameFilter) {
@@ -88,79 +75,72 @@ const filteredInfo = computed(() => {
       ` com o ${tagPrefix}nome: ${data.lastFiltered.nameFilter}${sufixPrefix}` :
       '';
   }
-  if (data.lastFiltered.statusFilter > 0) {
+  if (data.lastFiltered.nicknameFilter) {
     info += data.lastFiltered.nameFilter ?
-      ` e o ${tagPrefix}status: ${getStatusDescription(data.lastFiltered.statusFilter)}${sufixPrefix}` :
-      ` com o ${tagPrefix}status: ${getStatusDescription(data.lastFiltered.statusFilter)}${sufixPrefix}`;
+      ` e o ${tagPrefix}apelido: ${data.lastFiltered.nicknameFilter}${sufixPrefix}` :
+      ` com o ${tagPrefix}apelido: ${data.lastFiltered.nicknameFilter}${sufixPrefix}`;
   }
   return info;
 })
 
-const statusFilterOptions = computed(() => {
-  return getStatusFilterOptions();
-})
-
-const showConfirmEventScheduleDialog = () => {
-  data.displayConfirmEventScheduleModal = true;
-}
-
-const hideConfirmEventScheduleDialog = () => {
-  data.displayConfirmEventScheduleModal = false;
-}
-
-const shouldDisplayMenu = computed((): boolean => {
-  return isCurrentUserAdministrative();
-});
-
-const setWindowWidth = () => {
-  width.value = window.innerWidth;
-}
-
 const pageChanged = (page: number) => {
   data.currentPage = page;
-  getEvents();
+  getVolunteers();
 }
 
-const capacityDisplay = (event: any) => {
-  return isEventFull(event) ? {
-    label: 'Máxima',
-    color: 'error'
-   } : 
-   {
-    label: 'Disponível',
-    color: 'success',
-  }
+const toggleSort = (value: Array<any>) => {
+  data.sortOptions = value;
 }
 
-const dateAndTimeDisplay = (event: any) => {
-  return `${eventFullDate(event.happenAt)} às ${eventHour(event.happenAt)}`
-}
+const itemsToDisplay = computed(() => {
+  if(!data.sortOptions.length) return volunteers.value;
+  let arr = volunteers.value.slice();
+  const sortKey = data.sortOptions[0].key
+  const sortOrder = data.sortOptions[0].order
+  return arr.sort((a: any, b: any): any => {
+    const aValue = a[sortKey].toUpperCase(); 
+    const bValue = b[sortKey].toUpperCase();
+    if (sortOrder === 'desc') {
+      if (aValue < bValue) {
+        return 1;
+      }
+      if (aValue > bValue) {
+        return -1;
+      }
+    } else {
+      if (aValue > bValue) {
+        return 1;
+      }
+      if (aValue < bValue) {
+        return -1;
+      }
+    }
+    return 0;
+  });
+})
 
 const clearFilters = () => {
   data.nameFilter = '';
-  data.statusFilter = 1;
-  getEvents();
+  data.nicknameFilter = '';
+  data.emailFilter = '';
+  getVolunteers();
 }
 
-const getEvents = async () => {
+const getVolunteers = async () => {
   data.lastFiltered = {
     nameFilter: data.nameFilter,
-    statusFilter: data.statusFilter
+    nicknameFilter: data.nicknameFilter,
+    emailFilter: data.emailFilter,
   };
   try {
-    await useEvents().getDataByQuery(eventQuery.value);
+    await useVolunteers().getUsersByQuery(eventQuery.value);
   } catch (e) {
-    throw new Error('Unable to fetch events list')
+    throw new Error('Unable to fetch volunteers list')
   }
 }
 
-onUnmounted(async () => {
-  window.removeEventListener('resize', setWindowWidth);
-});
-
 onMounted(async () => {
-  window.addEventListener('resize', setWindowWidth);
-  await getEvents();
+  await getVolunteers();
 });
 </script>
 
@@ -181,33 +161,44 @@ onMounted(async () => {
                   <span
                     v-if="!expanded"
                     key="0">
-                    {{ data.nameFilter || data.statusFilter ? 'Expandir para visualizar filtros aplicados' : '' }}
+                    {{ data.nameFilter || data.nicknameFilter || data.emailFilter ? 'Expandir para visualizar filtros aplicados' : '' }}
                   </span>
                 </v-col>
               </v-row>
             </v-expansion-panel-title>
             <v-expansion-panel-text>
               <v-row :align="'center'">
-                <v-col class="v-col-xs-12" md="5" sm="12" xs="12">
+                <v-col class="v-col-xs-12" md="3" sm="12" xs="12">
                   <v-label class="mb-2 font-weight-medium">Nome</v-label>
                   <v-text-field
                     v-model="data.nameFilter"
                     class="mb-md-5 mb-sm-0"
                     placeholder="Filtrar por nome"
                     hide-details
-                    @keyup.enter="getEvents"
+                    @keyup.enter="getVolunteers"
                   ></v-text-field>
                 </v-col>
-  
-                <v-col class="v-col-xs-9" md="5" sm="9" xs="9">
-                  <v-label class="mb-2 font-weight-medium">Status</v-label>
-                  <v-select
-                    :items="statusFilterOptions"
-                    item-title="label"
-                    item-value="value"
-                    single-line
-                    variant="outlined"
-                    v-model="data.statusFilter" />
+
+                <v-col class="v-col-xs-12" md="3" sm="12" xs="12">
+                  <v-label class="mb-2 font-weight-medium">Apelido</v-label>
+                  <v-text-field
+                    v-model="data.nicknameFilter"
+                    class="mb-md-5 mb-sm-0"
+                    placeholder="Filtrar por apelido"
+                    hide-details
+                    @keyup.enter="getVolunteers"
+                  ></v-text-field>
+                </v-col>
+
+                <v-col class="v-col-xs-12" md="3" sm="12" xs="12">
+                  <v-label class="mb-2 font-weight-medium">Email</v-label>
+                  <v-text-field
+                    v-model="data.emailFilter"
+                    class="mb-md-5 mb-sm-0"
+                    placeholder="Filtrar por email"
+                    hide-details
+                    @keyup.enter="getVolunteers"
+                  ></v-text-field>
                 </v-col>
   
                 <v-col md="2" sm="3" xs="3" class="pb-1 v-col-xs-3">
@@ -215,7 +206,7 @@ onMounted(async () => {
                     color="primary"
                     prepend-icon="mdi-filter"
                     variant="text"
-                    @click="getEvents">
+                    @click="getVolunteers">
                     Filtrar
                   </v-btn>
                 </v-col>
@@ -223,10 +214,7 @@ onMounted(async () => {
             </v-expansion-panel-text>
           </v-expansion-panel>
         </v-expansion-panels>
-        <UiParentCard title="Eventos">
-          <template v-slot:action v-if="shouldDisplayMenu">
-            <ActionBar :actions="menuActions" />
-          </template>
+        <UiParentCard title="Voluntários">
           <v-fade-transition>
             <v-alert
                 v-model="data.filterInfo"
@@ -246,29 +234,16 @@ onMounted(async () => {
             v-model:items-per-page="data.itemsPerPage"
             class="pb-4 border rounded"
             :headers="data.tableHeaders"
-            :items="events"
+            :items="itemsToDisplay"
             :items-length="totalItems"
             :loading="isLoading"
             :page="currentPage"
+            @update:sortBy="toggleSort"
             items-per-page-text="Itens por página"
             loading-text="Carregando... Por favor aguarde"
-            @update:itemsPerPage="getEvents"
+            @update:itemsPerPage="getVolunteers"
             @update:page="pageChanged"
           >
-            <template v-slot:item.happenAt="{ item }">
-              {{ dateAndTimeDisplay(item) }} 
-            </template>
-
-            <template v-slot:item.capacity="{ item }">
-              <v-chip
-                class="ma-2"
-                :color="capacityDisplay(item).color"
-                label
-              >
-                {{ capacityDisplay(item).label }}
-              </v-chip>
-            </template>
-
             <template v-slot:no-data>
               <p class="align-center d-flex justify-center">
                 <span>Nenhum resultado encontrado para os filtros aplicados.</span>
@@ -284,7 +259,7 @@ onMounted(async () => {
             <template v-slot:item.actions="{ item }">
               <router-link
                 tag="v-btn"
-                :to="{ name: 'EventDetails', params: { id: item.id } }"
+                :to="{ name: 'VolunteerDetails', params: { id: item.id } }"
               >
                 <v-btn size="small" color="primary" type="submit" variant="text"
                   >Detalhes</v-btn
@@ -296,12 +271,6 @@ onMounted(async () => {
       </v-col>
     </v-row>
   </div>
-  <!-- Modal Confirm Event Schedule -->
-  <ConfirmEventScheduleModal
-    v-if="data.displayConfirmEventScheduleModal"
-    :mobileView="isMobile"
-    :dialog="data.displayConfirmEventScheduleModal"
-    @closeConfirmEventScheduleModal="hideConfirmEventScheduleDialog" />
 </template>
 
 <style lang="scss" scoped>
@@ -338,12 +307,14 @@ onMounted(async () => {
     flex: 0 0 16.6666666667%;
     max-width: 16.6666666667%;
   }
+  .v-col-md-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
   .v-col-md-5 {
     flex: 0 0 41.6666666667%;
     max-width: 41.6666666667%;
   }
 }
-
-
 </style>
 

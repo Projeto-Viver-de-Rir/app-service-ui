@@ -148,10 +148,9 @@ export const isEventFull = (event: event): boolean => {
 }
 
 /**
- * Returns a boolean conditioned on the difference between occupancy and capacity.
+ * Returns an array of actions for the header menu.
  * 
- * @param event Event to be checked
- * @returns true if the event capacity is lower than event.occupancy.
+ * @returns Array of objects for dynamic menu rendering.
  */
 export const eventActions = (): Array<ActionButton> => {
   const currentEvent = useEvents().getEvent;
@@ -188,6 +187,11 @@ export const eventActions = (): Array<ActionButton> => {
   ]
 }
 
+/**
+ * Returns an array of actions for the header menu.
+ * 
+ * @returns Array of objects for dynamic menu rendering.
+ */
 export const eventListActions = (): Array<ActionButton> => {
   return [
     {

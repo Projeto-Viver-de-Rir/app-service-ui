@@ -9,9 +9,13 @@ import { useAuthStore } from "@/stores/auth";
 
 interface volunteerState {
   user: volunteer | null;
+  volunteer: volunteer | null;
   initialUser: volunteer | null;
   users: volunteer[];
   filters: volunteerFilter;
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
   isLoading: boolean;
   isEditing: boolean;
   filterName: string;
@@ -24,8 +28,12 @@ export const useVolunteers = defineStore("volunteer", () => {
   const state = reactive<volunteerState>({
     isLoading: true,
     filters: new volunteerFilter("", ""),
+    currentPage: 1,
+    totalPages: 0,
+    totalItems: 0,
     users: [],
     user: null,
+    volunteer: null,
     isEditing: false,
     filterName: "",
     filterEmail: "",
@@ -37,10 +45,14 @@ export const useVolunteers = defineStore("volunteer", () => {
   const userRepository = container.resolve(volunteerRepository);
   const getList = computed(() => state.users);
   const getUser = computed(() => state.user);
+  const getCurrentVolunteer = computed(() => state.volunteer)
   const isLoading = computed(() => state.isLoading);
   const filters = computed(() => state.filters);
   const availability = computed(() => state.user?.availability);
   const isEditing = computed(() => state.isEditing);
+  const currentPage = computed(() => state.currentPage);
+  const totalPages = computed(() => state.totalPages);
+  const totalItems = computed(() => state.totalItems);
   const getData = async () => {
     state.isLoading = true;
     const data = await userRepository.get("", "", 1, 15);
@@ -58,6 +70,29 @@ export const useVolunteers = defineStore("volunteer", () => {
     state.isLoading = false;
   };
 
+  const getVolunteerById = async (id: string): Promise<void> => {
+    state.isLoading = true;
+    try {
+      const data = await userRepository.getById(id);
+      state.volunteer = data;
+      state.isLoading = false;
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error('Unable to fetch user')
+    }
+  };
+
+  const deleteVolunteer = async (id: string): Promise<void> => {
+    state.isLoading = true;
+    try {
+      await userRepository.delete(id);
+      state.isLoading = false;
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error('Unable to delete user')
+    }
+  };
+
   const filter = async () => {
     state.isLoading = true;
     const data = await userRepository.get(
@@ -68,6 +103,22 @@ export const useVolunteers = defineStore("volunteer", () => {
     );
     state.users = data.result;
     state.isLoading = false;
+  };
+
+  const getUsersByQuery = async (query: string) => {
+    if (!query) throw new Error("Query params not provided");
+    state.isLoading = true;
+    try {
+      const data = await userRepository.getByQuery(query);
+      state.users = data.result;
+      state.currentPage = data.currentPage;
+      state.totalPages = data.totalPages;
+      state.totalItems = data.totalItems;
+      state.isLoading = false;
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error('Unable to fetch users')
+    }
   };
 
   const edit = async () => {
@@ -138,6 +189,13 @@ export const useVolunteers = defineStore("volunteer", () => {
   return {
     filter,
     getData,
+    getUsersByQuery,
+    getVolunteerById,
+    deleteVolunteer,
+    currentPage,
+    totalPages,
+    totalItems,
+    getCurrentVolunteer,
     getById,
     getUser,
     getList,
