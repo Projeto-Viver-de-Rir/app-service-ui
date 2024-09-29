@@ -11,9 +11,7 @@ import {
   ShoppingCartIcon,
 } from "vue-tabler-icons";
 import LanguageDD from "./LanguageDD.vue";
-import NotificationDD from "./NotificationDD.vue";
 import ProfileDD from "./ProfileDD.vue";
-import Searchbar from "./Searchbar.vue";
 import Navigations from "./Navigations.vue";
 
 const customizer = useCustomizerStore();
@@ -51,24 +49,6 @@ watch(priority, (newPriority) => {
       <Menu2Icon size="20" stroke-width="1.5" />
     </v-btn>
 
-    <!-- search mobile -->
-    <!-- <v-btn class="hidden-lg-and-up ml-3" icon variant="text" color="primary" @click="searchbox">
-            <SearchIcon size="17" stroke-width="1.5" />
-        </v-btn> -->
-
-    <!-- <v-sheet v-if="showSearch" class="search-sheet v-col-12">
-            <Searchbar :closesearch="searchbox" />
-        </v-sheet> -->
-
-    <!-- ---------------------------------------------- -->
-    <!-- Search part -->
-    <!-- ---------------------------------------------- -->
-    <v-sheet>
-      <Searchbar />
-    </v-sheet>
-
-    <!---/Search part -->
-
     <!-- ---------------------------------------------- -->
     <!-- Mega menu -->
     <!-- ---------------------------------------------- -->
@@ -83,11 +63,6 @@ watch(priority, (newPriority) => {
     <!-- translate -->
     <!-- ---------------------------------------------- -->
     <LanguageDD />
-
-    <!-- ---------------------------------------------- -->
-    <!-- Notification -->
-    <!-- ---------------------------------------------- -->
-    <NotificationDD />
 
     <!-- right sidebar -->
     <v-btn
