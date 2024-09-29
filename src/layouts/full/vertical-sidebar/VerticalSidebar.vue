@@ -7,7 +7,6 @@ import type { volunteer } from "@/entities/volunteer";
 import NavGroup from "./NavGroup/index.vue";
 import NavItem from "./NavItem/index.vue";
 import NavCollapse from "./NavCollapse/NavCollapse.vue";
-import Profile from "./profile/Profile.vue";
 import Logo from "../logo/Logo.vue";
 
 const customizer = useCustomizerStore();
@@ -69,9 +68,6 @@ if (!!user) {
         </template>
         </template>
       </v-list>
-      <div class="pa-6 userbottom">
-        <Profile />
-      </div>
     </perfect-scrollbar>
   </v-navigation-drawer>
 </template>
