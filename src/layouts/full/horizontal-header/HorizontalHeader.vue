@@ -65,17 +65,6 @@ watch(priority, (newPriority) => {
 
       <v-spacer />
 
-      <!-- right sidebar -->
-      <v-btn
-        class="hidden-lg-and-up ml-3"
-        icon
-        rounded="sm"
-        @click.stop="appsdrawer = !appsdrawer"
-        variant="flat"
-      >
-        <GridDotsIcon size="17" stroke-width="1.5" />
-      </v-btn>
-
       <!-- ---------------------------------------------- -->
       <!-- User Profile -->
       <!-- ---------------------------------------------- -->

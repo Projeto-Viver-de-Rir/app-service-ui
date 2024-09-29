@@ -64,17 +64,6 @@ watch(priority, (newPriority) => {
     <!-- ---------------------------------------------- -->
     <LanguageDD />
 
-    <!-- right sidebar -->
-    <v-btn
-      variant="text"
-      color="primary"
-      class="hidden-lg-and-up"
-      icon
-      @click.stop="appsdrawer = !appsdrawer"
-    >
-      <GridDotsIcon size="17" stroke-width="1.5" />
-    </v-btn>
-
     <!-- ---------------------------------------------- -->
     <!-- User Profile -->
     <!-- ---------------------------------------------- -->
