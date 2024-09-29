@@ -14,7 +14,7 @@
               </p>
               <div class="mt-10 mb-3 d-sm-flex justify-center gap-4">
                 <v-btn
-                  href="https://discord.gg/XujgB8ww4n"
+                  href="https://www.instagram.com/ongviverderir/"
                   target="_blank"
                   color="primary"
                   size="large"
