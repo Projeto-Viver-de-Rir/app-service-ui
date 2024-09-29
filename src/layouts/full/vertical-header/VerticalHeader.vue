@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { useCustomizerStore } from "../../../stores/customizer";
-import { useEcomStore } from "@/stores/apps/eCommerce";
+
 import {
   GridDotsIcon,
   LanguageIcon,
@@ -29,10 +29,6 @@ watch(priority, (newPriority) => {
 });
 
 // count items
-const store = useEcomStore();
-const getCart = computed(() => {
-  return store.cart;
-});
 </script>
 
 <template>
@@ -88,15 +84,6 @@ const getCart = computed(() => {
     <!-- translate -->
     <!-- ---------------------------------------------- -->
     <LanguageDD />
-
-    <!-- ---------------------------------------------- -->
-    <!-- ShoppingCart -->
-    <!-- ---------------------------------------------- -->
-    <v-btn icon variant="text" color="primary" to="/ecommerce/checkout">
-      <v-badge color="error" :content="getCart?.length">
-        <ShoppingCartIcon stroke-width="1.5" size="22" />
-      </v-badge>
-    </v-btn>
 
     <!-- ---------------------------------------------- -->
     <!-- Notification -->

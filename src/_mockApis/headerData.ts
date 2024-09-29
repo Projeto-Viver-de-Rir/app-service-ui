@@ -104,12 +104,6 @@ import img7 from "@/assets/images/svgs/icon-dd-message-box.svg";
 import img8 from "@/assets/images/svgs/icon-dd-application.svg";
 const appsLink: appsLinkType[] = [
   {
-    avatar: img2,
-    title: "eCommerce App",
-    subtext: "learn more information",
-    href: "/ecommerce/products",
-  },
-  {
     avatar: img3,
     title: "User Profile App",
     subtext: "Get profile details",
@@ -174,11 +168,7 @@ const quickLink: quickLinksType[] = [
   {
     title: "User Application",
     href: "/apps/user/profile",
-  },
-  {
-    title: "Shopping Cart",
-    href: "/ecommerce/checkout",
-  },
+  }
 ];
 
 //
@@ -190,20 +180,8 @@ const searchSugg: searchType[] = [
     href: "/dashboards/modern",
   },
   {
-    title: "eCommerce",
-    href: "/dashboards/ecommerce",
-  },
-  {
     title: "Contacts",
     href: "/apps/contacts",
-  },
-  {
-    title: "Shop",
-    href: "/ecommerce/shop",
-  },
-  {
-    title: "Checkout",
-    href: "/ecommerce/checkout",
   },
   {
     title: "Notes",

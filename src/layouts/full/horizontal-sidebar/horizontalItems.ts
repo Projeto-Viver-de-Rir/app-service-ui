@@ -43,12 +43,7 @@ const horizontalItems: menu[] = [
         title: "Modern",
         icon: CircleIcon,
         to: "/dashboards/modern",
-      },
-      {
-        title: "Ecommerce",
-        icon: CircleIcon,
-        to: "/dashboards/ecommerce",
-      },
+      }
     ],
   },
   {
@@ -60,33 +55,6 @@ const horizontalItems: menu[] = [
         title: "Chats",
         icon: CircleIcon,
         to: "/apps/chats",
-      },
-      {
-        title: "E-Commerce",
-        icon: CircleIcon,
-        to: "/ecommerce/",
-        children: [
-          {
-            title: "Shop",
-            icon: PointIcon,
-            to: "/ecommerce/products",
-          },
-          {
-            title: "Detail",
-            icon: PointIcon,
-            to: "/ecommerce/product/detail/1",
-          },
-          {
-            title: "List",
-            icon: PointIcon,
-            to: "/ecommerce/productlist",
-          },
-          {
-            title: "Checkout",
-            icon: PointIcon,
-            to: "/ecommerce/checkout",
-          },
-        ],
       },
       {
         title: "User Profile",
