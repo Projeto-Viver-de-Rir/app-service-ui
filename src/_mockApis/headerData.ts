@@ -55,21 +55,13 @@ const notifications: notificationType[] = [
 // Profile
 //
 import proUser1 from "@/assets/images/svgs/icon-account.svg";
-import proUser2 from "@/assets/images/svgs/icon-inbox.svg";
-import proUser3 from "@/assets/images/svgs/icon-tasks.svg";
 const profileDD: profileType[] = [
   {
     avatar: proUser1,
     title: "My Profile",
     subtitle: "Account settings",
     href: "/apps/profile",
-  },
-  {
-    avatar: proUser3,
-    title: "My Tasks",
-    subtitle: "To-do and Daily tasks",
-    href: "/apps/task",
-  },
+  }
 ];
 
 //
@@ -84,63 +76,6 @@ const languageDD: languageType[] = [
   { title: "français", subtext: "French", value: "fr", avatar: flag2 },
   { title: "عربي", subtext: "Arbic", value: "ro", avatar: flag3 },
   { title: "中国人", subtext: "Chinese", value: "zh", avatar: flag4 },
-];
-
-//
-// AppsLink
-//
-import img2 from "@/assets/images/svgs/icon-dd-cart.svg";
-import img3 from "@/assets/images/svgs/icon-dd-invoice.svg";
-import img4 from "@/assets/images/svgs/icon-dd-date.svg";
-import img5 from "@/assets/images/svgs/icon-dd-mobile.svg";
-import img6 from "@/assets/images/svgs/icon-dd-lifebuoy.svg";
-import img7 from "@/assets/images/svgs/icon-dd-message-box.svg";
-import img8 from "@/assets/images/svgs/icon-dd-application.svg";
-const appsLink: appsLinkType[] = [
-  {
-    avatar: img3,
-    title: "User Profile App",
-    subtext: "Get profile details",
-    href: "/apps/user/profile",
-  },
-  {
-    avatar: img5,
-    title: "Contact Application",
-    subtext: "2 Unsaved Contacts",
-    href: "/apps/contacts",
-  },
-  {
-    avatar: img6,
-    title: "Account Setting App",
-    subtext: "Account settings",
-    href: "/pages/account-settings",
-  }
-];
-
-//
-// Quick Links
-//
-const quickLink: quickLinksType[] = [
-  {
-    title: "Pricing Page",
-    href: "/pages/pricing",
-  },
-  {
-    title: "Authentication Design",
-    href: "/auth/login",
-  },
-  {
-    title: "Register Now",
-    href: "/auth/register",
-  },
-  {
-    title: "404 Error Page",
-    href: "/auth/404",
-  },
-  {
-    title: "User Application",
-    href: "/apps/user/profile",
-  }
 ];
 
 //
@@ -169,7 +104,5 @@ export {
   notifications,
   profileDD,
   languageDD,
-  appsLink,
-  quickLink,
   searchSugg,
 };

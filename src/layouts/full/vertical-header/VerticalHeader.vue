@@ -14,7 +14,6 @@ import LanguageDD from "./LanguageDD.vue";
 import NotificationDD from "./NotificationDD.vue";
 import ProfileDD from "./ProfileDD.vue";
 import Searchbar from "./Searchbar.vue";
-import RightMobileSidebar from "./RightMobileSidebar.vue";
 import Navigations from "./Navigations.vue";
 
 const customizer = useCustomizerStore();
@@ -109,10 +108,4 @@ watch(priority, (newPriority) => {
     </div>
   </v-app-bar>
 
-  <!-- ---------------------------------------------- -->
-  <!-- Right Sidebar -->
-  <!-- ---------------------------------------------- -->
-  <v-navigation-drawer v-model="appsdrawer" location="right" temporary>
-    <RightMobileSidebar />
-  </v-navigation-drawer>
 </template>

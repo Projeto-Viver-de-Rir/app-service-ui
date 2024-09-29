@@ -15,7 +15,6 @@ import Logo from "../logo/Logo.vue";
 // dropdown imports
 import ProfileDD from "../vertical-header/ProfileDD.vue";
 import Navigations from "../vertical-header/Navigations.vue";
-import RightMobileSidebar from "../vertical-header/RightMobileSidebar.vue";
 
 const customizer = useCustomizerStore();
 const showSearch = ref(false);
@@ -86,7 +85,4 @@ watch(priority, (newPriority) => {
     </div>
   </v-app-bar>
 
-  <v-navigation-drawer v-model="appsdrawer" location="right" temporary>
-    <RightMobileSidebar />
-  </v-navigation-drawer>
 </template>
