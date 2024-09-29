@@ -43,7 +43,6 @@ export const useAuthStore = defineStore({
           );
 
           this.user = data;
-          this.user.photo = this.user.photo || "";
 
           // store user details and jwt in local storage to keep user logged in between page refreshes
           (async () =>
