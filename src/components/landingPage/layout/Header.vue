@@ -14,16 +14,13 @@ const customizer = useCustomizerStore();
   <div>
     <div>
       <!-- -----------------------------------------------
-                    Start Header
-                    ----------------------------------------------- -->
+      Start Header
+      ----------------------------------------------- -->
       <v-app-bar height="80" class="lp-header" flat>
         <v-container class="py-sm-4 py-0">
           <v-toolbar class="d-flex align-center">
             <!-- Logo -->
-            <div v-if="customizer.setRTLLayout" rtl>
-              <RtlLogo />
-            </div>
-            <div v-else>
+            <div>
               <Logo />
             </div>
 
@@ -43,8 +40,8 @@ const customizer = useCustomizerStore();
         </v-container>
       </v-app-bar>
       <!-- -----------------------------------------------
-                    End Header
-                    ----------------------------------------------- -->
+      End Header
+      ----------------------------------------------- -->
     </div>
 
     <!----sidebar menu drawer start----->

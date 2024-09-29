@@ -43,12 +43,7 @@ const horizontalItems: menu[] = [
         title: "Modern",
         icon: CircleIcon,
         to: "/dashboards/modern",
-      },
-      {
-        title: "Ecommerce",
-        icon: CircleIcon,
-        to: "/dashboards/ecommerce",
-      },
+      }
     ],
   },
   {
@@ -60,50 +55,6 @@ const horizontalItems: menu[] = [
         title: "Chats",
         icon: CircleIcon,
         to: "/apps/chats",
-      },
-      {
-        title: "Blog",
-        icon: CircleIcon,
-        to: "/",
-        children: [
-          {
-            title: "Posts",
-            icon: PointIcon,
-            to: "/apps/blog/posts",
-          },
-          {
-            title: "Detail",
-            icon: PointIcon,
-            to: "/apps/blog/early-black-friday-amazon-deals-cheap-tvs-headphones",
-          },
-        ],
-      },
-      {
-        title: "E-Commerce",
-        icon: CircleIcon,
-        to: "/ecommerce/",
-        children: [
-          {
-            title: "Shop",
-            icon: PointIcon,
-            to: "/ecommerce/products",
-          },
-          {
-            title: "Detail",
-            icon: PointIcon,
-            to: "/ecommerce/product/detail/1",
-          },
-          {
-            title: "List",
-            icon: PointIcon,
-            to: "/ecommerce/productlist",
-          },
-          {
-            title: "Checkout",
-            icon: PointIcon,
-            to: "/ecommerce/checkout",
-          },
-        ],
       },
       {
         title: "User Profile",
@@ -131,22 +82,7 @@ const horizontalItems: menu[] = [
             to: "/apps/user/profile/gallery",
           },
         ],
-      },
-      {
-        title: "Notes",
-        icon: CircleIcon,
-        to: "/apps/notes",
-      },
-      {
-        title: "Calendar",
-        icon: CircleIcon,
-        to: "/apps/calendar",
-      },
-      {
-        title: "Kanban",
-        icon: CircleIcon,
-        to: "/apps/kanban",
-      },
+      }
     ],
   },
 
