@@ -276,7 +276,7 @@ onUnmounted(async () => {
               <div class="description-details-container__item">
                 <v-icon icon="mdi-calendar-month-outline" />
                 <span class="text-md-h5 mt-1">
-                  {{ eventDate(event?.happenAt)}}
+                  {{ eventDate(event?.happenAt as Date)}}
                 </span>
                 <span class="text-body-1">
                   Dia
@@ -285,7 +285,7 @@ onUnmounted(async () => {
               <div class="description-details-container__item">
                 <v-icon icon="mdi-calendar-clock" />
                 <span class="text-md-h5 mt-1">
-                  {{ eventHour(event?.happenAt)}}
+                  {{ eventHour(event?.happenAt as Date)}}
                 </span>
                 <span class="text-body-1">
                   Hora
