@@ -82,12 +82,7 @@ const horizontalItems: menu[] = [
             to: "/apps/user/profile/gallery",
           },
         ],
-      },
-      {
-        title: "Calendar",
-        icon: CircleIcon,
-        to: "/apps/calendar",
-      },
+      }
     ],
   },
 

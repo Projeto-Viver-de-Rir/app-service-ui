@@ -104,12 +104,6 @@ const appsLink: appsLinkType[] = [
     href: "/apps/user/profile",
   },
   {
-    avatar: img4,
-    title: "Calendar App",
-    subtext: "Get dates",
-    href: "/apps/calendar",
-  },
-  {
     avatar: img5,
     title: "Contact Application",
     subtext: "2 Unsaved Contacts",

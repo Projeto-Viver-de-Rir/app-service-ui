@@ -68,7 +68,4 @@ import { HelpIcon, ChevronDownIcon } from "vue-tabler-icons";
       </div>
     </v-sheet>
   </v-menu>
-  <router-link to="/apps/calendar" class="text-decoration-none">
-    <v-btn variant="text" color="primary">Calendar </v-btn>
-  </router-link>
 </template>
