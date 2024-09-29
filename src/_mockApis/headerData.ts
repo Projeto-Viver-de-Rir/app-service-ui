@@ -58,8 +58,8 @@ import proUser1 from "@/assets/images/svgs/icon-account.svg";
 const profileDD: profileType[] = [
   {
     avatar: proUser1,
-    title: "My Profile",
-    subtitle: "Account settings",
+    title: "Meu Perfil",
+    subtitle: "Altere suas informações",
     href: "/apps/profile",
   }
 ];
