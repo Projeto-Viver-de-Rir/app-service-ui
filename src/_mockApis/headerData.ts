@@ -65,12 +65,6 @@ const profileDD: profileType[] = [
     href: "/apps/profile",
   },
   {
-    avatar: proUser2,
-    title: "My Inbox",
-    subtitle: "Messages & Emails",
-    href: "/apps/inbox",
-  },
-  {
     avatar: proUser3,
     title: "My Tasks",
     subtitle: "To-do and Daily tasks",
@@ -126,12 +120,6 @@ const appsLink: appsLinkType[] = [
     title: "Account Setting App",
     subtext: "Account settings",
     href: "/pages/account-settings",
-  },
-  {
-    avatar: img7,
-    title: "Email App",
-    subtext: "Get new emails",
-    href: "/apps/email",
   }
 ];
 
