@@ -6,8 +6,7 @@ import {
   MailIcon,
   MessagesIcon,
 } from "vue-tabler-icons";
-import QuickLinks from "@/components/landingPage/layout/PageMenuQuicklinks.vue";
-import AppsLink from "@/components/landingPage/layout/PageMegamenu.vue";
+
 import { useCustomizerStore } from "@/stores/customizer";
 import Logo from "@/layouts/full/logo/Logo.vue";
 const customizer = useCustomizerStore();
@@ -20,43 +19,16 @@ const customizer = useCustomizerStore();
         <Logo />
       </div>
     </div>
-    <v-list class="right-sidebar py-0 px-2">
-      <v-list-group value="Apps">
-        <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props" rounded="md">
-            <h5 class="text-subtitle-1">Demos</h5>
-          </v-list-item>
-        </template>
-      </v-list-group>
-    </v-list>
-    <v-list class="right-sidebar py-0 px-2">
-      <v-list-group value="Apps">
-        <template v-slot:activator="{ props }">
-          <v-list-item v-bind="props" rounded="md">
-            <h5 class="text-subtitle-1">Pages</h5>
-          </v-list-item>
-        </template>
-        <v-list-item class="pl-6 pb-6">
-          <div class="mt-4">
-            <AppsLink />
-          </div>
-          <div class="mt-8">
-            <h5 class="text-h5 mb-3">Quick Links</h5>
-            <QuickLinks />
-          </div>
-        </v-list-item>
-      </v-list-group>
-    </v-list>
     <v-list class="py-0 px-2">
       <v-list-item rounded="md">
         <v-btn
           variant="text"
           class="custom-hover-primary px-0 text-left"
           flat
-          href="https://demos.adminmart.com/premium/vue/modernize-vuejs/docs/index.html"
+          href="/contact"
           target="_blank"
         >
-          <h5 class="text-subtitle-1">Documentation</h5>
+          <h5 class="text-subtitle-1">Contato</h5>
         </v-btn>
       </v-list-item>
       <v-list-item class="mt-2" rounded="md">
