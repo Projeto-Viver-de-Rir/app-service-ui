@@ -132,13 +132,7 @@ const appsLink: appsLinkType[] = [
     title: "Email App",
     subtext: "Get new emails",
     href: "/apps/email",
-  },
-  {
-    avatar: img8,
-    title: "Notes Application",
-    subtext: "To-do and Daily tasks",
-    href: "/apps/notes",
-  },
+  }
 ];
 
 //
@@ -162,10 +156,6 @@ const quickLink: quickLinksType[] = [
     href: "/auth/404",
   },
   {
-    title: "Notes App",
-    href: "/apps/notes",
-  },
-  {
     title: "User Application",
     href: "/apps/user/profile",
   }
@@ -182,10 +172,6 @@ const searchSugg: searchType[] = [
   {
     title: "Contacts",
     href: "/apps/contacts",
-  },
-  {
-    title: "Notes",
-    href: "/apps/notes",
   },
   {
     title: "Pricing",

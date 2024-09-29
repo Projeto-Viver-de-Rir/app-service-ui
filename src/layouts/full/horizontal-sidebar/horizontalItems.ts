@@ -84,11 +84,6 @@ const horizontalItems: menu[] = [
         ],
       },
       {
-        title: "Notes",
-        icon: CircleIcon,
-        to: "/apps/notes",
-      },
-      {
         title: "Calendar",
         icon: CircleIcon,
         to: "/apps/calendar",
