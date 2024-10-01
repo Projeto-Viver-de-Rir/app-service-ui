@@ -208,25 +208,26 @@ onUnmounted(async () => {
               <v-card-text>
                 <p class="text-md-h3 mb-3">Informações</p>
 
-                <p class="icon-label text-body-1 mb-2">
-                  <span class="text-body-1 font-weight-semibold ml-3">Celular:</span>
+                <p class="icon-label text-body-1 mb-2" v-if="currentVolunteer?.phone">
+                  <v-icon icon="mdi-cellphone" />
                   <span class="text-body-1 font-weight-semibold ml-3">{{ currentVolunteer?.phone }}</span>
                 </p>
 
-                <p class="icon-label text-body-1 mb-2">
-                  <span class="text-body-1 font-weight-semibold ml-3">Email:</span>
+                <p class="icon-label text-body-1 mb-2" v-if="currentVolunteer?.email">
+                  <v-icon icon="mdi-email" />
                   <span class="text-body-1 font-weight-semibold ml-3">{{ currentVolunteer?.email }}</span>
                 </p>
 
-                <p class="icon-label text-body-1 mb-2">
-                  <span class="text-body-1 font-weight-semibold ml-3">Data de nascimento:</span>
+                <p class="icon-label text-body-1 mb-2" v-if="currentVolunteer?.birthDate">
+                  <v-icon icon="mdi-calendar" />
                   <span class="text-body-1 font-weight-semibold ml-3">{{ eventFullDate(currentVolunteer?.birthDate as string) }}</span>
                 </p>
 
-                <p class="icon-label text-body-1 mb-0">
-                  <span class="text-body-1 font-weight-semibold ml-3">Cidade:</span>
+                <p class="icon-label text-body-1 mb-2" v-if="currentVolunteer?.city">
+                  <v-icon icon="mdi-home-city" />
                   <span class="text-body-1 font-weight-semibold ml-3">{{ currentVolunteer?.city }}</span>
                 </p>
+
               </v-card-text>
             </v-card>
           </v-window-item>
