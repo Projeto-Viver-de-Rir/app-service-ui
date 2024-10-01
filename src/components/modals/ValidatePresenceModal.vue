@@ -34,11 +34,11 @@ const actionConfirmPresence = async () => {
   } catch (error) {
     data.hasError = true;
   }
-  closeModal();
   snackBarStore.addToQueue({ 
     color: snackBarBtnColor.value, 
     message: snackBarFeedbackLabel.value
   });
+  closeModal(!data.hasError);
 }
 
 const snackBarFeedbackLabel = computed(() => {
@@ -49,8 +49,8 @@ const snackBarBtnColor = computed(() => {
   return data.hasError ? 'error' : 'success';
 })
 
-const closeModal = () => {
-  emit('closeValidatePresenceModal');
+const closeModal = (confirm = false) => {
+  emit('closeValidatePresenceModal', { confirm });
 }
 
 const getActionBtnProps = () => {

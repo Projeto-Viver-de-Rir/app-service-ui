@@ -48,18 +48,6 @@ const data: EventDetailsDataProps = reactive({
 
 const width = ref(window.innerWidth)
 
-const breadcrumbs = ref([
-	{
-    text: "Eventos",
-    disabled: false,
-    to: "/events",
-	},
-	{
-    text: "Detalhes",
-    disabled: true,
-	},
-]);
-
 const isMobile = computed(() => {
   return width.value < 960;
 })
@@ -188,9 +176,11 @@ const showValidatePresenceDialog = () => {
   data.displayValidatePresenceModal = true;
 }
 
-const hideValidatePresenceDialog = () => {
+const hideValidatePresenceDialog = ({ confirm }: { confirm: boolean } ) => {
   data.displayValidatePresenceModal = false;
-  router.push({ name: "ListEvents" });
+  if (confirm) {
+    router.push({ name: "ListEvents" });
+  }
 }
 
 const showConfirmDeleteEventDialog = () => {
@@ -256,10 +246,6 @@ onUnmounted(async () => {
 <template>
   <div class="event-details-view">
     <div v-if="isLoading" class="loading" />
-    <BaseBreadcrumb
-			:title="'Eventos'"
-			:breadcrumbs="breadcrumbs"
-    />
     <UiParentCard title="Evento">
       <template v-slot:action v-if="shouldDisplayMenu">
         <ActionBar :actions="menuActions" />
@@ -268,7 +254,7 @@ onUnmounted(async () => {
         <div class="description-tab">
           <div class="description-container">
             <div class="description-name-container">
-              <span class="text-md-h6">{{ event?.name }}</span>
+              <span class="text-h6">{{ event?.name }}</span>
               <span class="text-body-1">{{ event?.city }}</span>
             </div>
 
@@ -304,7 +290,7 @@ onUnmounted(async () => {
 
             <div class="description-actions-container">
               <div>
-                <v-btn size="small"
+                <v-btn :size="isMobile? 'default' : 'small'"
                        color="primary"
                        class="mr-3"
                        :disabled="shouldDisableConfirmParicipationBtn"

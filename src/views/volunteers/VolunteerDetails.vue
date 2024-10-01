@@ -76,18 +76,6 @@ const data: VolunteerDetailsDataProps = reactive({
 
 const width = ref(window.innerWidth)
 
-const breadcrumbs = ref([
-	{
-    text: "Voluntários",
-    disabled: false,
-    to: "/volunteers",
-	},
-	{
-    text: "Detalhes",
-    disabled: true,
-	},
-]);
-
 const isMobile = computed(() => {
   return width.value < 960;
 })
@@ -147,10 +135,6 @@ onUnmounted(async () => {
 <template>
   <div class="volunteer-details-view">
     <div v-if="isLoading" class="loading" />
-    <BaseBreadcrumb
-			:title="'Voluntários'"
-			:breadcrumbs="breadcrumbs"
-    />
     <UiParentCard title="Voluntário">
       <template v-slot:action v-if="isAdmin">
         <ActionBar :actions="menuActions" />
@@ -326,6 +310,9 @@ onUnmounted(async () => {
   width: inherit;
   justify-content: flex-start;
   flex-wrap: wrap;
+  @media (max-width: 600px) {
+    justify-content: center;
+  }
 }
 :deep(.v-selection-control) {
   min-width: 150px;

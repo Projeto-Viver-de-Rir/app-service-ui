@@ -3,6 +3,7 @@ import { MailIcon } from "vue-tabler-icons";
 import { profileDD } from "@/_mockApis/headerData";
 
 import { useAuthStore } from "@/stores/auth";
+import { isUserAvatarAvailable } from "@/utils/event";
 
 const authStore = useAuthStore();
 </script>
@@ -16,23 +17,15 @@ const authStore = useAuthStore();
       <v-btn class="custom-hover-primary" variant="text" v-bind="props" icon>
         <v-avatar
           size="40"
-          v-if="
-            !authStore.user.photo ||
-            !authStore.user.photo.includes('jpg') ||
-            !authStore.user.photo.includes('png')
-          "
+          v-if="!isUserAvatarAvailable(authStore.user.volunteer.photo)"
         >
           <img src="@/assets/images/palhaco.png" alt="user" height="40" />
         </v-avatar>
         <v-avatar
           size="40"
-          v-if="
-            authStore.user.photo !== undefined &&
-            (authStore.user.photo.includes('.jpg') ||
-              authStore.user.photo.includes('.png'))
-          "
+          v-else
         >
-          <img :src="authStore.user.photo" height="40" />
+          <img :src="authStore.user.volunteer.photo" height="40" />
         </v-avatar>
       </v-btn>
     </template>
@@ -42,22 +35,15 @@ const authStore = useAuthStore();
         <div class="d-flex align-center mt-4 pb-6">
           <v-avatar
             size="80"
-            v-if="
-              !authStore.user.photo ||
-              !authStore.user.photo.includes('jpg') ||
-              !authStore.user.photo.includes('png')
-            "
+            v-if="!isUserAvatarAvailable(authStore.user.volunteer.photo)"
           >
             <img src="@/assets/images/palhaco.png" alt="user" height="80" />
           </v-avatar>
           <v-avatar
             size="80"
-            v-if="
-              authStore.user.photo.includes('.jpg') ||
-              authStore.user.photo.includes('.png')
-            "
+            v-else
           >
-            <img :src="authStore.user.photo" height="80" />
+            <img :src="authStore.user.volunteer.photo" height="80" />
           </v-avatar>
           <div class="ml-3">
             <h6 class="text-h6 mb-n1">{{ authStore.user.name }}</h6>

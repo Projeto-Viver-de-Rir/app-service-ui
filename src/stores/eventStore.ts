@@ -136,7 +136,7 @@ export const useEvents = defineStore("events", () => {
         id: f.volunteer.id,
         name: f.volunteer.name,
         nickname: f.volunteer.nickname,
-        photo: f.volunteer.photo != null ? f.eventPresenceVolunteer.photo : "",
+        photo: f.volunteer.photo != null ? f.volunteer.photo : "",
       })
     );
 
@@ -289,7 +289,7 @@ export const useEvents = defineStore("events", () => {
     state.isLoading = true;
     try {
       let date = new Date();
-      var newDate = new Date(date.setMonth(date.getMonth() + 2));
+      var newDate = new Date(date.setMonth(date.getMonth() + 1));
       var request = new createEventRequest(newDate);
       await opRepository.createEvents(request);
       state.isLoading = false;

@@ -42,69 +42,90 @@ export interface menu {
 }
 
 const sidebarItem: menu[] = [
-  { header: "Início" },
+  { 
+    header: "Início",
+    roles: ["volunteer"]
+  },
   {
     title: "Dashboard",
     icon: DashboardIcon,
     to: "/dashboard",
+    roles: ["volunteer"]
   },
   {
     title: "Eventos",
     icon: CalendarEventIcon,
     to: "/events",
+    roles: ["volunteer"]
   },
   {
     title: "Voluntários",
     icon: UsersIcon,
     to: "/volunteers",
+    roles: ["volunteer"]
   },
 
-  { header: "Minha área" },
+  { 
+    header: "Minha área",
+    roles: ["volunteer"] 
+  },
   {
     title: "Meu Perfil",
     icon: UserCircleIcon,
     to: "/personal-profile",
+    roles: ["volunteer"]
   },
   {
     title: "Minhas Mensalidades",
     icon: CashBanknoteIcon,
     to: "/personal-debts",
+    roles: ["volunteer"]
   },
 
-  { header: "Grupos de trabalho" },
+  { 
+    header: "Grupos de trabalho",
+    roles: ["volunteer"] 
+  },
   {
     title: "Executivo",
     icon: BrandApplePodcastIcon,
     to: "/working-groups/executive",
+    roles: ["volunteer"]
   },
   {
     title: "Coordenação",
     icon: UserSearchIcon,
     to: "/working-groups/operational",
+    roles: ["volunteer"]
   },
   {
     title: "Conselho consultivo",
     icon: BoxMultiple0Icon,
     to: "/working-groups/advisory",
+    roles: ["volunteer"]
   },
   {
     title: "Conselho fiscal",
     icon: CashIcon,
     to: "/working-groups/fiscal",
+    roles: ["volunteer"]
   },
 
-  { header: "Gestão" },
+  { 
+    header: "Gestão",
+    roles: ["fiscal", "administrative"]
+  },
   {
     title: "Mensalidades",
     icon: CoinIcon,
     to: "/mensalidades",
-    roles: ["fiscal", "administrative"],
+    roles: ["administrative"],
   },
   {
     title: "Presença no trimestre",
     icon: AwardIcon,
     to: "/reports/attendancy",
-    roles: ["operational", "administrative"],
+    roles: ["administrative"],
   },
   {
     title: "Inadimplência atual",
@@ -122,16 +143,19 @@ const sidebarItem: menu[] = [
         title: "Eventos Planejados",
         icon: CalendarTimeIcon,
         to: "/schedule-events",
+        roles: ["administrative"]
       },
       {
         title: "Equipes",
         icon: FriendsIcon,
         to: "/teams",
+        roles: ["administrative"]
       },
       {
         title: "Sistema",
         icon: SettingsAutomationIcon,
         to: "/configs",
+        roles: ["administrative"]
       },
     ],
   },

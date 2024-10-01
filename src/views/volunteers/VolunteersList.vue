@@ -276,7 +276,7 @@ onMounted(async () => {
 <style lang="scss" scoped>
 /* Hack to fix Vuetify not setting xs style on the current version */
 /* ToDo: upgrade Vuetify version on the future */
-@media (min-width: 480px) {
+@media (max-width: 480px) {
   .v-col-xs-3 {
     flex: 0 0 25%;
     max-width: 25%;
@@ -291,7 +291,7 @@ onMounted(async () => {
   }
 }
 
-@media (min-width: 600px) {
+@media (max-width: 600px) {
   .v-col-sm-3 {
     flex: 0 0 25%;
     max-width: 25%;
