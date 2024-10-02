@@ -5,7 +5,35 @@ import { profileDD } from "@/_mockApis/headerData";
 import { useAuthStore } from "@/stores/auth";
 import { isUserAvatarAvailable } from "@/utils/event";
 
+import { useRoute } from "vue-router";
+import { computed } from "vue";
+import { useAccountData } from "@/stores/accountStore";
+import { storeToRefs } from "pinia";
+const route = useRoute();
+
 const authStore = useAuthStore();
+const accountStore =  useAccountData();
+
+const { account } = storeToRefs(accountStore);
+
+const shouldDisplayDefaultAvatar = computed((): boolean => {
+  if (account.value && account.value.volunteer?.photo) {
+    return !isUserAvatarAvailable(account.value.volunteer.photo)
+  } else if (authStore.user.volunteer?.photo) {
+    return !isUserAvatarAvailable(authStore.user.volunteer.photo)
+  }
+  return true;
+});
+
+const userContext = computed((): Record<string, any> => {
+  if (authStore.user?.volunteer) {
+    return authStore.user;
+  } else if (account.value && account.value?.volunteer) {
+    return account.value;
+  }
+  return {};
+});
+
 </script>
 
 <template>
@@ -17,7 +45,7 @@ const authStore = useAuthStore();
       <v-btn class="custom-hover-primary" variant="text" v-bind="props" icon>
         <v-avatar
           size="40"
-          v-if="!isUserAvatarAvailable(authStore.user.volunteer.photo)"
+          v-if="shouldDisplayDefaultAvatar"
         >
           <img src="@/assets/images/palhaco.png" alt="user" height="40" />
         </v-avatar>
@@ -25,7 +53,7 @@ const authStore = useAuthStore();
           size="40"
           v-else
         >
-          <img :src="authStore.user.volunteer.photo" height="40" />
+          <img :src="userContext.volunteer.photo" height="40" />
         </v-avatar>
       </v-btn>
     </template>
@@ -35,7 +63,7 @@ const authStore = useAuthStore();
         <div class="d-flex align-center mt-4 pb-6">
           <v-avatar
             size="80"
-            v-if="!isUserAvatarAvailable(authStore.user.volunteer.photo)"
+            v-if="shouldDisplayDefaultAvatar"
           >
             <img src="@/assets/images/palhaco.png" alt="user" height="80" />
           </v-avatar>
@@ -43,18 +71,18 @@ const authStore = useAuthStore();
             size="80"
             v-else
           >
-            <img :src="authStore.user.volunteer.photo" height="80" />
+            <img :src="userContext.volunteer.photo" height="80" />
           </v-avatar>
           <div class="ml-3">
-            <h6 class="text-h6 mb-n1">{{ authStore.user.name }}</h6>
+            <h6 class="text-h6 mb-n1">{{ userContext.volunteer.name }}</h6>
             <span class="text-subtitle-1 font-weight-regular textSecondary">{{
-              authStore.user.nickname
+              userContext.volunteer.nickname
             }}</span>
             <div class="d-flex align-center mt-1">
               <MailIcon size="18" stroke-width="1.5" />
               <span
                 class="text-subtitle-1 font-weight-regular textSecondary ml-2"
-                >{{ authStore.user.email }}</span
+                >{{ userContext.volunteer.email }}</span
               >
             </div>
           </div>
