@@ -59,7 +59,6 @@ export const useAccountData = defineStore('account', {
             id: response.data?.id,
             phone: this.account?.phone || "",
             email: this.account?.email || "",
-            photo: this.account?.photo  || "",
             volunteer: response.data
           };
 
