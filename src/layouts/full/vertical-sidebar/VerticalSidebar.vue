@@ -51,21 +51,20 @@ if (!!user) {
               item.roles?.some((someItem) =>
                 userData?.permissions?.includes(someItem)
               )
-            "
-          >
-          <!---Item Sub Header -->
-          <NavGroup :item="item" v-if="item.header" :key="item.title" />
-          <!---If Has Child -->
-          <NavCollapse
-            class="leftPadding"
-            :item="item"
-            :level="0"
-            v-else-if="item.children"
-          />
-          <!---Single Item-->
-          <NavItem :item="item" v-else class="leftPadding" />
-          <!---End Single Item-->
-        </template>
+            ">
+            <!---Item Sub Header -->
+            <NavGroup :item="item" v-if="item.header" :key="item.title" />
+            <!---If Has Child -->
+            <NavCollapse
+              class="leftPadding"
+              :item="item"
+              :level="0"
+              v-else-if="item.children"
+            />
+            <!---Single Item-->
+            <NavItem :item="item" v-else class="leftPadding" />
+            <!---End Single Item-->
+          </template>
         </template>
       </v-list>
     </perfect-scrollbar>
