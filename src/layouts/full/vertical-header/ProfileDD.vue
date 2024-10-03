@@ -82,7 +82,7 @@ const userContext = computed((): Record<string, any> => {
               <MailIcon size="18" stroke-width="1.5" />
               <span
                 class="text-subtitle-1 font-weight-regular textSecondary ml-2"
-                >{{ userContext.volunteer.email }}</span
+                >{{ userContext.email }}</span
               >
             </div>
           </div>
