@@ -4,9 +4,11 @@
 
 import type { eventVolunteerResponse } from "@/entities/event";
 import { UserPermissionTypes } from "@/interfaces/permissions";
+import { useAccountData } from "@/stores/accountStore";
 import { useAuthStore } from "@/stores/auth";
 
 const authStore = useAuthStore();
+const accountStore =  useAccountData();
 
 /**
  * This method returns a boolean conditioned on the existence of admin role on user permissions.
@@ -14,8 +16,8 @@ const authStore = useAuthStore();
  * @returns true if 'administrative' value exists and the user permissions.
  */
 export const isCurrentUserAdministrative = (): boolean => {
-    const user = authStore.user;
-    if (!user) return false;
+    const user = getUserContext();
+    if (!user.id) return false;
     return user.permissions.includes(UserPermissionTypes.ADMINISTRATIVE)
 }
 
@@ -25,8 +27,8 @@ export const isCurrentUserAdministrative = (): boolean => {
  * @returns true if 'operational' value exists and the user permissions.
  */
 export const isCurrentUserOperational = (): boolean => {
-    const user = authStore.user;
-    if (!user) return false;
+    const user = getUserContext();
+    if (!user.id) return false;
     return user.permissions.includes(UserPermissionTypes.OPERATIONAL)
 }
 
@@ -36,8 +38,8 @@ export const isCurrentUserOperational = (): boolean => {
  * @returns true if 'operational' value exists and the user permissions.
  */
 export const isCurrentUserAllowedToManage = (eventCoordinators: Array<eventVolunteerResponse>): boolean => {
-    const user = authStore.user;
-    if (!user) return false;
+    const user = getUserContext();
+    if (!user.id) return false;
     return user.permissions.includes(UserPermissionTypes.OPERATIONAL) && 
         !!eventCoordinators.find((c) => c.volunteer.id === user.volunteer.id)
 }
@@ -49,8 +51,8 @@ export const isCurrentUserAllowedToManage = (eventCoordinators: Array<eventVolun
  * @returns true if the volunteer.id of the current user value exists on the given presences list.
  */
 export const isCurrentUserPresentOnEvent = (presences: Array<eventVolunteerResponse>): boolean => {
-    const user = authStore.user;
-    if (!user) return false;
+    const user = getUserContext();
+    if (!user.id) return false;
     return !!presences.find((p) => p.volunteer.id === user.volunteer.id);
 }
 
@@ -61,7 +63,22 @@ export const isCurrentUserPresentOnEvent = (presences: Array<eventVolunteerRespo
  * @returns true if the volunteer.id of the current user equals the id of the provided volunteer.
  */
 export const isCurrentUserTheVolunteer = (id: string): boolean => {
-    const user = authStore.user;
-    if (!user || !id) return false;
+    const user = getUserContext();
+    if (!user.id || !id) return false;
     return user.volunteer.id === id;
+}
+
+/**
+ * This method returns a situational user context based on the app workflow.
+ * If user data comes from enroll workflow, user context will be retrieved from accountStore.
+ * If user data comess from authentication flow, user context will be retrieved from authStore.
+ *
+ * @returns user object if volunteer property exists.
+ */
+export const getUserContext = (): Record<string, any> => {
+    const authUser = authStore.user;
+    const accountUser = accountStore.account;
+    if (authUser?.volunteer) return authUser;
+    else if (accountUser?.volunteer) return accountUser;
+    return {}
 }

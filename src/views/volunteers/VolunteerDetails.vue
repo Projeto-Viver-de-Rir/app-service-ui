@@ -145,7 +145,7 @@ onUnmounted(async () => {
           <div class="description-container">
             <div class="avatar-container ml-3">
               <v-avatar size="100" v-if="isUserAvatarAvailable(currentVolunteer?.photo as string)">
-                <img :src="currentVolunteer?.photo" height="100" />
+                <img :src="currentVolunteer?.photo" width="100" />
               </v-avatar>
               <v-avatar size="100" v-else>
                 <img src="@/assets/images/palhaco.png" alt="user" height="100" />

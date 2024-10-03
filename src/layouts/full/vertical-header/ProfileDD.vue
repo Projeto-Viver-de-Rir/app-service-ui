@@ -5,11 +5,10 @@ import { profileDD } from "@/_mockApis/headerData";
 import { useAuthStore } from "@/stores/auth";
 import { isUserAvatarAvailable } from "@/utils/event";
 
-import { useRoute } from "vue-router";
 import { computed } from "vue";
 import { useAccountData } from "@/stores/accountStore";
 import { storeToRefs } from "pinia";
-const route = useRoute();
+import { getUserContext } from "@/utils/permissions";
 
 const authStore = useAuthStore();
 const accountStore =  useAccountData();
@@ -26,12 +25,7 @@ const shouldDisplayDefaultAvatar = computed((): boolean => {
 });
 
 const userContext = computed((): Record<string, any> => {
-  if (authStore.user?.volunteer) {
-    return authStore.user;
-  } else if (account.value && account.value?.volunteer) {
-    return account.value;
-  }
-  return {};
+  return getUserContext();
 });
 
 </script>
