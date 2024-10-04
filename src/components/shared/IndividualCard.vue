@@ -19,10 +19,10 @@ defineProps({
   <v-card class="individual-card border" elevation="0">
     <div class="info-wrapper">
       <v-avatar size="50" v-if="isUserAvatarAvailable(individual.volunteer?.photo)">
-        <img :src="individual.volunteer.photo" height="50" />
+        <img :src="individual.volunteer.photo" width="50" />
       </v-avatar>
       <v-avatar size="50" v-else>
-        <img src="@/assets/images/palhaco.png" alt="user" height="50" />
+        <img src="@/assets/images/palhaco.png" alt="user" width="50" />
       </v-avatar>
       <div class="info-wrapper-name ml-2">
         <v-label
