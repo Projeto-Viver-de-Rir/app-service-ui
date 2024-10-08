@@ -1,12 +1,22 @@
 <script setup lang="ts">
-import { ref  } from 'vue';
+import { onMounted, ref  } from 'vue';
 import defaultImage from '@/assets/images/profile/user-1.jpg';
 import { useAccountData } from "@/stores/accountStore";
+import { storeToRefs } from 'pinia';
 
 const store = useAccountData();
 
+const { account } = storeToRefs(store);
+ 
 const currentPhoto = ref(defaultImage);
 const error = ref('');
+
+const props = defineProps({
+    noHeader: {
+    type: Boolean,
+    default: false,
+  },
+});
 
 const onFileChange = async (e: any) => {
     const file = e.target.files[0];
@@ -41,11 +51,16 @@ const reset = () => {
     if (store.account) store.account.photo = '';
 }
 
+onMounted(async () => {
+    if (account.value?.volunteer.photo) {
+        currentPhoto.value = account.value?.volunteer.photo
+    }
+});
 </script>
 <template>
     <v-card-item>
-        <h5 class="text-h5">Alteração de perfil</h5>
-        <div class="text-subtitle-1 text-medium-emphasis mt-2">Altere sua foto de perfil aqui</div>
+        <h5 class="text-h5" v-if="!props.noHeader">Alteração de perfil</h5>
+        <div class="text-subtitle-1 text-medium-emphasis mt-2" v-if="!props.noHeader">Altere sua foto de perfil aqui</div>
         <div class="text-center mt-6 mb-6">
             <v-avatar size="120">
                 <img :src="currentPhoto" height="120" alt="image" />

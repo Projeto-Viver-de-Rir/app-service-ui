@@ -9,6 +9,7 @@ type profileType = {
   title: string;
   subtitle: string;
   href: string;
+  to?: string;
 };
 
 type languageType = {

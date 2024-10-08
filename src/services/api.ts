@@ -138,9 +138,6 @@ export class Api implements ApiInterface {
 
   async patch<T = any>(url: string, request: T): Promise<void> {
     const auth: any = useAuthStore();
-
-    console.log('auth', auth.token);
-
     const config = {
       headers: {
         Authorization: "Bearer " + auth.token,
@@ -148,6 +145,12 @@ export class Api implements ApiInterface {
     };
     return await this.client
       .patch(url, request, config)
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        throw new Error(error);
+      });
   }
   
 }

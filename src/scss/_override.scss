@@ -30,3 +30,42 @@ html {
     max-width: 800px;
   }
 }
+
+/* Hack to fix Vuetify not setting xs style on the current version */
+/* ToDo: upgrade Vuetify version on the future */
+@media (max-width: 480px) {
+  .v-col-xs-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .v-col-xs-9 {
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+  .v-col-xs-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .v-col-sm-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .v-col-sm-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 960px) {
+  .v-col-md-2 {
+    flex: 0 0 16.6666666667%;
+    max-width: 16.6666666667%;
+  }
+  .v-col-md-5 {
+    flex: 0 0 41.6666666667%;
+    max-width: 41.6666666667%;
+  }
+}
