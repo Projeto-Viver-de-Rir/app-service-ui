@@ -21,6 +21,30 @@ export interface volunteer {
   permissions: string[];
 }
 
+export interface PasswordUpdateModel {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface AccountPatchModel {
+  phone: string;
+  email: string;
+  changePassword: PasswordUpdateModel;
+}
+
+export interface VolunteerPatchModel {
+  name: string;
+  nickname: string;
+  address: string;
+  city: string;
+  state: string;
+  zip: string;
+  country: string;
+  birthDate: Date | string;
+  identifier: string;
+  availability: string;
+}
+
 export interface volunteersResponse {
   result: Array<volunteer>;
   skip: number;

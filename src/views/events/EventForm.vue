@@ -186,8 +186,8 @@ const submit = async (): Promise<void> => {
 
 onMounted(async () => {
   if (!!route.params.id) {
-		await fetchEvent();
-		try {
+	  try {
+			await fetchEvent();
 			setEventModel(event.value as event);
 		} catch (error) {
 			snackBarStore.addToQueue({ 

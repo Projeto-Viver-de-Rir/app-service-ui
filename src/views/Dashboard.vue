@@ -7,7 +7,6 @@ import eventsTableCustom from "@/components/tables/eventsTableCustom.vue";
 
 import { storeToRefs } from 'pinia';
 import { useEvents } from "@/stores/eventStore";
-import { useRouter } from "vue-router";
 
 const page = ref({ title: "Dashboard" });
 const DASHBOARD_NEXT_EVENTS_QUERY = `status=1&currentPage=1&pageSize=100`;

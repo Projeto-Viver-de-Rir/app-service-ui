@@ -10,6 +10,10 @@ const AccountRoutes = {
       name: "Enroll",
       path: "/account/enroll",
       component: () => import("@/views/account/Enroll.vue"),
+    },    {
+      name: "Profile",
+      path: "/account/profile",
+      component: () => import("@/views/account/Profile.vue"),
     },
   ],
   };

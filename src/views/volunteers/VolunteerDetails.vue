@@ -2,13 +2,12 @@
 import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
-import BaseBreadcrumb from "@/components/shared/BaseBreadcrumb.vue";
 
 import ConfirmDeleteVolunteerModal from "@/components/modals/ConfirmDeleteVolunteerModal.vue";
 
 import UiParentCard from "@/components/shared/UiParentCard.vue";
 import ActionBar from "@/components/shared/ActionBar.vue";
-import { eventActions, eventFullDate, isUserAvatarAvailable } from "@/utils/event";
+import { eventFullDate, isUserAvatarAvailable } from "@/utils/event";
 import { isCurrentUserAdministrative } from "@/utils/permissions";
 import { type ActionButton } from "@/interfaces/event";
 
