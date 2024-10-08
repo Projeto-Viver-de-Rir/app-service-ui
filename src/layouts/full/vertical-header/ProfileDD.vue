@@ -16,9 +16,9 @@ const accountStore =  useAccountData();
 const { account } = storeToRefs(accountStore);
 
 const shouldDisplayDefaultAvatar = computed((): boolean => {
-  if (account.value && account.value.volunteer?.photo) {
+  if (account.value?.volunteer?.photo) {
     return !isUserAvatarAvailable(account.value.volunteer.photo)
-  } else if (authStore.user.volunteer?.photo) {
+  } else if (authStore.user?.volunteer?.photo) {
     return !isUserAvatarAvailable(authStore.user.volunteer.photo)
   }
   return true;
@@ -34,7 +34,7 @@ const userContext = computed((): Record<string, any> => {
   <!-- ---------------------------------------------- -->
   <!-- notifications DD -->
   <!-- ---------------------------------------------- -->
-  <v-menu :close-on-content-click="false">
+  <v-menu :close-on-content-click="true">
     <template v-slot:activator="{ props }">
       <v-btn class="custom-hover-primary" variant="text" v-bind="props" icon>
         <v-avatar

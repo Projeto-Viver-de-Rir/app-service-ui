@@ -3,8 +3,10 @@ import { onMounted, ref  } from 'vue';
 import defaultImage from '@/assets/images/profile/user-1.jpg';
 import { useAccountData } from "@/stores/accountStore";
 import { storeToRefs } from 'pinia';
+import { useSnackBar } from '@/stores/snackBarStore';
 
 const store = useAccountData();
+const snackBarStore = useSnackBar();
 
 const { account } = storeToRefs(store);
  
@@ -32,9 +34,19 @@ const onFileChange = async (e: any) => {
     }
 
     error.value = '';
-
-    currentPhoto.value = URL.createObjectURL(file);
-    await store.uploadPhoto(file);
+    try {
+        currentPhoto.value = URL.createObjectURL(file);
+        await store.uploadPhoto(file);
+        snackBarStore.addToQueue({ 
+			color: 'success', 
+			message: 'Foto do perfil atualizada com sucesso.'
+		});
+    } catch(error) {
+        snackBarStore.addToQueue({ 
+			color: 'error', 
+			message: 'Não foi possível atualizar a foto do perfil.'
+		});
+    }
 }
 
 const openFileDialog = () => {

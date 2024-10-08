@@ -11,7 +11,9 @@ import { eventFormRules } from "@/utils/form";
 const router = useRouter();
 const route = useRoute();
 const eventStore = useEvents();
-const snackBarStore = useSnackBar()
+const snackBarStore = useSnackBar();
+const tab1Ref = ref();
+const tab2Ref = ref();
 
 const {
   getEvent: event,
@@ -157,10 +159,38 @@ const disableSubmit = computed(() => {
 		!timeIsValid.value;
 })
 
+const findInputIdByTab = async (elementId: string) => {
+  const tabs = [
+  {
+    id: 'tab-1',
+    element: tab1Ref,
+  },
+  {
+    id: 'tab-2',
+    element: tab2Ref,
+  }];
+  tabs.forEach((tab) => {
+    const el = tab.element.value.$el;
+    const inputArr = el.getElementsByTagName('input');
+    var inputList = [].slice.call(inputArr);
+    if (!!inputList.find((element: any) => element.id === elementId)) {
+      data.tab = tab.id;
+    }
+  })
+};
+
 const validateThenSubmit = async () => {
-	const { valid } = await formRef.value.validate()
-	if (valid) {
-		submit();
+	if (!data.eventModel.address || !data.eventModel.city) {
+		data.tab = 'tab-2'
+	} else if (!data.eventModel.occupancy) {
+		data.tab = 'tab-1'
+	} else {
+		const { valid, errors } = await formRef.value.validate()
+		if (valid) {
+			submit();
+		} else {
+			findInputIdByTab(errors[0].id);
+		}
 	}
 };
 
@@ -212,28 +242,29 @@ onUnmounted(async () => {
 			:breadcrumbs="breadcrumbs"
     />
 
-		<v-form v-model="data.formValid" 
-						class="form-container" 
-						ref="formRef" 
-						@submit.prevent="validateThenSubmit">
-			<div class="tabs-container">
-				<v-tabs
-					v-model="data.tab"
-					color="primary"
-				>
-					<v-tab text="Essenciais" value="tab-1" />
-					<v-tab text="Localidade" value="tab-2" />
-				</v-tabs>
-			</div>
 
-			<v-row class="mt-4">
-				<v-col cols="12" md="12">
-					<v-row>
-						<v-col cols="12" md="8">
-							<!-- Tab context cards -->
-							<v-window v-model="data.tab" class="rounded-md border">
+		<div class="tabs-container">
+			<v-tabs
+				v-model="data.tab"
+				color="primary"
+			>
+				<v-tab text="Essenciais" value="tab-1" />
+				<v-tab text="Localidade" value="tab-2" />
+			</v-tabs>
+		</div>
 
-								<v-window-item value="tab-1">
+		<v-row class="mt-4">
+			<v-col cols="12" md="12">
+				<v-row>
+					<v-col cols="12" md="8">
+						<!-- Tab context cards -->
+						<v-window v-model="data.tab" class="rounded-md border">
+							<v-form v-model="data.formValid" 
+									class="form-container" 
+									ref="formRef" 
+									@submit.prevent="validateThenSubmit">
+
+								<v-window-item value="tab-1" ref="tab1Ref">
 									<v-card title="Essenciais" elevation="0">
 										<v-card-text class="px-8 pb-6">
 											<div class="form-property-data mb-4">
@@ -291,7 +322,7 @@ onUnmounted(async () => {
 									</v-card>
 								</v-window-item>
 
-								<v-window-item value="tab-2">
+								<v-window-item value="tab-2" ref="tab2Ref">
 									<v-row>
 										<v-col cols="12" md="12">
 											<v-card title="Localidade" elevation="0">
@@ -319,78 +350,79 @@ onUnmounted(async () => {
 										</v-col>
 									</v-row>
 								</v-window-item>
-							</v-window>
-						</v-col>
+							</v-form>
 
-						<!-- Fixed cards -->
-						<v-col cols="12" md="4">
-							<v-row>
-								<v-col cols="12" md="12">
-									<v-card title="Quando" class="border mb-6" elevation="0" style="z-index: 1"> 
-										<v-card-text class="px-8">
-											<v-label :class="[formLabelClass, 'required']">Data</v-label>
-											<VueDatePicker
-												v-model="data.eventModel.when.date"
-												:locale="locale"
-												:format="formatDate"
-												:enable-time-picker="false"
-												:state="dateIsValid"
-											/>
-											<div class="ml-4 mt-1 validation-message" v-if="!dateIsValid">Data é obrigatória!</div>
+						</v-window>
+					</v-col>
 
-											<v-label :class="[formLabelClass, 'required mt-5']">Horário</v-label>
-											<VueDatePicker
-												v-model="data.eventModel.when.time"
-												:locale="locale"
-												:format="formatTime"
-												:state="timeIsValid"
-												time-picker
-											/>
-											<div class="ml-4 mt-1 validation-message" v-if="!timeIsValid">Horário é obrigatório!</div>
-										</v-card-text>
-									</v-card>
+					<!-- Fixed cards -->
+					<v-col cols="12" md="4">
+						<v-row>
+							<v-col cols="12" md="12">
+								<v-card title="Quando" class="border mb-6" elevation="0" style="z-index: 1"> 
+									<v-card-text class="px-8">
+										<v-label :class="[formLabelClass, 'required']">Data</v-label>
+										<VueDatePicker
+											v-model="data.eventModel.when.date"
+											:locale="locale"
+											:format="formatDate"
+											:enable-time-picker="false"
+											:state="dateIsValid"
+										/>
+										<div class="ml-4 mt-1 validation-message" v-if="!dateIsValid">Data é obrigatória!</div>
 
-									<v-card title="Vagas" class="border mb-6" elevation="0" style="z-index: 0">
-										<v-card-text class="px-8">
-											<v-label :class="[formLabelClass, 'required']">Vagas disponíveis</v-label>
-											<v-text-field
-												v-model="data.eventModel.occupancy"
-												type="number"
-												placeholder="10"
-												:rules="rules.occupancy"
-												required
-											></v-text-field>
-										</v-card-text>
-									</v-card>
+										<v-label :class="[formLabelClass, 'required mt-5']">Horário</v-label>
+										<VueDatePicker
+											v-model="data.eventModel.when.time"
+											:locale="locale"
+											:format="formatTime"
+											:state="timeIsValid"
+											time-picker
+										/>
+										<div class="ml-4 mt-1 validation-message" v-if="!timeIsValid">Horário é obrigatório!</div>
+									</v-card-text>
+								</v-card>
 
-									<v-card class="border pt-4" elevation="0" style="z-index: 0">
-										<v-card-actions class="justify-end">
-											<v-btn color="error"
-														 variant="flat"
-														 size="large"
-														 width="100"
-														 @click="goBack">Cancelar</v-btn>
-											<v-btn color="primary" 
-														 variant="flat" 
-														 size="large" 
-														 class="ml-5" 
-														 width="100" 
-														 type="submit"
-														 :disabled="disableSubmit">
-											 {{ isEdit ? 'Atualizar' : 'Criar' }}
-											</v-btn>
-										</v-card-actions>
-									</v-card>
-									
+								<v-card title="Vagas" class="border mb-6" elevation="0" style="z-index: 0">
+									<v-card-text class="px-8">
+										<v-label :class="[formLabelClass, 'required']">Vagas disponíveis</v-label>
+										<v-text-field
+											v-model="data.eventModel.occupancy"
+											type="number"
+											placeholder="10"
+											:rules="rules.occupancy"
+											required
+										></v-text-field>
+									</v-card-text>
+								</v-card>
 
-								</v-col>
-							</v-row>
-	
-						</v-col>
-					</v-row>
-				</v-col>
-			</v-row>
-		</v-form>
+								<v-card class="border pt-4" elevation="0" style="z-index: 0">
+									<v-card-actions class="justify-end">
+										<v-btn color="error"
+														variant="flat"
+														size="large"
+														width="100"
+														@click="goBack">Cancelar</v-btn>
+										<v-btn color="primary" 
+														variant="flat" 
+														size="large" 
+														class="ml-5" 
+														width="100"
+														@click="validateThenSubmit"
+														:disabled="disableSubmit">
+											{{ isEdit ? 'Atualizar' : 'Criar' }}
+										</v-btn>
+									</v-card-actions>
+								</v-card>
+								
+
+							</v-col>
+						</v-row>
+
+					</v-col>
+				</v-row>
+			</v-col>
+		</v-row>
   </div>
 </template>
 <style lang="scss" scoped>
