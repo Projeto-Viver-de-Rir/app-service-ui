@@ -10,6 +10,11 @@ const MyAreaRoutes = {
       path: "/personal-debts",
       component: () => import("@/views/PersonalDebts.vue"),
     },
+    {
+      name: "Profile",
+      path: "/personal-profile",
+      component: () => import("@/views/account/Profile.vue"),
+    },
   ],
 };
 

@@ -29,12 +29,15 @@ export const useAccountData = defineStore('account', {
     },
     async uploadPhoto(file: Blob) {      
       const repository = container.resolve(accountRepository);
-      await repository.patchPhoto(file).then((res) => {
-        if (res && res.status === 200) {
-          this.account.photo = res.data;
-        }
-      })
-      
+      await repository.patchPhoto(file)
+        .then((res) => {
+          if (res && res.status === 200) {
+            this.account.photo = res.data;
+          }
+        })
+        .catch((error) => {
+          throw new Error('Unable to update profile avatar.');
+        })
     },
     async setEnroll(volunteer: any) {
       const user : accountEnroll = {

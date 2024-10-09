@@ -2,12 +2,10 @@
 import { computed, onMounted, reactive, ref } from "vue";
 
 import BaseBreadcrumb from "@/components/shared/BaseBreadcrumb.vue";
-import SnackBarContainer from "@/components/shared/SnackBarContainer.vue";
 
 import { storeToRefs } from 'pinia';
 import { useAccountData } from "@/stores/accountStore";
 import { useSnackBar } from "@/stores/snackBarStore";
-import { useRouter } from "vue-router";
 import AvatarForm from "@/components/account/forms/AvatarForm.vue";
 import { availabilityOptions } from "@/utils/form";
 import { VTextField } from "vuetify/lib/components/index.mjs";
@@ -16,14 +14,14 @@ const page = ref({ title: "Meu Perfil" });
 const locale = ref('pt-BR');
 const formLabelClass = ref('text-subtitle-1 font-weight-semibold text-lightText mb-1');
 
-const router = useRouter()
 const accountStore =  useAccountData()
 const snackBarStore = useSnackBar()
 const accountFormRef = ref();
 const volunteerFormRef = ref();
-const { account, isLoading } = storeToRefs(accountStore);
-
-// const rules = ref(eventFormRules());
+const tab1Ref = ref();
+const tab2Ref = ref();
+const tab3Ref = ref();
+const { account } = storeToRefs(accountStore);
 
 interface AccountFormProps {
   tab: string;
@@ -32,7 +30,9 @@ interface AccountFormProps {
   volunteerModel: Record<string, any>;
 	accountFormValid: boolean;
 	volunteerFormValid: boolean;
-  showPasswordForm: boolean;  
+  showPasswordForm: boolean;
+  lockEmailField: boolean;
+  lockPhoneField: boolean;
   availability: Array<Record<string, any>>;
   checkedAvailabilities: Array<string>;
 }
@@ -43,6 +43,8 @@ const data: AccountFormProps = reactive({
 	accountFormValid: false,
 	volunteerFormValid: false,
 	showPasswordForm: false,
+  lockEmailField: true,
+  lockPhoneField: true,
 	accountModel: {
 		contact: {
       email: '',
@@ -167,12 +169,17 @@ const resetAccountForm = () => {
 	data.accountModel.password.newPasswordVisible =  false;
 	data.accountModel.password.newPasswordConfirmationVisible = false;
   data.showPasswordForm = false;
+  data.lockEmailField = true;
+  data.lockPhoneField = true;
+  accountFormRef.value.resetValidation();
+  setAccountModel(account.value);
 };
 
 const resetVolunteerForm = () => {
   setVolunteerModel(account.value?.volunteer);
   resetAccountForm();
   data.tab = 'tab-1';
+  volunteerFormRef.value.resetValidation();
 };
 
 const prepareVolunteerModelToSubmit = () => {
@@ -238,11 +245,33 @@ const validateAccountFormThenSubmit = async () => {
 	}
 };
 
+const findInputIdByTab = async (elementId: string) => {
+  const tabs = [
+  {
+    id: 'tab-2',
+    element: tab2Ref,
+  },
+  {
+    id: 'tab-3',
+    element: tab3Ref,
+  }];
+  tabs.forEach((tab) => {
+    const el = tab.element.value.$el;
+    const inputArr = el.getElementsByTagName('input');
+    var inputList = [].slice.call(inputArr);
+    if (!!inputList.find((element: any) => element.id === elementId)) {
+      data.tab = tab.id;
+    }
+  })
+};
+
 const validateVolunteerFormThenSubmit = async () => {
-	const { valid } = await accountFormRef.value.validate()
+	const { valid, errors } = await volunteerFormRef.value.validate()
 	if (valid) {
 		submitVolunteer();
-	}
+	} else {
+    findInputIdByTab(errors[0].id);
+  }
 };
 
 const submitAccount = async (): Promise<void> => {
@@ -271,7 +300,7 @@ const submitVolunteer = async (): Promise<void> => {
 		await accountStore.updateVolunteer(volunteerToUpdate);
 		snackBarStore.addToQueue({ 
 			color: 'success', 
-			message: 'Conta atualizada com sucesso.'
+			message: 'Perfil atualizado com sucesso.'
 		});
     setVolunteerModel(account.value?.volunteer);
 	} catch (error) {
@@ -322,7 +351,7 @@ onMounted(async () => {
                     class="form-container" 
                     ref="accountFormRef" 
                     @submit.prevent="validateAccountFormThenSubmit">
-              <v-window-item value="tab-1">
+              <v-window-item value="tab-1" ref="tab1Ref">
                 <v-row>
                   <v-col md="6" sm="12">
                     <v-card elevation="0" 
@@ -353,7 +382,9 @@ onMounted(async () => {
                         <div class="form-overlay" v-if="!data.showPasswordForm">
                           <v-btn variant="text"
                                 prepend-icon="mdi-lock-outline"
-                                @click="data.showPasswordForm = !data.showPasswordForm">Alterar senha</v-btn>
+                                @click="data.showPasswordForm = !data.showPasswordForm">
+                            <span class="font-weight-bold">Alterar senha</span>
+                          </v-btn>
                         </div>
                         <div class="form-property-data mb-3">
                           <v-label :class="[formLabelClass, 'required']">Senha Atual</v-label>
@@ -416,24 +447,40 @@ onMounted(async () => {
                           <v-col md="6" sm="12">
                             <v-label :class="[formLabelClass, 'required']">E-mail</v-label>
                             <VTextField
-                                color="primary"
-                                variant="outlined"
-                                type="email"
-                                v-model="data.accountModel.contact.email"
-                                :rules="accountFormRules.email"
-                                required
-                            />
+                              color="primary"
+                              variant="outlined"
+                              type="email"
+                              v-model="data.accountModel.contact.email"
+                              :rules="accountFormRules.email"
+                              required
+                            >
+                              <div class="form-overlay" v-if="!!data.accountModel.contact.email && data.lockEmailField">
+                                <v-btn variant="text"
+                                      prepend-icon="mdi-lock-outline"
+                                      @click="data.lockEmailField = !data.lockEmailField">
+                                  <span class="font-weight-bold">Alterar e-mail</span>
+                                </v-btn>
+                              </div>
+                            </VTextField>
                           </v-col>
                           <v-col md="6" sm="12">
                             <v-label :class="[formLabelClass, 'required']">Celular</v-label>
                             <VTextField
-                                color="primary"
-                                variant="outlined"
-                                type="tel"
-                                v-model="data.accountModel.contact.phone"
-                                :rules="accountFormRules.phone"
-                                v-maska="'(##) #####-####'"
-                            />
+                              color="primary"
+                              variant="outlined"
+                              type="tel"
+                              v-model="data.accountModel.contact.phone"
+                              :rules="accountFormRules.phone"
+                              v-maska="'(##) #####-####'"
+                             >                              
+                             <div class="form-overlay" v-if="!!data.accountModel.contact.phone && data.lockEmailField">
+                                <v-btn variant="text"
+                                       prepend-icon="mdi-lock-outline"
+                                       @click="data.lockEmailField = !data.lockEmailField">
+                                  <span class="font-weight-bold">Alterar celular</span>
+                                </v-btn>
+                              </div>
+                            </VTextField>
                           </v-col>
                         </v-row>
                       </v-card-item>
@@ -467,7 +514,7 @@ onMounted(async () => {
                     class="form-container" 
                     ref="volunteerFormRef" 
                     @submit.prevent="validateVolunteerFormThenSubmit">
-              <v-window-item value="tab-2">
+              <v-window-item value="tab-2" ref="tab2Ref">
                 <v-card elevation="0" class="rounded border" style="z-index: 1">
                   <v-card-item class="pb-8">
                     <template v-slot:title>
@@ -540,7 +587,7 @@ onMounted(async () => {
                 </v-col>
               </v-window-item>
 
-              <v-window-item value="tab-3">
+              <v-window-item value="tab-3" ref="tab3Ref">
                 <v-row>
                   <v-col cols="12" md="12">
                     <v-card elevation="0" class="rounded border">
@@ -678,9 +725,50 @@ onMounted(async () => {
 				</v-col>
 			</v-row>
   </div>
-  <SnackBarContainer />
 </template>
 <style lang="scss" scoped>
+/* Hack to fix Vuetify not setting xs style on the current version */
+/* ToDo: upgrade Vuetify version on the future */
+@media (max-width: 480px) {
+  .v-col-xs-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .v-col-xs-9 {
+    flex: 0 0 75%;
+    max-width: 75%;
+  }
+  .v-col-xs-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .v-col-sm-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .v-col-sm-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (min-width: 960px) {
+  .v-col-md-2 {
+    flex: 0 0 16.6666666667%;
+    max-width: 16.6666666667%;
+  }
+  .v-col-md-3 {
+    flex: 0 0 25%;
+    max-width: 25%;
+  }
+  .v-col-md-5 {
+    flex: 0 0 41.6666666667%;
+    max-width: 41.6666666667%;
+  }
+}
 .validation-message {
 	color: rgb(var(--v-theme-error));
 }
@@ -696,6 +784,8 @@ onMounted(async () => {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
   button {
     height: 100%;
     width: 100%;

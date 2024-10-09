@@ -60,8 +60,8 @@ const profileDD: profileType[] = [
     avatar: proUser1,
     title: "Meu Perfil",
     subtitle: "Altere suas informações",
-    href: "/account/profile",
-    to: "/account/profile",
+    href: "/personal-profile",
+    to: "/personal-profile",
   }
 ];
 
