@@ -36,6 +36,15 @@ export class scheduleEventRepository
     return response.data;
   }
 
+  public async getScheduledEventsByQuery(query: string): Promise<scheduleEventsResponse> {
+    const response = await this.apiService.invoke("schedule-event?" + query);
+    return response.data;
+  }
+
+  public async create(event: scheduleEvent): Promise<void> {
+    await this.apiService.post("schedule-event/", event);
+  }
+
   public async update(scheduleEvent: scheduleEvent): Promise<void> {
     await this.apiService.put(
       "schedule-event/" + scheduleEvent.id,

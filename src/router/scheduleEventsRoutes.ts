@@ -9,12 +9,12 @@ const scheduleEventsRoutes = {
     {
       name: "ListScheduleEvents",
       path: "/schedule-events",
-      component: () => import("@/views/scheduleEvents/List.vue"),
+      component: () => import("@/views/scheduleEvents/ScheduledEvents.vue"),
     },
     {
-      name: "DetailScheduleEvents",
-      path: "/schedule-events/Detalhes/:id",
-      component: () => import("@/views/scheduleEvents/Edit.vue"),
+      name: "ScheduledEventForm",
+      path: "/schedule-events/form/:id?",
+      component: () => import("@/views/scheduleEvents/ScheduledEventForm.vue"),
     },
   ],
 };
