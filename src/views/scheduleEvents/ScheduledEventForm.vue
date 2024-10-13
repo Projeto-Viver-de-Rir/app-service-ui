@@ -1,0 +1,461 @@
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import BaseBreadcrumb from "@/components/shared/BaseBreadcrumb.vue";
+import { EVENT_PLACES_MORE, useEvents } from "@/stores/eventStore";
+import { storeToRefs } from "pinia";
+import { useSnackBar } from "@/stores/snackBarStore";
+import { eventFormRules } from "@/utils/form";
+import { getDayOfWeekOptions, getOccurrenceOptions } from "@/utils/event";
+import type { scheduleEvent } from "@/entities/scheduleEvent";
+import { useScheduleEvents } from "@/stores/scheduleEventStore";
+
+const router = useRouter();
+const route = useRoute();
+const eventStore = useEvents();
+const scheduledEventsStore = useScheduleEvents();
+const snackBarStore = useSnackBar();
+const tab1Ref = ref();
+const tab2Ref = ref();
+
+const {
+	getItem: scheduledEvent,
+} = storeToRefs(scheduledEventsStore);
+
+const {
+	getPlaces: eventNamesList,
+} = storeToRefs(eventStore);
+
+interface EventFormProps {
+  	tab: string;
+	loading: boolean;
+	eventModel: Record<string, any>;
+	formValid: boolean;
+	toggleNameInputType: boolean;
+}
+
+const data: EventFormProps = reactive({
+  tab: 'tab-1',
+	loading: false,
+	formValid: false,
+	toggleNameInputType: false,
+	eventModel: {
+		when: {
+			occurrence: null,
+			dayOfWeek: null,
+			time: {
+				hours: 0,
+				minutes: 0,
+				seconds: 0
+			},
+		}
+	},
+})
+
+const isEdit = computed(() => {
+  return !!scheduledEvent.value?.id;
+})
+
+const breadcrumbs = ref([
+	{
+		text: "Eventos Planejados",
+		disabled: false,
+		to: "/schedule-events",
+	},
+	{
+		text: `${isEdit.value ? 'Edição' : 'Adição'}`,
+		disabled: true,
+	},
+]);
+
+const page = ref({ title: "Eventos Planejados" });
+const locale = ref('pt-BR');
+const formLabelClass = ref('text-subtitle-1 font-weight-semibold text-lightText mb-1');
+const formRef = ref();
+const rules = ref(eventFormRules());
+
+const setModelSchedule = (time: string) => {
+	const timeArr = time.split(':');
+	data.eventModel.when.time.hours = timeArr[0];
+	data.eventModel.when.time.minutes = timeArr[1];
+};
+
+const formatTime = (date: Date) => {
+	const hours = date.getHours();
+	const minutes = (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
+
+	return `${hours}:${minutes}`;
+};
+
+const formattedDate = computed((): string => {
+	const time = data.eventModel.when.time;
+ 	return `${time.hours}:${time.minutes}:00`;
+});
+
+const setEventModel = (event: scheduleEvent) => {
+	data.eventModel.name = event.name;
+	data.eventModel.description = event.description;
+	data.eventModel.meetingPoint = event.meetingPoint;
+	data.eventModel.occupancy = event.occupancy;
+	data.eventModel.address = event.address;
+	data.eventModel.city = event.city;
+	data.eventModel.when.dayOfWeek = event.dayOfWeek;
+	data.eventModel.when.occurrence = event.occurrence;
+	setModelSchedule(event.schedule as string);
+};
+
+const goBack = () => {
+	router.back();
+};
+
+const onModelChange = (value: any) => {
+	if (value === EVENT_PLACES_MORE) {
+		data.toggleNameInputType = !data.toggleNameInputType
+		data.eventModel.name = 'Novo evento'
+	}
+};
+
+const fetchEvent = async (): Promise<void> => {
+	data.loading = true;
+	try {
+		await scheduledEventsStore.fetchScheduledEventById(route.params.id as string);
+	} catch (error) {
+		snackBarStore.addToQueue({ 
+			color: 'error', 
+			message: 'Não foi possível carregar o evento.'
+		});
+		goBack();
+	}
+	data.loading = false;
+}
+
+const prepareModelToSubmit = () => {
+	return {
+		...(isEdit.value ? { id: scheduledEvent.value?.id } : {}),
+		name: data.eventModel.name,
+		description: data.eventModel.description,
+		meetingPoint: data.eventModel.meetingPoint,
+		occupancy: data.eventModel.occupancy,
+		address: data.eventModel.address,
+		city: data.eventModel.city,
+		schedule: formattedDate.value,
+		status: 1,
+		dayOfWeek: data.eventModel.when.dayOfWeek,
+		occurrence: data.eventModel.when.occurrence,
+	}
+};
+
+const timeIsValid = computed(() => {
+  return !!data.eventModel.when.time;
+});
+
+const disableSubmit = computed(() => {
+  return !data.formValid ||
+		!timeIsValid.value;
+})
+
+const findInputIdByTab = async (elementId: string) => {
+  const tabs = [
+  {
+    id: 'tab-1',
+    element: tab1Ref,
+  },
+  {
+    id: 'tab-2',
+    element: tab2Ref,
+  }];
+  tabs.forEach((tab) => {
+    const el = tab.element.value.$el;
+    const inputArr = el.getElementsByTagName('input');
+    var inputList = [].slice.call(inputArr);
+    if (!!inputList.find((element: any) => element.id === elementId)) {
+      data.tab = tab.id;
+    }
+  })
+};
+
+const validateThenSubmit = async () => {
+	if (!data.eventModel.address || !data.eventModel.city) {
+		data.tab = 'tab-2'
+	} else if (!data.eventModel.occupancy) {
+		data.tab = 'tab-1'
+	} else {
+		const { valid, errors } = await formRef.value.validate()
+		if (valid) {
+			submit();
+		} else {
+			findInputIdByTab(errors[0].id);
+		}
+	}
+};
+
+const submit = async (): Promise<void> => {
+	data.loading = true;
+	try {
+		const scheduledEvent = prepareModelToSubmit();
+		await scheduledEventsStore.createOrUpdate(scheduledEvent);
+		snackBarStore.addToQueue({ 
+			color: 'success', 
+			message: `Evento planejado ${isEdit.value ? 'atualizado' : 'criado' } com sucesso.`
+		});
+		router.push({ name: 'ListScheduleEvents' });
+	} catch (error) {
+		snackBarStore.addToQueue({ 
+			color: 'error', 
+			message: `Não foi possível ${isEdit.value ? 'atualizar' : 'criar' } o evento planejado.`
+		});
+	}
+	data.loading = false;
+}
+
+onMounted(async () => {
+  if (!!route.params.id) {
+	  try {
+			await fetchEvent();
+			setEventModel(scheduledEvent.value as scheduleEvent);
+		} catch (error) {
+			snackBarStore.addToQueue({ 
+				color: 'error', 
+				message: 'Não foi possível recurerar os dados do evento planejado.'
+			});
+			goBack();
+		}
+	}
+});
+
+onUnmounted(async () => {
+  eventStore.resetEvent();
+});
+</script>
+
+<template>
+  <div class="event-form">
+    <div v-if="data.loading" class="loading" />
+    <BaseBreadcrumb
+			:title="page.title"
+			:breadcrumbs="breadcrumbs"
+    />
+
+
+		<div class="tabs-container">
+			<v-tabs
+				v-model="data.tab"
+				color="primary"
+			>
+				<v-tab text="Essenciais" value="tab-1" />
+				<v-tab text="Localidade" value="tab-2" />
+			</v-tabs>
+		</div>
+
+		<v-row class="mt-4">
+			<v-col cols="12" md="12">
+				<v-row>
+					<v-col cols="12" md="8">
+						<!-- Tab context cards -->
+						<v-window v-model="data.tab" class="rounded-md border">
+							<v-form v-model="data.formValid" 
+									class="form-container" 
+									ref="formRef" 
+									@submit.prevent="validateThenSubmit">
+
+								<v-window-item value="tab-1" ref="tab1Ref">
+									<v-card title="Essenciais" elevation="0">
+										<v-card-text class="px-8 pb-6">
+											<div class="form-property-data mb-4">
+												<v-label :class="[formLabelClass, 'required']">Nome do evento</v-label>
+												<v-autocomplete
+													v-if="!data.toggleNameInputType"
+													v-model="data.eventModel.name"
+													:items="eventNamesList"
+													:rules="rules.name"
+													class="rounded"
+													placeholder="Procure um nome na lista"
+													density="comfortable"
+													@update:modelValue="onModelChange"
+													required
+												>
+												
+												</v-autocomplete>
+												<v-text-field
+													v-else
+													v-model="data.eventModel.name"
+													placeholder="Onde será o local de encontro?"
+													:rules="rules.name"
+													required
+												>
+													<template v-slot:append>
+														<v-tooltip activator="parent" location="top">
+															Procurar um local sugerido na lista
+														</v-tooltip>
+														<v-slide-x-reverse-transition mode="out-in">
+															<v-icon
+																icon="mdi-arrow-u-left-bottom"
+																@click="data.toggleNameInputType = !data.toggleNameInputType"
+															></v-icon>
+														</v-slide-x-reverse-transition>
+													</template>
+												</v-text-field>
+											</div>
+											<div class="form-property-data mb-4">
+												<v-label :class="[formLabelClass, 'required']">Ponto de encontro</v-label>
+												<v-text-field
+													v-model="data.eventModel.meetingPoint"
+													placeholder="Onde será o local de encontro?"
+													:rules="rules.meetingPoint"
+													required
+												></v-text-field>
+											</div>
+											<div class="form-property-data mb-4">
+												<v-label :class="[formLabelClass]">Informação</v-label>
+												<v-text-field
+													v-model="data.eventModel.description"
+													placeholder="Insira uma informação adicional sobre o evento"
+												></v-text-field>
+											</div>
+										</v-card-text>
+									</v-card>
+								</v-window-item>
+
+								<v-window-item value="tab-2" ref="tab2Ref">
+									<v-row>
+										<v-col cols="12" md="12">
+											<v-card title="Localidade" elevation="0">
+												<v-card-text class="px-8">
+													<div class="form-property-data mb-4">
+														<v-label :class="[formLabelClass, 'required']">Endereço</v-label>
+														<v-text-field
+															v-model="data.eventModel.address"
+															placeholder="Av. Dezessete de Abril, 36 - Guajuviras"
+															:rules="rules.address"
+															required
+														></v-text-field>
+													</div>
+													<div class="form-property-data">
+														<v-label :class="[formLabelClass, 'required']">Cidade</v-label>
+														<v-text-field
+															v-model="data.eventModel.city"
+															placeholder="Canoas, RS"
+															:rules="rules.city"
+															required
+														></v-text-field>
+													</div>
+												</v-card-text>
+											</v-card>
+										</v-col>
+									</v-row>
+								</v-window-item>
+							</v-form>
+
+						</v-window>
+					</v-col>
+
+					<!-- Fixed cards -->
+					<v-col cols="12" md="4">
+						<v-row>
+							<v-col cols="12" md="12">
+								<v-card title="Quando" class="border mb-6" elevation="0" style="z-index: 1"> 
+									<v-card-text class="px-8">
+										<v-label :class="[formLabelClass, 'required mt-5']">Frequência</v-label>
+										<v-select
+											:items="getOccurrenceOptions()"
+											item-title="label"
+											item-value="value"
+											single-line
+											variant="outlined"
+											v-model="data.eventModel.when.occurrence" />
+
+										<v-label :class="[formLabelClass, 'required mt-5']">Dia da Semana</v-label>
+										<v-select
+											:items="getDayOfWeekOptions()"
+											item-title="label"
+											item-value="value"
+											single-line
+											variant="outlined"
+											v-model="data.eventModel.when.dayOfWeek" />
+
+										<v-label :class="[formLabelClass, 'required mt-5']">Horário</v-label>
+										<VueDatePicker
+											v-model="data.eventModel.when.time"
+											:locale="locale"
+											:format="formatTime"
+											:state="timeIsValid"
+											time-picker
+										/>
+										<div class="ml-4 mt-1 validation-message" v-if="!timeIsValid">Horário é obrigatório!</div>
+									</v-card-text>
+								</v-card>
+
+								<v-card title="Vagas" class="border mb-6" elevation="0" style="z-index: 0">
+									<v-card-text class="px-8">
+										<v-label :class="[formLabelClass, 'required']">Vagas disponíveis</v-label>
+										<v-text-field
+											v-model="data.eventModel.occupancy"
+											type="number"
+											placeholder="10"
+											:rules="rules.occupancy"
+											required
+										></v-text-field>
+									</v-card-text>
+								</v-card>
+
+								<v-card class="border pt-4" elevation="0" style="z-index: 0">
+									<v-card-actions class="justify-end">
+										<v-btn color="error"
+														variant="flat"
+														size="large"
+														width="100"
+														@click="goBack">Cancelar</v-btn>
+										<v-btn color="primary" 
+														variant="flat" 
+														size="large" 
+														class="ml-5" 
+														width="100"
+														@click="validateThenSubmit"
+														:disabled="disableSubmit">
+											{{ isEdit ? 'Atualizar' : 'Criar' }}
+										</v-btn>
+									</v-card-actions>
+								</v-card>
+								
+
+							</v-col>
+						</v-row>
+
+					</v-col>
+				</v-row>
+			</v-col>
+		</v-row>
+  </div>
+</template>
+<style lang="scss" scoped>
+.validation-message {
+	color: rgb(var(--v-theme-error));
+}
+:deep(.v-autocomplete .v-field) {
+	border-width: thin !important;
+	border-style: solid !important;
+	border-color: rgba(var(--v-border-color), var(--v-border-opacity)) !important;
+	border-radius: 6px;
+}
+
+:deep(.v-field--variant-filled .v-field__overlay) {
+	background-color: unset;
+}
+:deep(.dp__input_invalid) {
+	border-color: rgb(var(--v-theme-error));
+	box-shadow: none;
+}
+:deep(.dp__input_valid) {
+	box-shadow: none;
+}
+:deep(.dp__input_valid:hover) {
+	border-color: lightgray;
+}
+:deep(.v-label.required:after) {
+	content: ' *';
+	color: rgb(var(--v-theme-error));
+}
+:deep(.v-label + .v-input--error) {
+	color: rgb(var(--v-theme-error));
+}
+</style>

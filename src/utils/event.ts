@@ -26,6 +26,60 @@ export const getStatusDescription = (status: number): string => {
   }
 }
 
+
+/**
+ * This method returns a string value based on the day of week
+ *
+ * @param status A number value that reflects day of week.
+ * @returns string value for each.
+ */
+export const getDayOfWeekDescription = (status: number): string => {
+  switch (status) {
+    case 0:
+      return 'Domingo'
+    case 1:
+      return 'Segunda-Feira';
+    case 2:
+      return 'Terça-Feira';
+    case 3:
+      return 'Quarta-Feira';
+    case 4:
+      return 'Quinta-Feira';
+    case 5:
+      return 'Sexta-Feira';
+    case 6:
+      return 'Sábado';
+    default:
+      return '';
+  }
+}
+
+
+/**
+ * This method returns a string value based on the occurrence.
+ *
+ * @param status A number value that reflects to occurrence.
+ * @returns string value for each occurrence. Defaults to an empty string.
+ */
+export const getOccurrenceDescription = (status: number): string => {
+  switch (status) {
+    case 0:
+      return 'Semanal'
+    case 1:
+      return 'Primeira ocorrência do mês';
+    case 2:
+      return 'Segunda ocorrência do mês';
+    case 3:
+      return 'Terceira ocorrência do mês';
+    case 4:
+      return 'Quarta ocorrência do mês';
+    case 99:
+      return 'Última ocorrência do mês';
+    default:
+      return '';
+  }
+}
+
 /**
  * This method returns an array of status filter options.
  *
@@ -52,6 +106,102 @@ export const getStatusFilterOptions = (): Array<Record<string, any>> => {
       id: 3,
       label: 'Cancelado',
       value: 3,
+    },
+  ];
+}
+
+/**
+ * This method returns an array of status filter options.
+ *
+ * @returns Array of objects containing day of week options: label for display name value for status identifier.
+ */
+export const getDayOfWeekOptions = (): Array<Record<string, any>> => {
+  return [
+    {
+      id: 0,
+      label: 'Nenhum',
+      value: null,
+    },
+    {
+      id: 1,
+      label: 'Domingo',
+      value: 0,
+    },
+    {
+      id: 2,
+      label: 'Segunda-Feira',
+      value: 1,
+    },
+    {
+      id: 3,
+      label: 'Terça-Feira',
+      value: 2,
+    },
+    {
+      id: 4,
+      label: 'Quarta-Feira',
+      value: 3,
+    },
+    {
+      id: 5,
+      label: 'Quinta-Feira',
+      value: 4,
+    },
+    {
+      id: 6,
+      label: 'Sexta-Feira',
+      value: 5,
+    },
+    {
+      id: 6,
+      label: 'Sábado',
+      value: 6,
+    },
+  ];
+}
+
+
+/**
+ * This method returns an array of occurrence options.
+ *
+ * @returns Array of objects containing occurrence options: label for display name value for status identifier.
+ */
+export const getOccurrenceOptions = (): Array<Record<string, any>> => {
+  return [
+    {
+      id: 0,
+      label: 'Nenhum',
+      value: null,
+    },
+    {
+      id: 1,
+      label: 'Semanal',
+      value: 0,
+    },
+    {
+      id: 2,
+      label: 'Primeira ocorrência do mês',
+      value: 1,
+    },
+    {
+      id: 3,
+      label: 'Segunda ocorrência do mês',
+      value: 2,
+    },
+    {
+      id: 4,
+      label: 'Terceira ocorrência do mês',
+      value: 3,
+    },
+    {
+      id: 5,
+      label: 'Quarta ocorrência do mês',
+      value: 4,
+    },
+    {
+      id: 6,
+      label: 'Última ocorrência do mês',
+      value: 99,
     },
   ];
 }
@@ -212,6 +362,30 @@ export const eventListActions = (): Array<ActionButton> => {
       },
       link: {
         name: 'EventForm',
+        params: {}
+      },
+      visible: true,
+    },
+  ]
+}
+
+
+/**
+ * Returns an array of actions for the header menu.
+ * 
+ * @returns Array of objects for dynamic menu rendering.
+ */
+export const schedulledEventsListActions = (): Array<ActionButton> => {
+  return [
+    {
+      id: 0,
+      label: 'Adicionar',
+      button: {
+        icon: 'mdi-plus-thick',
+        color: 'success'
+      },
+      link: {
+        name: 'ScheduledEventForm',
         params: {}
       },
       visible: true,

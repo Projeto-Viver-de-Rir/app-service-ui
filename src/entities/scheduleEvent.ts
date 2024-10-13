@@ -8,6 +8,7 @@ export interface scheduleEvent {
   occupancy: string;
   dayOfWeek: string;
   occurrence: string;
+  schedule: string;
 }
 
 export interface scheduleEventsResponse {
@@ -15,6 +16,9 @@ export interface scheduleEventsResponse {
   skip: number;
   total: number;
   limit: number;
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
 }
 
 export interface scheduleEventResponse {
