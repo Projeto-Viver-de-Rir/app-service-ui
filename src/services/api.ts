@@ -86,7 +86,7 @@ export class Api implements ApiInterface {
     });
   }
 
-  async post<T = any>(url: string, request: T): Promise<void> {
+  async post<T = any>(url: string, request?: T): Promise<void> {
     const auth: any = useAuthStore();
 
     const config = {

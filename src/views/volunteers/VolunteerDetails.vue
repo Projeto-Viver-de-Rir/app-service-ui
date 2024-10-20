@@ -13,9 +13,11 @@ import { type ActionButton } from "@/interfaces/event";
 
 import { useVolunteers } from "@/stores/volunteerStore";
 import { volunteerActions } from "@/utils/volunteers";
+import { useSnackBar } from "@/stores/snackBarStore";
 
 const router = useRouter();
 const volunteerStore = useVolunteers();
+const snackBarStore = useSnackBar();
 
 const { 
   isLoading,
@@ -115,10 +117,18 @@ const setWindowWidth = () => {
 }
 
 const loadVolunteer = async (): Promise<void> => {
-  await volunteerStore.getVolunteerById(currentRoute.params.id as string);
-  if (currentVolunteer.value?.availability) {
-    data.checkedAvailabilities = currentVolunteer.value.availability.split(',')
-  };
+  try {
+    await volunteerStore.getVolunteerById(currentRoute.params.id as string);
+    if (currentVolunteer.value?.availability) {
+      data.checkedAvailabilities = currentVolunteer.value.availability.split(',')
+    };
+  } catch (e) {
+    snackBarStore.addToQueue({ 
+			color: 'error', 
+			message: "Não foi possível encontrar este usuário."
+		});
+    router.back();
+  }
 }
 
 onMounted(() => {
