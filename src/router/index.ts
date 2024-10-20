@@ -5,6 +5,7 @@ import eventsRoutes from "./eventsRoutes";
 import volunteersRoutes from "./volunteersRoutes";
 import { useAuthStore } from "@/stores/auth";
 import debtsRoutes from "./debtsRoutes";
+import reportsRoutes from "./reportsRoutes";
 import scheduleEventsRoutes from "./scheduleEventsRoutes";
 import teamsRoutes from "./teamsRoutes";
 import configsRoutes from "./configsRoutes";
@@ -25,6 +26,7 @@ export const router = createRouter({
     eventsRoutes,
     volunteersRoutes,
     debtsRoutes,
+    reportsRoutes,
     scheduleEventsRoutes,
     teamsRoutes,
     configsRoutes,

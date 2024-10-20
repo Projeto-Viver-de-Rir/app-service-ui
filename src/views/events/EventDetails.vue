@@ -3,7 +3,6 @@ import { computed, onMounted, onUnmounted, reactive, ref } from "vue";
 import { useRouter } from 'vue-router';
 import { storeToRefs } from 'pinia';
 import { useEvents } from "@/stores/eventStore";
-import BaseBreadcrumb from "@/components/shared/BaseBreadcrumb.vue";
 import ConfirmParticipationModal from "@/components/modals/ConfirmParticipationModal.vue";
 import ConfirmRemoveParticipantModal from "@/components/modals/ConfirmRemoveParticipantModal.vue";
 import ValidatePresenceModal from "@/components/modals/ValidatePresenceModal.vue";
@@ -15,9 +14,11 @@ import { eventDate, eventHour, getStatusDescription, eventDateStatus, isEventFul
 import { isCurrentUserAdministrative, isCurrentUserAllowedToManage, isCurrentUserPresentOnEvent, isCurrentUserTheVolunteer } from "@/utils/permissions";
 import { EventDateStatusTypes, type ActionButton } from "@/interfaces/event";
 import type { event } from "@/entities/event";
+import { useSnackBar } from "@/stores/snackBarStore";
 
 const router = useRouter();
 const eventStore = useEvents();
+const snackBarStore = useSnackBar();
 
 const { 
   isLoading, 
@@ -129,7 +130,6 @@ const menuActions = computed((): Array<ActionButton> => {
   return actions.map((action) => {
     return {
       ...action,
-      ...(action.id === 0 ? { onClick: eventStore.edit } : {}), // ToDo: remove this on clean up
       ...(action.id === 1 ? { 
         onClick: showValidatePresenceDialog,
       } : {}),
@@ -212,7 +212,15 @@ const hideConfirmParticipationDialog = ({ reload }: { reload: boolean }) => {
 }
 
 const loadEvent = async (): Promise<void> => {
-  await eventStore.getById(currentRoute.params.id as string);
+  try {
+    await eventStore.getById(currentRoute.params.id as string);
+  } catch (e) {
+    snackBarStore.addToQueue({ 
+			color: 'error', 
+			message: "Não foi possível encontrar este evento."
+		});
+    router.back();
+  }
 }
 
 const removeParticipant = async (participant: any) => {
