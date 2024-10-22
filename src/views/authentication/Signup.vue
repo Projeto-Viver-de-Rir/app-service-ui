@@ -21,7 +21,7 @@ import RegisterForm from "@/components/auth/RegisterForm.vue";
             <h2
               class="text-h3 font-weight-bold"
             >
-              Viver de rir
+              Viver de Rir
             </h2>
           </div>
           <div class="mb-8">Seja bem vindo ao processo de inscrição para novos voluntários da nossa instituição.</div>

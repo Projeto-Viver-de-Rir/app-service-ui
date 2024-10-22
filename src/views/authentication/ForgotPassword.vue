@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import Logo from "@/layouts/full/logo/Logo.vue";
-import { useAuthStore } from "@/stores/auth";
-/* Login form */
-import LoginForm from "@/components/auth/LoginForm.vue";
-onMounted(() => {
-  const authStore = useAuthStore();
-  authStore.startSession();
-});
+import ForgotPasswordForm from "@/components/auth/ForgotPasswordForm.vue";
 </script>
 
 <template>
@@ -32,21 +24,30 @@ onMounted(() => {
               Viver de Rir
             </h2>
           </div>
+          <div class="mb-8">Se você não lembra da sua senha, utilize essa funcionalidade para redefinir ela. 
+            <br/>
+            <br/>
+            <div style="text-align: center; ">
+              Você receberá um e-mail em breve.
+            </div>
+          </div>
+
           <div class="d-flex align-center text-center mb-6">
             <div class="w-100 px-5 auth-divider position-relative"></div>
           </div>
 
-          <LoginForm />
+          <ForgotPasswordForm />
 
-          <h6 class="text-h6 text-medium-emphasis d-flex justify-center align-center mt-3">            
+          <h6 class="text-h6 text-medium-emphasis d-flex justify-center align-center mt-3">
+            Lembrou sua senha?
             <v-btn 
               density="default" 
               size="default" 
               variant="plain" 
               class="v-theme--BLUE_THEME text-primary text-body-1 opacity-1 pl-2" 
-              href="/auth/forgot-password"
+              href="/auth/login"
             >
-              Esqueceu sua senha?
+              Login
             </v-btn>
           </h6>
         </v-card-item>        

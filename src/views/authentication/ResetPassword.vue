@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import Logo from "@/layouts/full/logo/Logo.vue";
-import { useAuthStore } from "@/stores/auth";
-/* Login form */
-import LoginForm from "@/components/auth/LoginForm.vue";
-onMounted(() => {
-  const authStore = useAuthStore();
-  authStore.startSession();
-});
+import ResetPasswordForm from "@/components/auth/ResetPasswordForm.vue";
 </script>
 
 <template>
@@ -32,23 +24,14 @@ onMounted(() => {
               Viver de Rir
             </h2>
           </div>
+          <div class="mb-8">Utilize os dados recebidos por e-mail para redefinir sua senha. 
+          </div>
+
           <div class="d-flex align-center text-center mb-6">
             <div class="w-100 px-5 auth-divider position-relative"></div>
           </div>
 
-          <LoginForm />
-
-          <h6 class="text-h6 text-medium-emphasis d-flex justify-center align-center mt-3">            
-            <v-btn 
-              density="default" 
-              size="default" 
-              variant="plain" 
-              class="v-theme--BLUE_THEME text-primary text-body-1 opacity-1 pl-2" 
-              href="/auth/forgot-password"
-            >
-              Esqueceu sua senha?
-            </v-btn>
-          </h6>
+          <ResetPasswordForm />
         </v-card-item>        
       </v-card>      
     </v-row>

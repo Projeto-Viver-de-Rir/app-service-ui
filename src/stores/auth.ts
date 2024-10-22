@@ -83,6 +83,32 @@ export const useAuthStore = defineStore({
           console.log(err);
           return err;
         });
-    }
+    },
+    async forgot_password(email: string) {
+      return await axios
+        .post(
+          `${API_URL}/identity/forgotPassword`,
+          {
+            email
+          }
+        ).catch((err) => {
+          console.log(err);
+          return err;
+        });
+    },
+    async reset_password(email: string, resetCode: string, newPassword: string) {
+      return await axios
+        .post(
+          `${API_URL}/identity/resetPassword`,
+          {
+            email,
+            resetCode,
+            newPassword
+          }
+        ).catch((err) => {
+          console.log(err);
+          return err;
+        });
+    }        
   },
 });

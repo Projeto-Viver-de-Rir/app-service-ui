@@ -3,9 +3,11 @@ import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { Form } from "vee-validate";
 import { useRoute } from "vue-router";
+import { VTextarea } from "vuetify/lib/components/index.mjs";
 
-const password = ref("");
+const newPassword = ref("");
 const email = ref("");
+const resetCode = ref("");
 const passwordRules = ref([(v: string) => !!v || "Senha é obrigatória"]);
 const emailRules = ref([
   (v: string) => !!v || "Email é obrigatório",
@@ -13,15 +15,13 @@ const emailRules = ref([
 ]);
 
 const route = useRoute();
-const isEmailConfirmed = ref(route.query['status'] === 'account_confirmed');
 
 async function validate(values: any, { setErrors }: any) {
   const authStore = useAuthStore();
   return await authStore
-    .login(email.value, password.value)
+    .reset_password(email.value, resetCode.value, newPassword.value)
     .catch((error) => {
       console.log(error);
-      setErrors({ apiError: "Dados de login não conferem." })
 });
 }
 </script>
@@ -32,10 +32,6 @@ async function validate(values: any, { setErrors }: any) {
     v-slot="{ errors, isSubmitting }"
     class="mt-5"
   >
-
-    <v-alert color="success" v-if="isEmailConfirmed" class="mt-2 mb-4">Seu e-mail já está confirmado.<br />
-      Por favor faça login e continue seu cadastro.
-    </v-alert>
 
     <v-label class="text-subtitle-1 font-weight-semibold pb-2 text-lightText"
       >Email</v-label
@@ -48,10 +44,19 @@ async function validate(values: any, { setErrors }: any) {
       hide-details="auto"
     ></VTextField>
     <v-label class="text-subtitle-1 font-weight-semibold pb-2 text-lightText"
-      >Senha</v-label
+      >Código</v-label
+    >
+    <VTextarea
+      v-model="resetCode"
+      class="mb-8"
+      required
+      hide-details="auto"
+    ></VTextarea>    
+    <v-label class="text-subtitle-1 font-weight-semibold pb-2 text-lightText"
+      >Nova Senha</v-label
     >
     <VTextField
-      v-model="password"
+      v-model="newPassword"
       :rules="passwordRules"
       required
       hide-details="auto"
@@ -66,11 +71,7 @@ async function validate(values: any, { setErrors }: any) {
       block
       type="submit"
       flat
-      >Entrar</v-btn
+      >Alterar</v-btn
     >
-    <div v-if="errors.apiError" class="mt-2">
-      <v-alert color="error">{{ errors.apiError }}</v-alert>
-    </div>
-
   </Form>
 </template>
