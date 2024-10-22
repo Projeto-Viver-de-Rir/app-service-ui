@@ -31,7 +31,6 @@ async function validate(values: any, { setErrors }: any) {
     @submit="validate"
     v-slot="{ errors, isSubmitting }"
     class="mt-5"
-    style="min-width: 350px"
   >
 
     <v-alert color="success" v-if="isEmailConfirmed" class="mt-2 mb-4">Seu e-mail já está confirmado.<br />
@@ -67,7 +66,7 @@ async function validate(values: any, { setErrors }: any) {
       block
       type="submit"
       flat
-      >Sign In</v-btn
+      >Entrar</v-btn
     >
     <div v-if="errors.apiError" class="mt-2">
       <v-alert color="error">{{ errors.apiError }}</v-alert>

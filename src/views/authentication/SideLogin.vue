@@ -11,42 +11,46 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="pa-3">
-    <v-row class="h-100vh mh-100 auth">
-      <v-col
-        cols="12"
-        lg="7"
-        xl="8"
-        class="d-lg-flex align-center justify-center authentication position-relative"
+  <v-container fluid class="pa-0">
+    <v-row class="h-100vh d-flex justify-center align-center">
+      <v-card
+        density="default" 
+        variant="elevated"
+        class="elevation-10 rounded-md px-sm-1 px-0 mx-auto" 
+        style="max-width: 450px;"
       >
-        <div class="">
-          <img src="@/assets/images/landingpage/background-starter.png" />
-        </div>
-      </v-col>
-      <v-col cols="12" lg="5" xl="4" class="d-flex align-center justify-center">
-        <div class="mt-xl-0 mt-5 mw-100">
-          <div class="mt-xl-0 mt-5 mw-100">
+        <v-card-item class="pa-sm-8">
+          <!-- Logo -->
+          <div class="mt-xl-0 my-5 mw-100 d-flex align-center justify-center">
             <img
               src="@/assets/images/red_nose.png"
-              style="
-                position: absolute;
-                display: inline-block;
-                margin-left: -15px;
-                margin-bottom: 10px;
-              "
               width="50"
             />
             <h2
-              class="text-h3 font-weight-bold mb-2"
-              style="display: inline-block; margin-left: 31px; margin-top: 7px"
+              class="text-h3 font-weight-bold"
             >
-              Viver de rir
+              Viver de Rir
             </h2>
           </div>
-          <div class="text-subtitle-1 mb-6">Bem vindo!</div>
+          <div class="d-flex align-center text-center mb-6">
+            <div class="w-100 px-5 auth-divider position-relative"></div>
+          </div>
+
           <LoginForm />
-        </div>
-      </v-col>
+
+          <h6 class="text-h6 text-medium-emphasis d-flex justify-center align-center mt-3">            
+            <v-btn 
+              density="default" 
+              size="default" 
+              variant="plain" 
+              class="v-theme--BLUE_THEME text-primary text-body-1 opacity-1 pl-2" 
+              href="/auth/forgot-password"
+            >
+              Esqueceu sua senha?
+            </v-btn>
+          </h6>
+        </v-card-item>        
+      </v-card>      
     </v-row>
-  </div>
+  </v-container>
 </template>
