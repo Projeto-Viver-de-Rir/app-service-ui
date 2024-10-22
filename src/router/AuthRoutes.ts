@@ -25,6 +25,16 @@ const AuthRoutes = {
       path: "/participate",
       component: () => import("@/views/authentication/Signup.vue"),
     },
+    {
+      name: "Forgot Password",
+      path: "/auth/forgot-password",
+      component: () => import("@/views/authentication/ForgotPassword.vue"),
+    },
+    {
+      name: "Reset Password",
+      path: "/auth/reset-password",
+      component: () => import("@/views/authentication/ResetPassword.vue"),
+    }, 
   ],
 };
 
