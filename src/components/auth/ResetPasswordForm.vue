@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { Form } from "vee-validate";
-import { useRoute } from "vue-router";
+import { useRouter } from 'vue-router';
 import { VTextarea } from "vuetify/lib/components/index.mjs";
 
 const newPassword = ref("");
@@ -14,12 +14,19 @@ const emailRules = ref([
   (v: string) => /.+@.+\..+/.test(v) || "Insira um email válido",
 ]);
 
-const route = useRoute();
+const router = useRouter();
 
 async function validate(values: any, { setErrors }: any) {
   const authStore = useAuthStore();
   return await authStore
     .reset_password(email.value, resetCode.value, newPassword.value)
+    .then((success) => {
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      localStorage.removeItem("session");
+      
+      router.push("/auth/login");
+    })
     .catch((error) => {
       console.log(error);
 });

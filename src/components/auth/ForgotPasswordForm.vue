@@ -2,7 +2,8 @@
 import { ref } from "vue";
 import { useAuthStore } from "@/stores/auth";
 import { Form } from "vee-validate";
-import { useRoute } from "vue-router";
+
+import { useRouter } from 'vue-router';
 
 const email = ref("");
 const emailRules = ref([
@@ -10,12 +11,15 @@ const emailRules = ref([
   (v: string) => /.+@.+\..+/.test(v) || "Insira um email válido",
 ]);
 
-const route = useRoute();
+const router = useRouter();
 
 async function validate(values: any, { setErrors }: any) {
   const authStore = useAuthStore();
   return await authStore
     .forgot_password(email.value)
+    .then((success) => {
+      router.push("/auth/reset-password");
+    })
     .catch((error) => {
       console.log(error);
 });
