@@ -8,7 +8,6 @@ import { debtRepository } from "../repositories/debtRepository";
 import { operationRepository } from "../repositories/operationRepository";
 import { volunteerRepository } from "../repositories/volunteerRepository";
 import { createDebtsRequest } from "../entities/operation";
-import { fa } from "vuetify/lib/locale/index.mjs";
 
 interface debtState {
   debt: debt | null;
@@ -29,6 +28,9 @@ interface debtState {
   startDateGenerateDebts: Date | null;
   endDateGenerateDebts: Date | null;
   generateDebtsRequest: createDebtsRequest;
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
 }
 
 export const useDebts = defineStore("debts", () => {
@@ -51,6 +53,9 @@ export const useDebts = defineStore("debts", () => {
     startDateGenerateDebts: null,
     endDateGenerateDebts: null,
     generateDebtsRequest: new createDebtsRequest(new Date(), new Date()),
+    currentPage: 1,
+    totalPages: 0,
+    totalItems: 0,
   });
 
   const repository = container.resolve(debtRepository);
@@ -67,6 +72,9 @@ export const useDebts = defineStore("debts", () => {
   const endDateGenerateDebts = computed(() => state.endDateGenerateDebts);
   const generateDebtsRequest = computed(() => state.generateDebtsRequest);
   const isLoading = computed(() => state.isLoading);
+  const currentPage = computed(() => state.currentPage);
+  const totalPages = computed(() => state.totalPages);
+  const totalItems = computed(() => state.totalItems);
   const getById = async (id: string): Promise<void> => {
     state.isLoading = true;
     const data = await repository.getById(id);
@@ -191,6 +199,23 @@ export const useDebts = defineStore("debts", () => {
     );
     state.isLoading = false;
   };
+
+  const getMonthlyPaymentsByQuery = async (query: string) => {
+    if (!query) throw new Error("Query params not provided");
+    state.isLoading = true;
+    try {
+      const data = await repository.getByQuery(query);
+      state.debts = data.result;
+      state.currentPage = data.currentPage;
+      state.totalPages = data.totalPages;
+      state.totalItems = data.totalItems;
+      state.isLoading = false;
+    } catch (e) {
+      state.isLoading = false;
+      throw new Error('Unable to fetch monthly payments')
+    }
+  };
+
   return {
     getData,
     filter,
@@ -214,5 +239,9 @@ export const useDebts = defineStore("debts", () => {
     generateDebtsRequest,
     getDataByYear,
     isLoading,
+    currentPage,
+    totalPages,
+    totalItems,
+    getMonthlyPaymentsByQuery,
   };
 });

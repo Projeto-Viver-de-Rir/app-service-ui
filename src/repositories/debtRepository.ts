@@ -31,10 +31,17 @@ export class debtRepository implements debtRepositoryInterface {
     );
     return response.data;
   }
+
+  public async getByQuery(query: string): Promise<debtsResponse> {
+    const response = await this.apiService.invoke("debt?"  + query);
+    return response.data;
+  }
+
   public async getById(id: string): Promise<debtResponse> {
     const response = await this.apiService.invoke("debt/" + id);
     return response.data;
   }
+
   public async update(debt: debt): Promise<void> {
     await this.apiService.put("debt/" + debt.id, debt);
   }

@@ -3,9 +3,9 @@ export interface debt {
   name: string;
   description: string;
   amount: number;
-  dueDate: Date;
+  dueDate: Date | string;
   volunteerId: string;
-  paidAt: Date | null;
+  paidAt: Date | string | null;
   paidBy: string;
   volunteer: volunteerDebt;
 }
@@ -25,6 +25,9 @@ export interface debtsResponse {
   skip: number;
   total: number;
   limit: number;
+  currentPage: number;
+  totalPages: number;
+  totalItems: number;
 }
 
 export interface debtResponse {
