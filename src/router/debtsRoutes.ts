@@ -10,7 +10,7 @@ const debtsRoutes = {
     {
       name: "ListDebt",
       path: "/Mensalidades",
-      component: () => import("@/views/debts/MonthlyPayments.vue"),
+      component: () => import("@/views/debts/List.vue"),
     },
     {
       name: "DetailtDebt",

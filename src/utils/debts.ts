@@ -47,7 +47,7 @@ export const getSituationFilterOptions = (): Array<Record<string, any>> => {
  */
 export const getYearFilterOptions = (): Array<Record<string, any>> => {
   var max = new Date().getFullYear()
-  var min = max - 8
+  var min = max - 2
   var years = []
 
   for (var i = max; i >= min; i--) {
