@@ -8,7 +8,7 @@ const MyAreaRoutes = {
     {
       name: "Minhas Mensalidades",
       path: "/personal-debts",
-      component: () => import("@/views/PersonalDebts.vue"),
+      component: () => import("@/views/debts/MonthlyPayments.vue"),
     },
     {
       name: "Profile",

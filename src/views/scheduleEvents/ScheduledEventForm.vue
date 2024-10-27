@@ -81,15 +81,20 @@ const setModelSchedule = (time: string) => {
 };
 
 const formatTime = (date: Date) => {
-	const hours = date.getHours();
-	const minutes = (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
-
+	const hh = date.getHours();
+	const mm = date.getMinutes();
+	const hours = hh < 10 ? `0${hh}` : hh.toString();
+	const minutes = mm < 10 ? `0${mm}` : mm.toString();
 	return `${hours}:${minutes}`;
 };
 
 const formattedDate = computed((): string => {
 	const time = data.eventModel.when.time;
- 	return `${time.hours}:${time.minutes}:00`;
+	const hh = time.hours;
+	const mm = time.minutes;
+	const hours = time.hours < 10 ? `0${hh}` : hh.toString();
+	const minutes = time.minutes < 10 ? `0${mm}` : mm.toString();
+ 	return `${hours}:${minutes}:00`;
 });
 
 const setEventModel = (event: scheduleEvent) => {

@@ -83,9 +83,10 @@ const formatDate = (date: Date) => {
 };
 
 const formatTime = (date: Date) => {
-	const hours = date.getHours();
-	const minutes = (date.getMinutes() < 10 ? "0" : "") + date.getMinutes();
-
+	const hh = date.getHours();
+	const mm = date.getMinutes();
+	const hours = hh < 10 ? `0${hh}` : hh.toString();
+	const minutes = mm < 10 ? `0${mm}` : mm.toString();
 	return `${hours}:${minutes}`;
 };
 
@@ -93,7 +94,7 @@ const formattedDate = computed((): Date => {
 	const time = data.eventModel.when.time;
 	let date = new Date(data.eventModel.when.date)
 	date.setHours(time.hours, time.minutes, time.seconds);
-  return date;
+  	return date;
 });
 
 const setEventModel = (event: event) => {
@@ -359,7 +360,7 @@ onUnmounted(async () => {
 					<v-col cols="12" md="4">
 						<v-row>
 							<v-col cols="12" md="12">
-								<v-card title="Quando" class="border mb-6" elevation="0" style="z-index: 1"> 
+								<v-card title="Quando" class="border mb-6" elevation="0" style="z-index: 999999"> 
 									<v-card-text class="px-8">
 										<v-label :class="[formLabelClass, 'required']">Data</v-label>
 										<VueDatePicker
