@@ -174,7 +174,7 @@ export default defineComponent({
             <v-col cols="12" md="4">
               <v-label
                 class="text-subtitle-1 font-weight-semibold text-lightText"
-                >Apelido:</v-label
+                >Palhaço:</v-label
               >
               <v-text-field
                 v-model="user.nickname"

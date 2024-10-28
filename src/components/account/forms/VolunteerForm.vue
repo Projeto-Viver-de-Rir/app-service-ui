@@ -140,7 +140,7 @@ const submit = async (values: any, { setErrors }: any) => {
                                         />
                                     </v-col>
                                     <v-col cols="12" md="3">
-                                        <v-label class="mb-2 font-weight-medium">Apelido:</v-label>
+                                        <v-label class="mb-2 font-weight-medium">Nome de Palhaço:</v-label>
                                         <VTextField
                                             color="primary"
                                             variant="outlined"

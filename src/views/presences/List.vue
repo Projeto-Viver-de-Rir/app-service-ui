@@ -19,7 +19,7 @@ const data = reactive({
   filterInfo: true,
   tableHeaders: [
     { title: 'Nome', key: 'volunteer.name', sortable: true, align: 'start' },
-    { title: 'Apelido', key: 'volunteer.nickname', sortable: true, align: 'center' },
+    { title: 'Palhaço', key: 'volunteer.nickname', sortable: true, align: 'center' },
     { title: 'Anterior', key: 'lastMonthAttendance', sortable: false, align: 'center' },
     { title: 'Atual', key: 'previousMonthAttendance', sortable: false, align: 'center' },
     { title: ' ', key: 'actions', align: 'start' },
