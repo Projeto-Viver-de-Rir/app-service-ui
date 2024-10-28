@@ -133,7 +133,7 @@ const volunteerFormRules = ref({
     (v: string): string | boolean => !!v || 'Nome é obrigatório!',
   ],
   nickname: [
-    (v: string): string | boolean => !!v || 'Apelido é obrigatório!',
+    (v: string): string | boolean => !!v || 'Nome de Palhaço é obrigatório!',
   ],
   identifier: [
     (v: string) => !!v || "CPF é obrigatório",
@@ -533,7 +533,7 @@ onMounted(async () => {
                       </v-text-field>
                     </div>
                     <div class="form-property-data mb-4">
-                      <v-label :class="[formLabelClass, 'required']">Apelido</v-label>
+                      <v-label :class="[formLabelClass, 'required']">Nome de Palhaço</v-label>
                       <v-text-field
                         v-model="data.volunteerModel.nickname"
                         placeholder="Como você é conhecido?"

@@ -17,7 +17,7 @@ const data = reactive({
   currentPage: 1,
   tableHeaders: [
     { title: 'Nome', key: 'name', sortable: true, align: 'start' },
-    { title: 'Apelido', key: 'nickname', sortable: true, align: 'center' },
+    { title: 'Palhaço', key: 'nickname', sortable: true, align: 'center' },
     { title: 'Email', key: 'email', sortable: false, align: 'center' },
     { title: 'Telefone', key: 'phone', sortable: false, align: 'center' },
     { title: ' ', key: 'actions', align: 'start' },
@@ -77,8 +77,8 @@ const filteredInfo = computed(() => {
   }
   if (data.lastFiltered.nicknameFilter) {
     info += data.lastFiltered.nameFilter ?
-      ` e o ${tagPrefix}apelido: ${data.lastFiltered.nicknameFilter}${sufixPrefix}` :
-      ` com o ${tagPrefix}apelido: ${data.lastFiltered.nicknameFilter}${sufixPrefix}`;
+      ` e o ${tagPrefix}palhaço: ${data.lastFiltered.nicknameFilter}${sufixPrefix}` :
+      ` com o ${tagPrefix}palhaço: ${data.lastFiltered.nicknameFilter}${sufixPrefix}`;
   }
   return info;
 })
@@ -180,11 +180,11 @@ onMounted(async () => {
                 </v-col>
 
                 <v-col class="v-col-xs-12" md="3" sm="12" xs="12">
-                  <v-label class="mb-2 font-weight-medium">Apelido</v-label>
+                  <v-label class="mb-2 font-weight-medium">Palhaço</v-label>
                   <v-text-field
                     v-model="data.nicknameFilter"
                     class="mb-md-5 mb-sm-0"
-                    placeholder="Filtrar por apelido"
+                    placeholder="Filtrar por nome de palhaço"
                     hide-details
                     @keyup.enter="getVolunteers"
                   ></v-text-field>

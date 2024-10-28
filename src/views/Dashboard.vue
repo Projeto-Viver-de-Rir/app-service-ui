@@ -8,7 +8,7 @@ import eventsTableCustom from "@/components/tables/eventsTableCustom.vue";
 import { storeToRefs } from 'pinia';
 import { useEvents } from "@/stores/eventStore";
 
-const page = ref({ title: "Dashboard" });
+const page = ref({ title: "Bem vindo!" });
 const DASHBOARD_NEXT_EVENTS_QUERY = `status=1&currentPage=1&pageSize=100`;
 
 const { isLoading } = storeToRefs(useEvents());
@@ -26,9 +26,9 @@ onMounted(async () => {
     <div v-if="isLoading" class="loading"></div>
     <v-row v-else>
       <v-col cols="12" md="12">
-        <UiParentCard title="Próximos eventos">
+        <v-card variant="outlined" elevation="0">
           <eventsTableCustom />
-        </UiParentCard>
+        </v-card>
       </v-col>
     </v-row>
   </div>
