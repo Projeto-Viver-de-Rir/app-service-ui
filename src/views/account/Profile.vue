@@ -23,6 +23,16 @@ const tab2Ref = ref();
 const tab3Ref = ref();
 const { account } = storeToRefs(accountStore);
 
+const formatDate = (date: Date) => {
+	const day = date.getDate();
+	const month = date.getMonth() + 1;
+	const year = date.getFullYear();
+	const dd = day < 10 ? `0${day}` : day.toString();
+	const mm = month < 10 ? `0${month}` : month.toString();
+
+	return `${year}-${mm}-${dd}`;
+};
+
 interface AccountFormProps {
   tab: string;
 	loading: boolean;
@@ -68,7 +78,7 @@ const data: AccountFormProps = reactive({
     state: "",
     country: "",
     zip: "",
-    birthDate: "",
+    birthDate: formatDate(new Date()),
     availability: "",
   },
   checkedAvailabilities: [],
@@ -94,14 +104,6 @@ const dateIsValid = computed(() => {
 const availabilityModel = computed(() => {
   return data.checkedAvailabilities.toString();
 });
-
-const formatDate = (date: Date) => {
-	const day = date.getDate();
-	const month = (date.getMonth() + 1).toString().padStart(2, "0");
-	const year = date.getFullYear();
-
-	return `${day}/${month}/${year}`;
-};
 
 const accountFormRules = ref({
   currentPassword: [
@@ -154,6 +156,9 @@ const volunteerFormRules = ref({
   ],
   country: [
     (v: string): string | boolean => !!v || 'País é obrigatório!',
+  ],
+  date: [
+    (v: string): string | boolean => !!v || 'A Data de Nascimento é obrigatória!',
   ],
 })
 
@@ -225,7 +230,7 @@ const setVolunteerModel = (volunteer: any) => {
   data.volunteerModel.state = volunteer.state
   data.volunteerModel.country = volunteer.country
   data.volunteerModel.zip = volunteer.zip
-  data.volunteerModel.birthDate = volunteer.birthDate
+  data.volunteerModel.birthDate = formatDate(new Date(volunteer.birthDate))
   data.volunteerModel.availability = volunteer.availability
   if (volunteer.availability) {
     data.checkedAvailabilities = volunteer.availability.split(',')
@@ -552,13 +557,14 @@ onMounted(async () => {
                     </div>
                     <div class="mb-5">
                       <v-label :class="[formLabelClass, 'required']">Data de Nascimento</v-label>
-                      <VueDatePicker
+                      <v-text-field
                         v-model="data.volunteerModel.birthDate"
-                        :locale="locale"
-                        :format="formatDate"
-                        :enable-time-picker="false"
-                        :state="dateIsValid"
-                      />
+                        placeholder="20/10/2024"
+                        format="DD/MM/AAAA"
+                        :rules="volunteerFormRules.date"
+                        type="date"
+                        required
+                      ></v-text-field>
                       <div class="ml-4 mt-1 validation-message" v-if="!dateIsValid">Data de nascimento é obrigatória!</div>
                     </div>
                   </v-card-text>
