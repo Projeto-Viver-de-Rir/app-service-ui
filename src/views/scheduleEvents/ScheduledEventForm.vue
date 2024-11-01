@@ -43,11 +43,7 @@ const data: EventFormProps = reactive({
 		when: {
 			occurrence: null,
 			dayOfWeek: null,
-			time: {
-				hours: 0,
-				minutes: 0,
-				seconds: 0
-			},
+			time: '00:00',
 		}
 	},
 })
@@ -69,31 +65,21 @@ const breadcrumbs = ref([
 ]);
 
 const page = ref({ title: "Eventos Planejados" });
-const locale = ref('pt-BR');
 const formLabelClass = ref('text-subtitle-1 font-weight-semibold text-lightText mb-1');
 const formRef = ref();
 const rules = ref(eventFormRules());
 
 const setModelSchedule = (time: string) => {
 	const timeArr = time.split(':');
-	data.eventModel.when.time.hours = timeArr[0];
-	data.eventModel.when.time.minutes = timeArr[1];
-};
-
-const formatTime = (date: Date) => {
-	const hh = date.getHours();
-	const mm = date.getMinutes();
-	const hours = hh < 10 ? `0${hh}` : hh.toString();
-	const minutes = mm < 10 ? `0${mm}` : mm.toString();
-	return `${hours}:${minutes}`;
+	data.eventModel.when.time = `${timeArr[0]}:${timeArr[1]}`;
 };
 
 const formattedDate = computed((): string => {
-	const time = data.eventModel.when.time;
-	const hh = time.hours;
-	const mm = time.minutes;
-	const hours = time.hours < 10 ? `0${hh}` : hh.toString();
-	const minutes = time.minutes < 10 ? `0${mm}` : mm.toString();
+	const time = data.eventModel.when.time.split(':');
+	const hh = parseInt(time[0]);
+	const mm = parseInt(time[1]);
+	const hours = hh < 10 ? `0${hh}` : hh.toString();
+	const minutes = mm < 10 ? `0${mm}` : mm.toString();
  	return `${hours}:${minutes}:00`;
 });
 
@@ -379,13 +365,13 @@ onUnmounted(async () => {
 											v-model="data.eventModel.when.dayOfWeek" />
 
 										<v-label :class="[formLabelClass, 'required mt-5']">Horário</v-label>
-										<VueDatePicker
+										<v-text-field
 											v-model="data.eventModel.when.time"
-											:locale="locale"
-											:format="formatTime"
-											:state="timeIsValid"
-											time-picker
-										/>
+											placeholder="12:00"
+											:rules="rules.time"
+											type="time"
+											required
+										></v-text-field>
 										<div class="ml-4 mt-1 validation-message" v-if="!timeIsValid">Horário é obrigatório!</div>
 									</v-card-text>
 								</v-card>

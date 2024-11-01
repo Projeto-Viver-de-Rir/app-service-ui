@@ -28,6 +28,16 @@ interface EventFormProps {
 	toggleNameInputType: boolean;
 }
 
+const formatDate = (date: Date) => {
+	const day = date.getDate();
+	const month = date.getMonth() + 1;
+	const year = date.getFullYear();
+	const dd = day < 10 ? `0${day}` : day.toString();
+	const mm = month < 10 ? `0${month}` : month.toString();
+
+	return `${year}-${mm}-${dd}`;
+};
+
 const data: EventFormProps = reactive({
   tab: 'tab-1',
 	loading: false,
@@ -35,12 +45,8 @@ const data: EventFormProps = reactive({
 	toggleNameInputType: false,
 	eventModel: {
 		when: {
-			date: new Date(),
-			time: {
-				hours: 0,
-				minutes: 0,
-				seconds: 0
-			},
+			date: formatDate(new Date()),
+			time: '00:00',
 		}
 	},
 })
@@ -62,38 +68,25 @@ const breadcrumbs = ref([
 ]);
 
 const page = ref({ title: "Eventos" });
-const locale = ref('pt-BR');
 const formLabelClass = ref('text-subtitle-1 font-weight-semibold text-lightText mb-1');
 const formRef = ref();
 const rules = ref(eventFormRules());
 
 const setModelDate = (date: Date) => {
 	const eventDate = new Date(date);
-	data.eventModel.when.date = eventDate;
-	data.eventModel.when.time.hours = eventDate.getHours();
-	data.eventModel.when.time.minutes = eventDate.getMinutes();
-};
-
-const formatDate = (date: Date) => {
-	const day = date.getDate();
-	const month = (date.getMonth() + 1).toString().padStart(2, "0");
-	const year = date.getFullYear();
-
-	return `${day}/${month}/${year}`;
-};
-
-const formatTime = (date: Date) => {
-	const hh = date.getHours();
-	const mm = date.getMinutes();
+	data.eventModel.when.date = formatDate(new Date(date));
+	console.log(formatDate(new Date(date)))
+	const hh = eventDate.getHours();
+	const mm = eventDate.getMinutes();
 	const hours = hh < 10 ? `0${hh}` : hh.toString();
 	const minutes = mm < 10 ? `0${mm}` : mm.toString();
-	return `${hours}:${minutes}`;
+	data.eventModel.when.time = `${hours}:${minutes}`;
 };
 
 const formattedDate = computed((): Date => {
-	const time = data.eventModel.when.time;
+	const time = data.eventModel.when.time.split(':');
 	let date = new Date(data.eventModel.when.date)
-	date.setHours(time.hours, time.minutes, time.seconds);
+	date.setHours(time[0], time[1], 0);
   	return date;
 });
 
@@ -360,27 +353,28 @@ onUnmounted(async () => {
 					<v-col cols="12" md="4">
 						<v-row>
 							<v-col cols="12" md="12">
-								<v-card title="Quando" class="border mb-6" elevation="0" style="z-index: 999999"> 
+								<v-card title="Quando" class="border mb-6" elevation="0" style="z-index: 999999">
 									<v-card-text class="px-8">
 										<v-label :class="[formLabelClass, 'required']">Data</v-label>
-										<VueDatePicker
+										<v-text-field
 											v-model="data.eventModel.when.date"
-											:locale="locale"
-											:format="formatDate"
-											:enable-time-picker="false"
-											:state="dateIsValid"
-										/>
-										<div class="ml-4 mt-1 validation-message" v-if="!dateIsValid">Data é obrigatória!</div>
+											placeholder="20/10/2024"
+											format="DD/MM/AAAA"
+											:rules="rules.date"
+											type="date"
+											required
+										></v-text-field>
+										<div class="ml-4 validation-message" v-if="!dateIsValid">Data é obrigatória!</div>
 
 										<v-label :class="[formLabelClass, 'required mt-5']">Horário</v-label>
-										<VueDatePicker
+										<v-text-field
 											v-model="data.eventModel.when.time"
-											:locale="locale"
-											:format="formatTime"
-											:state="timeIsValid"
-											time-picker
-										/>
-										<div class="ml-4 mt-1 validation-message" v-if="!timeIsValid">Horário é obrigatório!</div>
+											placeholder="12:00"
+											:rules="rules.time"
+											type="time"
+											required
+										></v-text-field>
+										<div class="ml-4 validation-message" v-if="!timeIsValid">Horário é obrigatório!</div>
 									</v-card-text>
 								</v-card>
 
