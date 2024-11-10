@@ -75,7 +75,6 @@ const rules = ref(eventFormRules());
 const setModelDate = (date: Date) => {
 	const eventDate = new Date(date);
 	data.eventModel.when.date = formatDate(new Date(date));
-	console.log(formatDate(new Date(date)))
 	const hh = eventDate.getHours();
 	const mm = eventDate.getMinutes();
 	const hours = hh < 10 ? `0${hh}` : hh.toString();
@@ -85,7 +84,7 @@ const setModelDate = (date: Date) => {
 
 const formattedDate = computed((): Date => {
 	const time = data.eventModel.when.time.split(':');
-	let date = new Date(data.eventModel.when.date)
+	let date = new Date(data.eventModel.when.date + "T" + data.eventModel.when.time)
 	date.setHours(time[0], time[1], 0);
   	return date;
 });
