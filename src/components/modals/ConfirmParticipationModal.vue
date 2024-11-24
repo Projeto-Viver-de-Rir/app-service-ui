@@ -85,7 +85,7 @@ onMounted(async () => {
       transition="dialog-bottom-transition"
       class="dialog-mw">
       <v-card>
-        <v-toolbar dark color="primary" style="flex: unset">
+        <v-toolbar dark color="primary" style="">
           <v-toolbar-title>Confirmação de presença</v-toolbar-title>
           <v-btn icon color="inherit" @click="closeModal(false)" flat>
             <XIcon  width="20" />

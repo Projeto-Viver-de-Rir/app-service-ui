@@ -19,7 +19,7 @@ const widgets = ref(false);
         <v-btn color="error" class="w-100" dark v-bind="props" flat> Open Fullscreen Dialog </v-btn>
       </template>
       <v-card>
-        <v-toolbar dark color="primary" style="flex: unset">
+        <v-toolbar dark color="primary" style="">
           <v-btn icon color="inherit" @click="dialog = false" flat>
             <XIcon  width="20" />
           </v-btn>
