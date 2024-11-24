@@ -83,7 +83,7 @@ onMounted(() => {
       transition="dialog-bottom-transition"
       class="dialog-mw">
       <v-card>
-        <v-toolbar dark color="primary" style="flex: unset">
+        <v-toolbar dark color="primary" style="">
           <v-btn icon color="inherit" @click="closeModal()" flat>
             <XIcon  width="20" />
           </v-btn>

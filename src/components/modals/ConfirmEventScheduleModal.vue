@@ -93,7 +93,7 @@ onMounted(async () => {
       transition="dialog-bottom-transition"
       class="dialog-mw">
       <v-card>
-        <v-toolbar dark color="warning" style="flex: unset">
+        <v-toolbar dark color="warning" style="">
           <v-toolbar-title>Gerar agenda</v-toolbar-title>
           <v-btn icon color="inherit" @click="closeModal(false)" flat>
             <XIcon  width="20" />

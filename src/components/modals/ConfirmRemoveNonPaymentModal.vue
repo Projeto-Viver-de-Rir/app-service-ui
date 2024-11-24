@@ -36,7 +36,7 @@ const closeModal = (confirm = false) => {
       transition="dialog-bottom-transition"
       class="dialog-mw">
       <v-card>
-        <v-toolbar dark color="error" style="flex: unset">
+        <v-toolbar dark color="error" style="">
           <v-toolbar-title>Remover débito do relatório</v-toolbar-title>
           <v-btn icon color="inherit" @click="closeModal(false)" flat>
             <XIcon  width="20" />
