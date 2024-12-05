@@ -66,7 +66,7 @@ const requestQuery = computed(() => {
 
 const nonPaymentsCreatedAtFormatted = computed(() => {
   if (!nonPaymentsCreatedAt.value) return ''
-  return new Date(nonPaymentsCreatedAt.value).toLocaleDateString();
+  return new Date(nonPaymentsCreatedAt.value).toLocaleDateString("pt-BR");
 })
 
 const filteredInfo = computed(() => {

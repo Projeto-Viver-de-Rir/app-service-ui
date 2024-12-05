@@ -219,6 +219,8 @@ onMounted(async () => {
 			});
 			goBack();
 		}
+	} else {
+		eventStore.resetEvent();
 	}
 });
 

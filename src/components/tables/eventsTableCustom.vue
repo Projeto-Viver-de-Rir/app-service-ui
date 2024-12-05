@@ -12,7 +12,7 @@ const { getList: eventsList } = storeToRefs(useEvents());
                 <v-list-item-title class="text-subtitle-1">{{ item.name }}</v-list-item-title>
                 <v-list-item-subtitle class="text-subtitle-1 text-high-emphasis">
                   {{
-                    new Date(item.happenAt).toLocaleDateString()
+                    new Date(item.happenAt).toLocaleDateString("pt-BR")
                   }}
                   </v-list-item-subtitle>
                   <v-list-item-subtitle class="text-subtitle-1 text-high-emphasis">

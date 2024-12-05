@@ -102,7 +102,7 @@ export const useEvents = defineStore("events", () => {
     state.isLoading = false;
   };
 
-  const createOrUpdate = async (event: any) => {
+  const createOrUpdate = async (event: any) => {    
     state.isLoading = true;
     try {
       if (!event.id) {

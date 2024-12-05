@@ -62,7 +62,7 @@ export default defineComponent({
             <div class="d-left">
               <div>
                 <h6 class="text-h6">
-                  {{ new Date(item.dueDate).toLocaleDateString() }}
+                  {{ new Date(item.dueDate).toLocaleDateString("pt-BR") }}
                 </h6>
               </div>
             </div>
@@ -71,7 +71,7 @@ export default defineComponent({
             <div class="d-left">
               <div>
                 <h6 v-if="item.paidAt !== null" class="text-h6">
-                  {{ new Date(item.paidAt).toLocaleDateString() }}
+                  {{ new Date(item.paidAt).toLocaleDateString("pt-BR") }}
                 </h6>
               </div>
             </div>
