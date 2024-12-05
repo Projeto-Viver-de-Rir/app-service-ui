@@ -14,6 +14,20 @@ const DASHBOARD_NEXT_EVENTS_QUERY = `status=1&currentPage=1&pageSize=100`;
 const { isLoading } = storeToRefs(useEvents());
 
 onMounted(async () => {
+    let lastReload = localStorage.getItem("lastReload");
+
+    if (lastReload == null){
+      localStorage.setItem("lastReload", Date.now().toString());
+      window.location.reload();
+    } else {
+      let expected = (Date.now() - new Date(parseInt(lastReload)))/86_400_000;
+
+      if(expected >= 1){
+        localStorage.setItem("lastReload", Date.now().toString());
+        window.location.reload();
+      }
+    }
+
   await useEvents().getDataByQuery(DASHBOARD_NEXT_EVENTS_QUERY);
 });
 </script>

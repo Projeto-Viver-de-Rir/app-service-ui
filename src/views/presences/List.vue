@@ -66,7 +66,7 @@ const requestQuery = computed(() => {
 
 const presencesCreatedAtFormatted = computed(() => {
   if (!presencesCreatedAt.value) return ''
-  return new Date(presencesCreatedAt.value).toLocaleDateString();
+  return new Date(presencesCreatedAt.value).toLocaleDateString("pt-BR");
 })
 
 const filteredInfo = computed(() => {
