@@ -13,6 +13,11 @@ const DASHBOARD_NEXT_EVENTS_QUERY = `status=1&currentPage=1&pageSize=100`;
 
 const { isLoading } = storeToRefs(useEvents());
 
+const getVersion = () => {
+  let lastReload = localStorage.getItem("lastReload");
+  return new Date(parseInt(lastReload)).toLocaleDateString("pt-BR");
+}
+
 onMounted(async () => {
     let lastReload = localStorage.getItem("lastReload");
 
@@ -37,6 +42,9 @@ onMounted(async () => {
     <BaseBreadcrumb
       :title="page.title"
     ></BaseBreadcrumb>
+    <span class="text-subtitle-1">
+      Versão {{getVersion()}}
+    </span>
     <div v-if="isLoading" class="loading"></div>
     <v-row v-else>
       <v-col cols="12" md="12">
