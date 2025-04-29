@@ -49,11 +49,11 @@ export default defineComponent({
     const isLoading = computed(() => store.isLoading);
 
     const cancel = (): void => {
-      router.push({ path: "/Mensalidades", replace: true });
+      router.push({ path: "/debts", replace: true });
     };
     const save = async () => {
       await store.save();
-      router.push({ path: "/Mensalidades", replace: true });
+      router.push({ path: "/debts", replace: true });
     };
 
     const format = (date) => {
@@ -72,7 +72,7 @@ export default defineComponent({
       cancel,
       save,
       format,
-      formatCurrency,
+      //formatCurrency,
     };
   },
 });

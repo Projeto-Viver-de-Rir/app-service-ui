@@ -1,5 +1,5 @@
 const debtsRoutes = {
-  path: "/Mensalidades",
+  path: "/debts",
   meta: {
     requiresAuth: true,
     roles: ["fiscal", "administrative"],
@@ -9,14 +9,20 @@ const debtsRoutes = {
   children: [
     {
       name: "ListDebt",
-      path: "/Mensalidades",
+      path: "/debts",
       component: () => import("@/views/debts/List.vue"),
     },
     {
-      name: "DetailtDebt",
-      path: "/Mensalidades/Detalhes/:id",
+      name: "DebtDetails",
+      path: "/debts/details/:id",
       component: () => import("@/views/debts/Edit.vue"),
-    },
+      beforeEnter: (to: any) => {
+        if (!to.params?.id) {
+          return { name: 'Dashboard' };
+        }
+      }
+    },    
+
   ],
 };
 

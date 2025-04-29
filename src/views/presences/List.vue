@@ -20,8 +20,8 @@ const data = reactive({
   tableHeaders: [
     { title: 'Nome', key: 'volunteer.name', sortable: true, align: 'start' },
     { title: 'Palhaço', key: 'volunteer.nickname', sortable: true, align: 'center' },
-    { title: 'Anterior', key: 'lastMonthAttendance', sortable: false, align: 'center' },
-    { title: 'Atual', key: 'previousMonthAttendance', sortable: false, align: 'center' },
+    { title: 'Anterior', key: 'previousMonthAttendance', sortable: false, align: 'center' },
+    { title: 'Atual', key: 'lastMonthAttendance', sortable: false, align: 'center' },
     { title: ' ', key: 'actions', align: 'start' },
   ],
   sortOptions: [] as Array<any>,

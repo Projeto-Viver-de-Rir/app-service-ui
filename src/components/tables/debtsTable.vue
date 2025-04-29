@@ -97,7 +97,7 @@ export default defineComponent({
                 <router-link
                   tag="v-btn"
                   class="btn btn-primary mr-2"
-                  :to="{ name: 'DetailtDebt', params: { id: item.id } }"
+                  :to="{ name: 'DebtDetails', params: { id: item.id } }"
                 >
                   <v-btn size="small" color="primary" type="submit"
                     >Editar</v-btn

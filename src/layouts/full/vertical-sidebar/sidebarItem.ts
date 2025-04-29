@@ -118,7 +118,7 @@ const sidebarItem: menu[] = [
   {
     title: "Mensalidades",
     icon: CoinIcon,
-    to: "/mensalidades",
+    to: "/debts",
     roles: ["administrative"],
   },
   {

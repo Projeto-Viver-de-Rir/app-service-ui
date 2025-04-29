@@ -144,7 +144,7 @@ export default defineComponent({
               style="margin-right: 15px"
               color="warning"
               type="submit"
-              >Gerar agenda</v-btn
+              >Gerar mensalidades</v-btn
             >
           </v-col>
         </v-row>
