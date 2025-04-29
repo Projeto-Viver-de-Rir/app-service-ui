@@ -125,7 +125,7 @@ export const useEvents = defineStore("events", () => {
       state.isLoading = false;
     } catch (e) {
       state.isLoading = false;
-      throw new Error('Unable to confirm vacancy')
+      throw e;
     }
   };
 

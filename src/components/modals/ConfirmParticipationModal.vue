@@ -26,6 +26,7 @@ const props = defineProps({
 const data = reactive({
   isSubmitDisabled: true,
   hasError: false,
+  errorMessage: '',
   timeRemaining: 5,
 })
 
@@ -33,11 +34,14 @@ const emit = defineEmits(['closeConfirmParticipationModal']);
 
 const actionConfirmParticipation = async () => {
   data.hasError = false;
+  data.errorMessage =  '';
+
   try {
     await eventStore.confirmVacancy();
     closeModal(true);
   } catch (error) {
     data.hasError = true;
+    data.errorMessage =  error.message;
     closeModal(false);
   }
   snackBarStore.addToQueue({ 
@@ -55,7 +59,14 @@ const timeRemaningLabel = computed(() => {
 })
 
 const snackBarFeedbackLabel = computed(() => {
-  return data.hasError ? 'Ocorreu um erro ao confirmar a sua participação.' : 'Participação confirmada com sucesso!';
+  if (data.hasError){
+    if (data.errorMessage != '')
+      return data.errorMessage;
+    else 
+      return 'Ocorreu um erro ao confirmar a sua participação.';
+  }
+  else 
+    return  'Participação confirmada com sucesso!';
 })
 
 const snackBarBtnColor = computed(() => {

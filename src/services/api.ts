@@ -96,12 +96,13 @@ export class Api implements ApiInterface {
     };
     return await this.client
       .post(url, request, config)
-      // .then(function (response) {
-      //   console.log(response);
-      // })
-      // .catch(function (error) {
-      //   console.log(error);
-      // });
+      .then(function (response) {
+        console.log(response)
+      })
+      .catch(function (error) {
+        let msg = error.response.data.detail.replace('Next error(s) occurred:*','');
+        throw new Error(msg);
+      });
   }
   async delete<T = any>(url: string): Promise<void> {
     const auth: any = useAuthStore();
